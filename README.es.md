@@ -11,7 +11,7 @@ manual por herramienta. La idea no es coleccionar snippets sin contexto, sino
 tener una referencia viva que puedas consultar, depurar y mantener con el
 tiempo.
 
-![Commands Viewer screenshot](docs/screenshot.png)
+![Commands Viewer screenshot](docs/main.png)
 
 ## Qué es
 
