@@ -1,3 +1,3 @@
 @echo off
 set "SCRIPT_DIR=%~dp0"
-powershell.exe -ExecutionPolicy Bypass -File "%SCRIPT_DIR%launch-commands-viewer.ps1"
+wscript.exe "%SCRIPT_DIR%launch-commands-viewer.vbs"

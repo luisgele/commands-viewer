@@ -26,6 +26,7 @@ lerna-debug.log*
 .parcel-cache
 .vite
 .eslintcache
+tmp/
 *.local
 
 # ── Runtime / atomic writes ───────────────────────────────
