@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+@theme {
+  /* Fonts */
+  --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --font-sans: "DM Sans", system-ui, -apple-system, sans-serif;
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+
+  /* Background tokens */
+  --color-bg: #0c0e14;
+  --color-bg-card: #12151e;
+  --color-bg-card-alt: #161a26;
+  --color-border: #1e2436;
+  --color-border-glow: #2a3454;
+
+  /* Text tokens */
+  --color-text: #c8cdd8;
+  --color-text-muted: #6b7394;
+  --color-text-bright: #e8ecf4;
+
+  /* Accent palette */
+  --color-accent-orange: #ff6b35;
+  --color-accent-cyan: #00d4ff;
+  --color-accent-green: #3ddc84;
+  --color-accent-purple: #a78bfa;
+  --color-accent-yellow: #fbbf24;
+  --color-accent-pink: #f472b6;
+
+  /* Importance palette (aliases for the badges) */
+  --color-imp-critical: #ff6b35;
+  --color-imp-high: #00d4ff;
+  --color-imp-medium: #a78bfa;
+  --color-imp-low: #f472b6;
+
+  /* Frequency palette */
+  --color-freq-high: #3ddc84;
+  --color-freq-mid: #fbbf24;
+  --color-freq-low: #6b7394;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-display: swap;
+  src: local("JetBrains Mono");
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv01";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Subtle noise over the whole app, just like the cheatsheet */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+}
+
+/* Scrollbar theming */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-glow) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--color-border-glow);
+  border-radius: 10px;
+  border: 2px solid var(--color-bg);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #3a4670;
+}
+
+/* Input / button resets */
+input,
+textarea,
+select,
+button {
+  font-family: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Keyboard-only focus ring — doesn't flash on mouse clicks */
+:where(button, a, [role="button"], input, textarea, select):focus {
+  outline: none;
+}
+
+:where(button, a, [role="button"], input, textarea, select):focus-visible {
+  outline: 2px solid var(--color-accent-cyan);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Animated glow utility */
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}

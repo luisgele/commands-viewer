@@ -1,0 +1,3635 @@
+{
+  "tools": [
+    {
+      "id": "claude-code",
+      "name": "Claude Code",
+      "slug": "claude-code",
+      "icon": "◆",
+      "color": "#ff6b35",
+      "order": 0
+    },
+    {
+      "id": "git",
+      "name": "Git",
+      "slug": "git",
+      "icon": "⎇",
+      "color": "#00d4ff",
+      "order": 1
+    },
+    {
+      "id": "docker",
+      "name": "Docker",
+      "slug": "docker",
+      "icon": "▣",
+      "color": "#3ddc84",
+      "order": 2
+    },
+    {
+      "id": "npm",
+      "name": "npm",
+      "slug": "npm",
+      "icon": "▲",
+      "color": "#a78bfa",
+      "order": 3
+    },
+    {
+      "id": "bash",
+      "name": "Bash",
+      "slug": "bash",
+      "icon": "❯",
+      "color": "#f472b6",
+      "order": 4
+    },
+    {
+      "id": "ollama",
+      "name": "Ollama",
+      "slug": "ollama",
+      "icon": "🦙",
+      "color": "#00a67e",
+      "order": 5
+    }
+  ],
+  "commands": [
+    {
+      "id": "cc-cli-001",
+      "toolId": "claude-code",
+      "section": "CLI — Arranque y Sesiones",
+      "name": "claude",
+      "description": "Inicia sesión interactiva en el directorio actual",
+      "hint": "",
+      "importance": "critical",
+      "frequency": 5,
+      "tags": [
+        "cli",
+        "session"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "modifiers": [
+        {
+          "flag": "--model sonnet",
+          "description": "Fija modelo (sonnet, opus, haiku)"
+        },
+        {
+          "flag": "--effort high",
+          "description": "Nivel de esfuerzo (low|medium|high|max)"
+        },
+        {
+          "flag": "--permission-mode plan",
+          "description": "Modo de permisos inicial"
+        },
+        {
+          "flag": "--add-dir ../lib",
+          "description": "Incluye directorio adicional en el workspace"
+        },
+        {
+          "flag": "--bare",
+          "description": "Modo mínimo sin hooks/skills/MCP"
+        }
+      ]
+    },
+    {
+      "id": "cc-cli-002",
+      "toolId": "claude-code",
+      "section": "CLI — Arranque y Sesiones",
+      "name": "claude \"query\"",
+      "description": "Inicia sesión con prompt inicial",
+      "hint": "claude \"explica la arquitectura del proyecto\"",
+      "importance": "critical",
+      "frequency": 5,
+      "tags": [
+        "cli",
+        "session"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "modifiers": []
+    },
+    {
+      "id": "cc-cli-003",
+      "toolId": "claude-code",
+      "section": "CLI — Arranque y Sesiones",
+      "name": "claude -p \"query\"",
+      "description": "Modo print: responde y sale (ideal para scripts/CI)",
+      "hint": "claude -p \"¿qué hace main()?\" --output-format json",
+      "importance": "critical",
+      "frequency": 4,
+      "tags": [
+        "cli",
+        "ci",
+        "scripting"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 2,
+      "modifiers": [
+        {
+          "flag": "--output-format json",
+          "description": "Output estructurado para parseo"
+        },
+        {
+          "flag": "--max-turns 5",
+          "description": "Limita turnos agénticos (anti-runaway)"
+        },
+        {
+          "flag": "--max-budget-usd 0.50",
+          "description": "Corta al superar gasto"
+        },
+        {
+          "flag": "--allowedTools \"Bash,Read\"",
+          "description": "Herramientas auto-permitidas"
+        },
+        {
+          "flag": "--append-system-prompt \"...\"",
+          "description": "Añade al system prompt default"
+        }
+      ]
+    },
+    {
+      "id": "cc-cli-004",
+      "toolId": "claude-code",
+      "section": "CLI — Arranque y Sesiones",
+      "name": "cat x | claude -p",
+      "description": "Procesa contenido por pipe",
+      "hint": "git diff | claude -p \"review\" · cat error.log | claude -p \"explain\"",
+      "importance": "critical",
+      "frequency": 4,
+      "tags": [
+        "cli",
+        "pipe",
+        "scripting"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 3,
+      "modifiers": []
+    },
+    {
+      "id": "cc-cli-005",
+      "toolId": "claude-code",
+      "section": "CLI — Arranque y Sesiones",
+      "name": "claude -c",
+      "description": "Continúa la conversación más reciente (mismo directorio)",
+      "hint": "",
+      "importance": "high",
+      "frequency": 4,
+      "tags": [
+        "cli",
+        "session",
+        "resume"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 4,
+      "modifiers": []
+    },
+    {
+      "id": "cc-cli-006",
+      "toolId": "claude-code",
+      "section": "CLI — Arranque y Sesiones",
+      "name": "claude -r \"name\"",
+      "description": "Resume sesión por ID o nombre",
+      "hint": "claude -r \"auth-refactor\" \"Termina este PR\"",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "cli",
+        "session",
+        "resume"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 5,
+      "modifiers": []
+    },
+    {
+      "id": "cc-cli-007",
+      "toolId": "claude-code",
+      "section": "CLI — Arranque y Sesiones",
+      "name": "claude --model X",
+      "description": "Usa un modelo específico",
+      "hint": "--model sonnet · --model opus · --model claude-sonnet-4-6",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "cli",
+        "model"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 6,
+      "modifiers": []
+    },
+    {
+      "id": "cc-cli-008",
+      "toolId": "claude-code",
+      "section": "CLI — Arranque y Sesiones",
+      "name": "claude -w name",
+      "description": "Worktree aislado para trabajo paralelo",
+      "hint": "claude -w feature-auth --tmux",
+      "importance": "high",
+      "frequency": 2,
+      "tags": [
+        "cli",
+        "worktree",
+        "git"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 7,
+      "modifiers": []
+    },
+    {
+      "id": "cc-cli-009",
+      "toolId": "claude-code",
+      "section": "CLI — Arranque y Sesiones",
+      "name": "claude --effort high",
+      "description": "Fija nivel de esfuerzo para la sesión",
+      "hint": "low | medium | high | max (Opus only)",
+      "importance": "medium",
+      "frequency": 3,
+      "tags": [
+        "cli",
+        "model",
+        "effort"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 8,
+      "modifiers": []
+    },
+    {
+      "id": "cc-cli-010",
+      "toolId": "claude-code",
+      "section": "CLI — Arranque y Sesiones",
+      "name": "claude --permission-mode",
+      "description": "Modo de permisos al iniciar",
+      "hint": "default | acceptEdits | plan | auto | bypassPermissions",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "cli",
+        "permissions"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 9,
+      "modifiers": []
+    },
+    {
+      "id": "cc-cli-011",
+      "toolId": "claude-code",
+      "section": "CLI — Arranque y Sesiones",
+      "name": "claude -n \"name\"",
+      "description": "Nombra la sesión para luego resumirla fácilmente",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "cli",
+        "session"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 10,
+      "modifiers": []
+    },
+    {
+      "id": "cc-cli-012",
+      "toolId": "claude-code",
+      "section": "CLI — Arranque y Sesiones",
+      "name": "claude --add-dir",
+      "description": "Añade directorios extra de trabajo",
+      "hint": "claude --add-dir ../apps ../lib",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "cli",
+        "workspace"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 11,
+      "modifiers": []
+    },
+    {
+      "id": "cc-cli-013",
+      "toolId": "claude-code",
+      "section": "CLI — Arranque y Sesiones",
+      "name": "claude --bare",
+      "description": "Modo mínimo: sin hooks/skills/plugins/MCP — arranque rápido",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 1,
+      "tags": [
+        "cli",
+        "performance"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 12,
+      "modifiers": []
+    },
+    {
+      "id": "cc-cli-014",
+      "toolId": "claude-code",
+      "section": "CLI — Arranque y Sesiones",
+      "name": "claude --remote",
+      "description": "Crea sesión web en claude.ai",
+      "hint": "",
+      "importance": "low",
+      "frequency": 1,
+      "tags": [
+        "cli",
+        "remote"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 13,
+      "modifiers": []
+    },
+    {
+      "id": "cc-cli-015",
+      "toolId": "claude-code",
+      "section": "CLI — Arranque y Sesiones",
+      "name": "claude --chrome",
+      "description": "Habilita integración con Chrome para testing web",
+      "hint": "",
+      "importance": "low",
+      "frequency": 1,
+      "tags": [
+        "cli",
+        "browser",
+        "testing"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 14,
+      "modifiers": []
+    },
+    {
+      "id": "cc-slash-001",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Sesión y Contexto",
+      "name": "/compact [foco]",
+      "description": "Compacta la conversación, conservando lo indicado",
+      "hint": "/compact \"retén los patrones de error handling\" — úsalo al ~80% de contexto",
+      "importance": "critical",
+      "frequency": 5,
+      "tags": [
+        "slash",
+        "context"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "modifiers": [
+        {
+          "flag": "[foco]",
+          "description": "Qué retener durante la compactación",
+          "example": "/compact \"retén los patterns de error handling\""
+        }
+      ]
+    },
+    {
+      "id": "cc-slash-002",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Sesión y Contexto",
+      "name": "/clear",
+      "description": "Borra historial y libera contexto completo",
+      "hint": "Aliases: /reset, /new — úsalo al cambiar de tarea",
+      "importance": "critical",
+      "frequency": 5,
+      "tags": [
+        "slash",
+        "context"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "modifiers": []
+    },
+    {
+      "id": "cc-slash-003",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Sesión y Contexto",
+      "name": "/plan [desc]",
+      "description": "Entra en modo plan (solo lectura, sin escritura)",
+      "hint": "/plan fix the auth bug — Claude analiza sin tocar código",
+      "importance": "critical",
+      "frequency": 4,
+      "tags": [
+        "slash",
+        "plan"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 2,
+      "modifiers": []
+    },
+    {
+      "id": "cc-slash-004",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Sesión y Contexto",
+      "name": "/rewind",
+      "description": "Rebobina código y/o conversación a un punto anterior",
+      "hint": "Esc+Esc para menú rápido — \"Rewind code only\" mantiene historial",
+      "importance": "critical",
+      "frequency": 4,
+      "tags": [
+        "slash",
+        "history"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 3,
+      "modifiers": []
+    },
+    {
+      "id": "cc-slash-005",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Sesión y Contexto",
+      "name": "/model [model]",
+      "description": "Cambia modelo sin salir (↑ ↓ para ajustar effort)",
+      "hint": "",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "slash",
+        "model"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 4,
+      "modifiers": []
+    },
+    {
+      "id": "cc-slash-006",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Sesión y Contexto",
+      "name": "/effort [level]",
+      "description": "Ajusta nivel de esfuerzo en caliente",
+      "hint": "low | medium | high | max (Opus) | auto",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "slash",
+        "effort"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 5,
+      "modifiers": []
+    },
+    {
+      "id": "cc-slash-007",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Sesión y Contexto",
+      "name": "/fast [on|off]",
+      "description": "Activa/desactiva Fast Mode (mismo modelo, API speed-optimized)",
+      "hint": "",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "slash",
+        "performance"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 6,
+      "modifiers": []
+    },
+    {
+      "id": "cc-slash-008",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Sesión y Contexto",
+      "name": "/context",
+      "description": "Visualiza uso de contexto como grid de colores con sugerencias",
+      "hint": "",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "slash",
+        "context"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 7,
+      "modifiers": []
+    },
+    {
+      "id": "cc-slash-009",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Sesión y Contexto",
+      "name": "/resume",
+      "description": "Resume sesión desde picker interactivo",
+      "hint": "Alias: /continue",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "slash",
+        "session"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 8,
+      "modifiers": []
+    },
+    {
+      "id": "cc-slash-010",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Sesión y Contexto",
+      "name": "/diff",
+      "description": "Visor interactivo de diffs (uncommitted + por turno de Claude)",
+      "hint": "",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "slash",
+        "git"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 9,
+      "modifiers": []
+    },
+    {
+      "id": "cc-slash-011",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Sesión y Contexto",
+      "name": "/memory",
+      "description": "Edita archivos CLAUDE.md, auto-memory y preferencias",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "slash",
+        "memory"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 10,
+      "modifiers": []
+    },
+    {
+      "id": "cc-slash-012",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Sesión y Contexto",
+      "name": "/permissions",
+      "description": "Gestiona reglas allow/ask/deny para herramientas",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "slash",
+        "permissions"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 11,
+      "modifiers": []
+    },
+    {
+      "id": "cc-slash-013",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Sesión y Contexto",
+      "name": "/config",
+      "description": "Abre panel de configuración (tema, modelo, estilo…)",
+      "hint": "Alias: /settings",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "slash",
+        "config"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 12,
+      "modifiers": []
+    },
+    {
+      "id": "cc-slash-014",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Sesión y Contexto",
+      "name": "/cost",
+      "description": "Muestra estadísticas de tokens consumidos",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "slash",
+        "cost"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 13,
+      "modifiers": []
+    },
+    {
+      "id": "cc-slash-015",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Sesión y Contexto",
+      "name": "/usage",
+      "description": "Muestra límites del plan y estado de rate limit",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "slash",
+        "usage"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 14,
+      "modifiers": []
+    },
+    {
+      "id": "cc-slash-016",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Sesión y Contexto",
+      "name": "/rename [name]",
+      "description": "Renombra sesión actual (sin arg — autogenera nombre)",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 1,
+      "tags": [
+        "slash",
+        "session"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 15,
+      "modifiers": []
+    },
+    {
+      "id": "cc-slash-017",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Sesión y Contexto",
+      "name": "/copy [N]",
+      "description": "Copia última respuesta al clipboard (N = n-ésima anterior)",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "slash",
+        "clipboard"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 16,
+      "modifiers": []
+    },
+    {
+      "id": "cc-slash-018",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Sesión y Contexto",
+      "name": "/export [file]",
+      "description": "Exporta conversación como texto plano",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 1,
+      "tags": [
+        "slash",
+        "export"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 17,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flow-001",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Flujo de Trabajo",
+      "name": "/init",
+      "description": "Inicializa proyecto con CLAUDE.md",
+      "hint": "CLAUDE_CODE_NEW_INIT=1 para flujo interactivo con skills y hooks",
+      "importance": "critical",
+      "frequency": 1,
+      "tags": [
+        "slash",
+        "setup"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flow-002",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Flujo de Trabajo",
+      "name": "/simplify",
+      "description": "Pipeline de 3 agentes para QA pre-PR",
+      "hint": "Detecta issues arquitecturales, lógica duplicada, ineficiencias",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "slash",
+        "review",
+        "qa"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flow-003",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Flujo de Trabajo",
+      "name": "/batch",
+      "description": "Procesamiento paralelo en múltiples worktrees + auto-PR",
+      "hint": "Ideal para migraciones y aplicación de patrones a gran escala",
+      "importance": "high",
+      "frequency": 2,
+      "tags": [
+        "slash",
+        "batch",
+        "automation"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 2,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flow-004",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Flujo de Trabajo",
+      "name": "/debug",
+      "description": "Skill de debug asistido",
+      "hint": "",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "slash",
+        "debug"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 3,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flow-005",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Flujo de Trabajo",
+      "name": "/loop",
+      "description": "Skill de iteración continua hasta completar tarea",
+      "hint": "",
+      "importance": "high",
+      "frequency": 2,
+      "tags": [
+        "slash",
+        "loop"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 4,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flow-006",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Flujo de Trabajo",
+      "name": "/pr-comments [PR]",
+      "description": "Trae comentarios de un PR de GitHub",
+      "hint": "Detecta automáticamente la PR del branch actual",
+      "importance": "high",
+      "frequency": 2,
+      "tags": [
+        "slash",
+        "github",
+        "pr"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 5,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flow-007",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Flujo de Trabajo",
+      "name": "/agents",
+      "description": "Gestiona configuración de subagentes",
+      "hint": "",
+      "importance": "high",
+      "frequency": 2,
+      "tags": [
+        "slash",
+        "agents"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 6,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flow-008",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Flujo de Trabajo",
+      "name": "/security-review",
+      "description": "Analiza cambios pendientes por vulnerabilidades de seguridad",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "slash",
+        "security",
+        "review"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 7,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flow-009",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Flujo de Trabajo",
+      "name": "/insights",
+      "description": "Genera reporte HTML de tus sesiones (patrones, fricciones)",
+      "hint": "Recomendado cada 2 semanas o al cerrar milestones",
+      "importance": "medium",
+      "frequency": 1,
+      "tags": [
+        "slash",
+        "analytics"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 8,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flow-010",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Flujo de Trabajo",
+      "name": "/mcp",
+      "description": "Gestiona conexiones MCP y OAuth",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "slash",
+        "mcp"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 9,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flow-011",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Flujo de Trabajo",
+      "name": "/hooks",
+      "description": "Ver configuración de hooks para eventos de herramientas",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 1,
+      "tags": [
+        "slash",
+        "hooks"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 10,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flow-012",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Flujo de Trabajo",
+      "name": "/skills",
+      "description": "Lista skills disponibles (built-in + custom en .claude/)",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 1,
+      "tags": [
+        "slash",
+        "skills"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 11,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flow-013",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Flujo de Trabajo",
+      "name": "/plugin",
+      "description": "Instala/gestiona plugins de Claude Code",
+      "hint": "claude plugin install code-review@claude-plugins-official",
+      "importance": "medium",
+      "frequency": 1,
+      "tags": [
+        "slash",
+        "plugins"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 12,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flow-014",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Flujo de Trabajo",
+      "name": "/schedule [desc]",
+      "description": "Crea/gestiona tareas programadas en la nube",
+      "hint": "",
+      "importance": "low",
+      "frequency": 1,
+      "tags": [
+        "slash",
+        "schedule"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 13,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flow-015",
+      "toolId": "claude-code",
+      "section": "Slash Commands — Flujo de Trabajo",
+      "name": "/install-github-app",
+      "description": "Configura Claude GitHub Actions para un repo",
+      "hint": "",
+      "importance": "low",
+      "frequency": 1,
+      "tags": [
+        "slash",
+        "github",
+        "ci"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 14,
+      "modifiers": []
+    },
+    {
+      "id": "cc-key-001",
+      "toolId": "claude-code",
+      "section": "Atajos de Teclado",
+      "name": "Ctrl+C",
+      "description": "Cancela input o generación en curso",
+      "hint": "",
+      "importance": "critical",
+      "frequency": 5,
+      "tags": [
+        "shortcut",
+        "cancel"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "modifiers": []
+    },
+    {
+      "id": "cc-key-002",
+      "toolId": "claude-code",
+      "section": "Atajos de Teclado",
+      "name": "Esc + Esc",
+      "description": "Menú Rewind/Summarize",
+      "hint": "\"Rewind code only\" = revierte código, mantiene conversación",
+      "importance": "critical",
+      "frequency": 4,
+      "tags": [
+        "shortcut",
+        "history"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "modifiers": []
+    },
+    {
+      "id": "cc-key-003",
+      "toolId": "claude-code",
+      "section": "Atajos de Teclado",
+      "name": "Shift+Tab",
+      "description": "Cicla modos de permisos",
+      "hint": "default → acceptEdits → plan → auto → bypass…",
+      "importance": "critical",
+      "frequency": 4,
+      "tags": [
+        "shortcut",
+        "permissions"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 2,
+      "modifiers": []
+    },
+    {
+      "id": "cc-key-004",
+      "toolId": "claude-code",
+      "section": "Atajos de Teclado",
+      "name": "@ + texto",
+      "description": "Autocomplete de rutas de archivo",
+      "hint": "@src/auth.ts:42 — referencia directa a línea",
+      "importance": "high",
+      "frequency": 4,
+      "tags": [
+        "shortcut",
+        "files"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 3,
+      "modifiers": []
+    },
+    {
+      "id": "cc-key-005",
+      "toolId": "claude-code",
+      "section": "Atajos de Teclado",
+      "name": "! comando",
+      "description": "Ejecuta bash directo (sin pasar por Claude)",
+      "hint": "!git status · !dotnet build — ahorra tokens",
+      "importance": "high",
+      "frequency": 4,
+      "tags": [
+        "shortcut",
+        "bash"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 4,
+      "modifiers": []
+    },
+    {
+      "id": "cc-key-006",
+      "toolId": "claude-code",
+      "section": "Atajos de Teclado",
+      "name": "Ctrl+O",
+      "description": "Visor de transcript (detalle de herramientas ejecutadas)",
+      "hint": "",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "shortcut",
+        "transcript"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 5,
+      "modifiers": []
+    },
+    {
+      "id": "cc-key-007",
+      "toolId": "claude-code",
+      "section": "Atajos de Teclado",
+      "name": "Ctrl+R",
+      "description": "Búsqueda inversa en historial de comandos",
+      "hint": "",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "shortcut",
+        "history"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 6,
+      "modifiers": []
+    },
+    {
+      "id": "cc-key-008",
+      "toolId": "claude-code",
+      "section": "Atajos de Teclado",
+      "name": "Alt+P / Opt+P",
+      "description": "Cambiar modelo sin borrar prompt",
+      "hint": "",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "shortcut",
+        "model"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 7,
+      "modifiers": []
+    },
+    {
+      "id": "cc-key-009",
+      "toolId": "claude-code",
+      "section": "Atajos de Teclado",
+      "name": "Alt+T / Opt+T",
+      "description": "Toggle extended thinking",
+      "hint": "",
+      "importance": "high",
+      "frequency": 2,
+      "tags": [
+        "shortcut",
+        "thinking"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 8,
+      "modifiers": []
+    },
+    {
+      "id": "cc-key-010",
+      "toolId": "claude-code",
+      "section": "Atajos de Teclado",
+      "name": "Alt+O / Opt+O",
+      "description": "Toggle Fast Mode",
+      "hint": "",
+      "importance": "high",
+      "frequency": 2,
+      "tags": [
+        "shortcut",
+        "fast"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 9,
+      "modifiers": []
+    },
+    {
+      "id": "cc-key-011",
+      "toolId": "claude-code",
+      "section": "Atajos de Teclado",
+      "name": "Ctrl+V / Cmd+V",
+      "description": "Pega imagen del clipboard como [Image #N]",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "shortcut",
+        "clipboard"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 10,
+      "modifiers": []
+    },
+    {
+      "id": "cc-key-012",
+      "toolId": "claude-code",
+      "section": "Atajos de Teclado",
+      "name": "Ctrl+B",
+      "description": "Envía tareas al background (bash/agentes)",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "shortcut",
+        "background"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 11,
+      "modifiers": []
+    },
+    {
+      "id": "cc-key-013",
+      "toolId": "claude-code",
+      "section": "Atajos de Teclado",
+      "name": "Ctrl+G",
+      "description": "Abre tu editor de texto predeterminado para escribir el prompt",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 1,
+      "tags": [
+        "shortcut",
+        "editor"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 12,
+      "modifiers": []
+    },
+    {
+      "id": "cc-key-014",
+      "toolId": "claude-code",
+      "section": "Atajos de Teclado",
+      "name": "Ctrl+T",
+      "description": "Toggle lista de tareas en barra de estado",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 1,
+      "tags": [
+        "shortcut",
+        "todos"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 13,
+      "modifiers": []
+    },
+    {
+      "id": "cc-key-015",
+      "toolId": "claude-code",
+      "section": "Atajos de Teclado",
+      "name": "Hold Space",
+      "description": "Push-to-talk (voice dictation, requiere /voice)",
+      "hint": "Transcripción se inserta en la posición del cursor",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "shortcut",
+        "voice"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 14,
+      "modifiers": []
+    },
+    {
+      "id": "cc-key-016",
+      "toolId": "claude-code",
+      "section": "Atajos de Teclado",
+      "name": "\\ + Enter",
+      "description": "Input multilínea (funciona en todos los terminales)",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 3,
+      "tags": [
+        "shortcut",
+        "input"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 15,
+      "modifiers": []
+    },
+    {
+      "id": "cc-util-001",
+      "toolId": "claude-code",
+      "section": "Utilidad, Sistema y Cuenta",
+      "name": "claude update",
+      "description": "Actualiza a la última versión",
+      "hint": "",
+      "importance": "high",
+      "frequency": 2,
+      "tags": [
+        "cli",
+        "update"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "modifiers": []
+    },
+    {
+      "id": "cc-util-002",
+      "toolId": "claude-code",
+      "section": "Utilidad, Sistema y Cuenta",
+      "name": "claude auth login",
+      "description": "Inicia sesión Anthropic",
+      "hint": "--email · --sso · --console (para facturación API)",
+      "importance": "high",
+      "frequency": 1,
+      "tags": [
+        "cli",
+        "auth"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "modifiers": []
+    },
+    {
+      "id": "cc-util-003",
+      "toolId": "claude-code",
+      "section": "Utilidad, Sistema y Cuenta",
+      "name": "claude mcp add",
+      "description": "Añade servidor MCP",
+      "hint": "claude mcp add --transport http github https://mcp.github.com",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "cli",
+        "mcp"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 2,
+      "modifiers": []
+    },
+    {
+      "id": "cc-util-004",
+      "toolId": "claude-code",
+      "section": "Utilidad, Sistema y Cuenta",
+      "name": "claude mcp serve",
+      "description": "Expone Claude Code como servidor MCP",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 1,
+      "tags": [
+        "cli",
+        "mcp"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 3,
+      "modifiers": []
+    },
+    {
+      "id": "cc-util-005",
+      "toolId": "claude-code",
+      "section": "Utilidad, Sistema y Cuenta",
+      "name": "claude agents",
+      "description": "Lista todos los subagentes configurados",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 1,
+      "tags": [
+        "cli",
+        "agents"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 4,
+      "modifiers": []
+    },
+    {
+      "id": "cc-util-006",
+      "toolId": "claude-code",
+      "section": "Utilidad, Sistema y Cuenta",
+      "name": "/doctor",
+      "description": "Diagnostica y verifica instalación de Claude Code",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 1,
+      "tags": [
+        "slash",
+        "diagnostics"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 5,
+      "modifiers": []
+    },
+    {
+      "id": "cc-util-007",
+      "toolId": "claude-code",
+      "section": "Utilidad, Sistema y Cuenta",
+      "name": "/theme",
+      "description": "Cambia tema de color (light/dark/daltonized/ANSI)",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 1,
+      "tags": [
+        "slash",
+        "theme"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 6,
+      "modifiers": []
+    },
+    {
+      "id": "cc-util-008",
+      "toolId": "claude-code",
+      "section": "Utilidad, Sistema y Cuenta",
+      "name": "/stats",
+      "description": "Visualiza uso diario, historial de sesiones, streaks",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 1,
+      "tags": [
+        "slash",
+        "stats"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 7,
+      "modifiers": []
+    },
+    {
+      "id": "cc-util-009",
+      "toolId": "claude-code",
+      "section": "Utilidad, Sistema y Cuenta",
+      "name": "/voice",
+      "description": "Activa/desactiva dictado por voz push-to-talk",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "slash",
+        "voice"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 8,
+      "modifiers": []
+    },
+    {
+      "id": "cc-util-010",
+      "toolId": "claude-code",
+      "section": "Utilidad, Sistema y Cuenta",
+      "name": "/btw pregunta",
+      "description": "Pregunta lateral sin añadir al contexto",
+      "hint": "",
+      "importance": "low",
+      "frequency": 1,
+      "tags": [
+        "slash",
+        "context"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 9,
+      "modifiers": []
+    },
+    {
+      "id": "cc-util-011",
+      "toolId": "claude-code",
+      "section": "Utilidad, Sistema y Cuenta",
+      "name": "/color [color]",
+      "description": "Color de la prompt bar para diferenciar sesiones",
+      "hint": "",
+      "importance": "low",
+      "frequency": 1,
+      "tags": [
+        "slash",
+        "theme"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 10,
+      "modifiers": []
+    },
+    {
+      "id": "cc-util-012",
+      "toolId": "claude-code",
+      "section": "Utilidad, Sistema y Cuenta",
+      "name": "/release-notes",
+      "description": "Ver changelog completo",
+      "hint": "",
+      "importance": "low",
+      "frequency": 1,
+      "tags": [
+        "slash",
+        "info"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 11,
+      "modifiers": []
+    },
+    {
+      "id": "cc-util-013",
+      "toolId": "claude-code",
+      "section": "Utilidad, Sistema y Cuenta",
+      "name": "/sandbox",
+      "description": "Toggle modo sandbox (plataformas soportadas)",
+      "hint": "",
+      "importance": "low",
+      "frequency": 1,
+      "tags": [
+        "slash",
+        "sandbox"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 12,
+      "modifiers": []
+    },
+    {
+      "id": "cc-util-014",
+      "toolId": "claude-code",
+      "section": "Utilidad, Sistema y Cuenta",
+      "name": "/vim",
+      "description": "Toggle modo Vim para edición en el prompt",
+      "hint": "",
+      "importance": "low",
+      "frequency": 1,
+      "tags": [
+        "slash",
+        "vim",
+        "editor"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 13,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flag-001",
+      "toolId": "claude-code",
+      "section": "Flags Avanzados / Scripting / CI",
+      "name": "--output-format",
+      "description": "Formato de salida: text | json | stream-json",
+      "hint": "",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "flag",
+        "ci",
+        "output"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flag-002",
+      "toolId": "claude-code",
+      "section": "Flags Avanzados / Scripting / CI",
+      "name": "--max-turns N",
+      "description": "Limita turnos agénticos (solo -p)",
+      "hint": "",
+      "importance": "high",
+      "frequency": 2,
+      "tags": [
+        "flag",
+        "ci",
+        "limits"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flag-003",
+      "toolId": "claude-code",
+      "section": "Flags Avanzados / Scripting / CI",
+      "name": "--max-budget-usd N",
+      "description": "Tope de gasto en USD (solo -p)",
+      "hint": "",
+      "importance": "high",
+      "frequency": 2,
+      "tags": [
+        "flag",
+        "ci",
+        "budget"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 2,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flag-004",
+      "toolId": "claude-code",
+      "section": "Flags Avanzados / Scripting / CI",
+      "name": "--json-schema",
+      "description": "Output validado contra JSON Schema (solo -p)",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 1,
+      "tags": [
+        "flag",
+        "ci",
+        "output"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 3,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flag-005",
+      "toolId": "claude-code",
+      "section": "Flags Avanzados / Scripting / CI",
+      "name": "--allowedTools",
+      "description": "Herramientas que se ejecutan sin pedir permiso",
+      "hint": "\"Bash(git log *)\" \"Bash(git diff *)\" \"Read\"",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "flag",
+        "permissions"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 4,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flag-006",
+      "toolId": "claude-code",
+      "section": "Flags Avanzados / Scripting / CI",
+      "name": "--disallowedTools",
+      "description": "Herramientas completamente deshabilitadas",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 1,
+      "tags": [
+        "flag",
+        "permissions"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 5,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flag-007",
+      "toolId": "claude-code",
+      "section": "Flags Avanzados / Scripting / CI",
+      "name": "--append-system-prompt",
+      "description": "Añade instrucciones al system prompt default",
+      "hint": "Mantiene las capabilities built-in de Claude Code",
+      "importance": "medium",
+      "frequency": 1,
+      "tags": [
+        "flag",
+        "prompt"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 6,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flag-008",
+      "toolId": "claude-code",
+      "section": "Flags Avanzados / Scripting / CI",
+      "name": "--system-prompt",
+      "description": "Reemplaza completamente el system prompt",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 1,
+      "tags": [
+        "flag",
+        "prompt"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 7,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flag-009",
+      "toolId": "claude-code",
+      "section": "Flags Avanzados / Scripting / CI",
+      "name": "--mcp-config file",
+      "description": "Carga servidores MCP desde JSON",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 1,
+      "tags": [
+        "flag",
+        "mcp"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 8,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flag-010",
+      "toolId": "claude-code",
+      "section": "Flags Avanzados / Scripting / CI",
+      "name": "--fallback-model",
+      "description": "Modelo de respaldo si el default está sobrecargado",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 1,
+      "tags": [
+        "flag",
+        "model"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 9,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flag-011",
+      "toolId": "claude-code",
+      "section": "Flags Avanzados / Scripting / CI",
+      "name": "--agents JSON",
+      "description": "Define subagentes dinámicos por JSON inline",
+      "hint": "",
+      "importance": "low",
+      "frequency": 1,
+      "tags": [
+        "flag",
+        "agents"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 10,
+      "modifiers": []
+    },
+    {
+      "id": "cc-flag-012",
+      "toolId": "claude-code",
+      "section": "Flags Avanzados / Scripting / CI",
+      "name": "--tools \"X,Y,Z\"",
+      "description": "Restringe herramientas disponibles",
+      "hint": "\"Bash,Edit,Read\" · \"\" deshabilita todo · \"default\" todas",
+      "importance": "low",
+      "frequency": 1,
+      "tags": [
+        "flag",
+        "permissions"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 11,
+      "modifiers": []
+    },
+    {
+      "id": "git-001",
+      "toolId": "git",
+      "section": "Básico",
+      "name": "git status",
+      "description": "Muestra archivos modificados, en staging y sin seguir",
+      "hint": "-s para output corto · -b para incluir branch",
+      "importance": "critical",
+      "frequency": 5,
+      "tags": [
+        "basic",
+        "inspection"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "modifiers": [
+        {
+          "flag": "-s",
+          "description": "Formato compacto, una línea por archivo"
+        },
+        {
+          "flag": "-b",
+          "description": "Incluye nombre de branch en el output"
+        },
+        {
+          "flag": "--short",
+          "description": "Alias largo de -s"
+        },
+        {
+          "flag": "-uall",
+          "description": "Muestra también archivos dentro de directorios untracked"
+        }
+      ]
+    },
+    {
+      "id": "git-002",
+      "toolId": "git",
+      "section": "Básico",
+      "name": "git add .",
+      "description": "Añade todos los cambios al staging area",
+      "hint": "git add -p para modo interactivo hunk-by-hunk",
+      "importance": "critical",
+      "frequency": 5,
+      "tags": [
+        "basic",
+        "staging"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "modifiers": [
+        {
+          "flag": "-p",
+          "description": "Interactive por hunks (recomendado)"
+        },
+        {
+          "flag": "-A",
+          "description": "Stage de TODO incluidos deletes"
+        },
+        {
+          "flag": "-u",
+          "description": "Solo tracked (no untracked)"
+        }
+      ]
+    },
+    {
+      "id": "git-003",
+      "toolId": "git",
+      "section": "Básico",
+      "name": "git commit -m \"msg\"",
+      "description": "Crea un commit con mensaje",
+      "hint": "-a auto-stage · --amend para enmendar el último",
+      "importance": "critical",
+      "frequency": 5,
+      "tags": [
+        "basic",
+        "commit"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 2,
+      "modifiers": []
+    },
+    {
+      "id": "git-004",
+      "toolId": "git",
+      "section": "Remoto",
+      "name": "git push",
+      "description": "Envía commits al remoto",
+      "hint": "-u origin branch para primera vez · --force-with-lease para force push seguro",
+      "importance": "critical",
+      "frequency": 5,
+      "tags": [
+        "remote",
+        "push"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "modifiers": [
+        {
+          "flag": "-u origin branch",
+          "description": "Set upstream en primer push"
+        },
+        {
+          "flag": "--force-with-lease",
+          "description": "Force push seguro (aborta si hay cambios remotos)"
+        },
+        {
+          "flag": "--tags",
+          "description": "Incluye tags en el push"
+        },
+        {
+          "flag": "--dry-run",
+          "description": "Simula sin enviar nada"
+        }
+      ]
+    },
+    {
+      "id": "git-005",
+      "toolId": "git",
+      "section": "Remoto",
+      "name": "git pull --rebase",
+      "description": "Trae cambios remotos y rebase encima",
+      "hint": "Evita commits de merge innecesarios",
+      "importance": "high",
+      "frequency": 4,
+      "tags": [
+        "remote",
+        "rebase"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "modifiers": []
+    },
+    {
+      "id": "git-006",
+      "toolId": "git",
+      "section": "Branches",
+      "name": "git checkout -b name",
+      "description": "Crea nueva branch y cambia a ella",
+      "hint": "git switch -c name (sintaxis moderna)",
+      "importance": "high",
+      "frequency": 4,
+      "tags": [
+        "branch"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "modifiers": []
+    },
+    {
+      "id": "git-007",
+      "toolId": "git",
+      "section": "Branches",
+      "name": "git log --oneline --graph",
+      "description": "Historial compacto con grafo de branches",
+      "hint": "--all para ver todas las branches · -20 para limitar",
+      "importance": "high",
+      "frequency": 4,
+      "tags": [
+        "history",
+        "inspection"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "modifiers": [
+        {
+          "flag": "--oneline",
+          "description": "Una línea por commit con SHA corto + subject"
+        },
+        {
+          "flag": "--graph",
+          "description": "Dibuja árbol ASCII de branches/merges"
+        },
+        {
+          "flag": "--all",
+          "description": "Incluye todas las branches, no solo HEAD"
+        },
+        {
+          "flag": "-n N",
+          "description": "Limita a los N commits más recientes"
+        },
+        {
+          "flag": "--author=name",
+          "description": "Filtra por autor (regex parcial)"
+        },
+        {
+          "flag": "--since=\"2 weeks\"",
+          "description": "Commits desde fecha o tiempo relativo"
+        },
+        {
+          "flag": "--stat",
+          "description": "Resumen de archivos modificados por commit"
+        }
+      ]
+    },
+    {
+      "id": "git-008",
+      "toolId": "git",
+      "section": "Avanzado",
+      "name": "git stash",
+      "description": "Guarda cambios sin commit para recuperar luego",
+      "hint": "git stash pop para recuperar · git stash list para ver",
+      "importance": "medium",
+      "frequency": 3,
+      "tags": [
+        "stash"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "modifiers": []
+    },
+    {
+      "id": "docker-001",
+      "toolId": "docker",
+      "section": "Containers",
+      "name": "docker ps",
+      "description": "Lista containers corriendo",
+      "hint": "-a para incluir parados",
+      "importance": "critical",
+      "frequency": 5,
+      "tags": [
+        "containers",
+        "inspection"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "modifiers": []
+    },
+    {
+      "id": "docker-002",
+      "toolId": "docker",
+      "section": "Containers",
+      "name": "docker run image",
+      "description": "Ejecuta un container desde una imagen",
+      "hint": "-d detached · -p 8080:80 puertos · --rm auto-delete",
+      "importance": "critical",
+      "frequency": 4,
+      "tags": [
+        "containers",
+        "run"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "modifiers": [
+        {
+          "flag": "-d",
+          "description": "Detached mode — corre en background"
+        },
+        {
+          "flag": "-p host:container",
+          "description": "Publica puerto en el host",
+          "example": "-p 8080:80"
+        },
+        {
+          "flag": "-v host:container",
+          "description": "Monta volumen",
+          "example": "-v ./data:/app/data"
+        },
+        {
+          "flag": "--rm",
+          "description": "Elimina container al terminar"
+        },
+        {
+          "flag": "--name label",
+          "description": "Nombre legible para el container"
+        },
+        {
+          "flag": "-e KEY=value",
+          "description": "Variable de entorno"
+        },
+        {
+          "flag": "--network mynet",
+          "description": "Conecta a red Docker específica"
+        },
+        {
+          "flag": "-it",
+          "description": "Interactive + TTY (shells)"
+        },
+        {
+          "flag": "--restart unless-stopped",
+          "description": "Política de reinicio"
+        }
+      ]
+    },
+    {
+      "id": "docker-003",
+      "toolId": "docker",
+      "section": "Containers",
+      "name": "docker exec -it id bash",
+      "description": "Entra en un container en ejecución",
+      "hint": "sh si no hay bash",
+      "importance": "high",
+      "frequency": 4,
+      "tags": [
+        "containers",
+        "debug"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 2,
+      "modifiers": [
+        {
+          "flag": "-it",
+          "description": "Interactive + TTY (esencial para shells)"
+        },
+        {
+          "flag": "-u root",
+          "description": "Ejecuta como otro usuario"
+        },
+        {
+          "flag": "-w /path",
+          "description": "Working directory dentro del container"
+        },
+        {
+          "flag": "-e VAR=val",
+          "description": "Define variable de entorno"
+        }
+      ]
+    },
+    {
+      "id": "docker-004",
+      "toolId": "docker",
+      "section": "Containers",
+      "name": "docker logs -f id",
+      "description": "Sigue los logs de un container en tiempo real",
+      "hint": "--tail 100 para solo las últimas 100 líneas",
+      "importance": "high",
+      "frequency": 4,
+      "tags": [
+        "containers",
+        "logs"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 3,
+      "modifiers": [
+        {
+          "flag": "-f",
+          "description": "Follow (tail -f) — sigue en tiempo real"
+        },
+        {
+          "flag": "--tail 100",
+          "description": "Muestra solo las últimas N líneas"
+        },
+        {
+          "flag": "-t",
+          "description": "Añade timestamps"
+        },
+        {
+          "flag": "--since 10m",
+          "description": "Solo logs desde hace X minutos/horas"
+        }
+      ]
+    },
+    {
+      "id": "docker-005",
+      "toolId": "docker",
+      "section": "Compose",
+      "name": "docker compose up -d",
+      "description": "Levanta stack definido en docker-compose.yml",
+      "hint": "--build para reconstruir imágenes",
+      "importance": "critical",
+      "frequency": 5,
+      "tags": [
+        "compose",
+        "stack"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "modifiers": []
+    },
+    {
+      "id": "docker-006",
+      "toolId": "docker",
+      "section": "Compose",
+      "name": "docker compose down",
+      "description": "Detiene y elimina containers del stack",
+      "hint": "-v también elimina volúmenes",
+      "importance": "high",
+      "frequency": 4,
+      "tags": [
+        "compose",
+        "stack"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "modifiers": []
+    },
+    {
+      "id": "npm-001",
+      "toolId": "npm",
+      "section": "Básico",
+      "name": "npm install",
+      "description": "Instala todas las dependencias del package.json",
+      "hint": "Alias: npm i",
+      "importance": "critical",
+      "frequency": 5,
+      "tags": [
+        "basic",
+        "deps"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "modifiers": []
+    },
+    {
+      "id": "npm-002",
+      "toolId": "npm",
+      "section": "Básico",
+      "name": "npm install pkg",
+      "description": "Añade un paquete a dependencies",
+      "hint": "-D para devDependencies · -g global",
+      "importance": "critical",
+      "frequency": 5,
+      "tags": [
+        "basic",
+        "deps"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "modifiers": [
+        {
+          "flag": "-D",
+          "description": "devDependencies (solo build/test)"
+        },
+        {
+          "flag": "-g",
+          "description": "Instalación global"
+        },
+        {
+          "flag": "--save-exact",
+          "description": "Guarda versión exacta sin ^"
+        },
+        {
+          "flag": "--legacy-peer-deps",
+          "description": "Ignora conflictos de peer deps"
+        },
+        {
+          "flag": "--omit=dev",
+          "description": "Skippea devDeps (producción)"
+        },
+        {
+          "flag": "--no-fund",
+          "description": "Silencia mensajes de funding"
+        }
+      ]
+    },
+    {
+      "id": "npm-003",
+      "toolId": "npm",
+      "section": "Básico",
+      "name": "npm run script",
+      "description": "Ejecuta un script definido en package.json",
+      "hint": "npm run sin args lista todos los scripts",
+      "importance": "critical",
+      "frequency": 5,
+      "tags": [
+        "basic",
+        "scripts"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 2,
+      "modifiers": []
+    },
+    {
+      "id": "npm-004",
+      "toolId": "npm",
+      "section": "Maintenance",
+      "name": "npm audit fix",
+      "description": "Arregla automáticamente vulnerabilidades detectadas",
+      "hint": "--force puede romper por major bumps",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "security",
+        "maintenance"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "modifiers": []
+    },
+    {
+      "id": "npm-005",
+      "toolId": "npm",
+      "section": "Maintenance",
+      "name": "npm outdated",
+      "description": "Lista paquetes con versiones más nuevas disponibles",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "maintenance"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "modifiers": []
+    },
+    {
+      "id": "bash-001",
+      "toolId": "bash",
+      "section": "Básico",
+      "name": "ls -la",
+      "description": "Lista archivos incluyendo ocultos con detalles",
+      "hint": "-h para tamaños legibles · -t por fecha",
+      "importance": "critical",
+      "frequency": 5,
+      "tags": [
+        "basic",
+        "files"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "modifiers": []
+    },
+    {
+      "id": "bash-002",
+      "toolId": "bash",
+      "section": "Básico",
+      "name": "cd path",
+      "description": "Cambia de directorio",
+      "hint": "cd - vuelve al anterior · cd ~ home",
+      "importance": "critical",
+      "frequency": 5,
+      "tags": [
+        "basic",
+        "navigation"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "modifiers": []
+    },
+    {
+      "id": "bash-003",
+      "toolId": "bash",
+      "section": "Búsqueda",
+      "name": "grep -rn \"texto\" .",
+      "description": "Busca recursivamente un texto con números de línea",
+      "hint": "rg (ripgrep) es muchísimo más rápido",
+      "importance": "high",
+      "frequency": 4,
+      "tags": [
+        "search",
+        "text"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "modifiers": [
+        {
+          "flag": "-r",
+          "description": "Recursivo en directorios"
+        },
+        {
+          "flag": "-n",
+          "description": "Muestra número de línea"
+        },
+        {
+          "flag": "-i",
+          "description": "Case insensitive"
+        },
+        {
+          "flag": "-l",
+          "description": "Solo nombres de archivos que matchean"
+        },
+        {
+          "flag": "-v",
+          "description": "Invierte match (muestra NO-matches)"
+        },
+        {
+          "flag": "-E",
+          "description": "Extended regex (soporta +, ?, |)"
+        },
+        {
+          "flag": "-A 3",
+          "description": "Incluye 3 líneas después del match"
+        },
+        {
+          "flag": "-B 3",
+          "description": "Incluye 3 líneas antes del match"
+        },
+        {
+          "flag": "-C 3",
+          "description": "Contexto antes y después"
+        }
+      ]
+    },
+    {
+      "id": "bash-004",
+      "toolId": "bash",
+      "section": "Búsqueda",
+      "name": "find . -name \"*.ts\"",
+      "description": "Busca archivos por patrón",
+      "hint": "-type f solo files · -mtime -7 modificados últ. 7 días",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "search",
+        "files"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "modifiers": [
+        {
+          "flag": "-name pattern",
+          "description": "Match por nombre con glob"
+        },
+        {
+          "flag": "-type f",
+          "description": "Solo archivos (d para directorios)"
+        },
+        {
+          "flag": "-mtime -7",
+          "description": "Modificados en los últimos 7 días"
+        },
+        {
+          "flag": "-size +10M",
+          "description": "Archivos mayores de 10MB"
+        },
+        {
+          "flag": "-exec cmd {} \\;",
+          "description": "Ejecuta comando por cada match"
+        },
+        {
+          "flag": "-delete",
+          "description": "Borra cada match (PELIGROSO)"
+        },
+        {
+          "flag": "-not -path \"*/node_modules/*\"",
+          "description": "Excluye paths"
+        }
+      ]
+    },
+    {
+      "id": "bash-005",
+      "toolId": "bash",
+      "section": "Procesos",
+      "name": "ps aux | grep name",
+      "description": "Encuentra procesos en ejecución por nombre",
+      "hint": "pgrep name es equivalente más corto",
+      "importance": "medium",
+      "frequency": 3,
+      "tags": [
+        "process"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "modifiers": []
+    },
+    {
+      "id": "ol-1",
+      "toolId": "ollama",
+      "section": "Básicos",
+      "name": "ollama run model",
+      "description": "Ejecuta un modelo en modo interactivo",
+      "hint": "ollama run llama3.2 · Ctrl+D para salir",
+      "importance": "critical",
+      "frequency": 5,
+      "tags": [
+        "ollama",
+        "chat"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": [
+        {
+          "flag": "--verbose",
+          "description": "Muestra tokens/s y estadísticas de tokens"
+        },
+        {
+          "flag": "--format json",
+          "description": "Fuerza respuesta estructurada JSON"
+        },
+        {
+          "flag": "--keepalive 5m",
+          "description": "Cuánto tiempo mantener el modelo en VRAM"
+        }
+      ]
+    },
+    {
+      "id": "ol-2",
+      "toolId": "ollama",
+      "section": "Básicos",
+      "name": "ollama run model \"prompt\"",
+      "description": "Ejecuta modelo y sale (one-shot)",
+      "hint": "echo 'prompt' | ollama run llama3.2",
+      "importance": "critical",
+      "frequency": 5,
+      "tags": [
+        "ollama",
+        "oneshot",
+        "scripting"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "ol-3",
+      "toolId": "ollama",
+      "section": "Básicos",
+      "name": "ollama list",
+      "description": "Lista modelos descargados localmente",
+      "hint": "Alias: ollama ls",
+      "importance": "critical",
+      "frequency": 5,
+      "tags": [
+        "ollama",
+        "inspection"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 2,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "ol-4",
+      "toolId": "ollama",
+      "section": "Básicos",
+      "name": "ollama ps",
+      "description": "Lista modelos cargados en memoria/VRAM",
+      "hint": "",
+      "importance": "high",
+      "frequency": 4,
+      "tags": [
+        "ollama",
+        "monitoring"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 3,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "ol-5",
+      "toolId": "ollama",
+      "section": "Básicos",
+      "name": "ollama help",
+      "description": "Muestra ayuda general",
+      "hint": "ollama help <command> para detalle",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "ollama",
+        "help"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 4,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "ol-6",
+      "toolId": "ollama",
+      "section": "Modelos",
+      "name": "ollama pull model",
+      "description": "Descarga un modelo del registry",
+      "hint": "ollama pull llama3.2:70b · ollama pull qwen2.5-coder",
+      "importance": "critical",
+      "frequency": 4,
+      "tags": [
+        "ollama",
+        "download"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "ol-7",
+      "toolId": "ollama",
+      "section": "Modelos",
+      "name": "ollama show model",
+      "description": "Muestra metadata e info del modelo",
+      "hint": "",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "ollama",
+        "inspection"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": [
+        {
+          "flag": "--modelfile",
+          "description": "Imprime el Modelfile usado"
+        },
+        {
+          "flag": "--parameters",
+          "description": "Parámetros (temperature, top_p, etc.)"
+        },
+        {
+          "flag": "--template",
+          "description": "Template de prompt del modelo"
+        },
+        {
+          "flag": "--system",
+          "description": "System prompt embebido"
+        }
+      ]
+    },
+    {
+      "id": "ol-8",
+      "toolId": "ollama",
+      "section": "Modelos",
+      "name": "ollama rm model",
+      "description": "Elimina un modelo local",
+      "hint": "",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "ollama",
+        "cleanup"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 2,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "ol-9",
+      "toolId": "ollama",
+      "section": "Modelos",
+      "name": "ollama cp src dst",
+      "description": "Copia/renombra un modelo local",
+      "hint": "ollama cp llama3.2 mymodel",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "ollama",
+        "copy"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 3,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "ol-10",
+      "toolId": "ollama",
+      "section": "Modelos",
+      "name": "ollama create name -f Modelfile",
+      "description": "Crea un modelo custom desde Modelfile",
+      "hint": "FROM llama3.2\\nSYSTEM \"...\" · PARAMETER temperature 0.5",
+      "importance": "high",
+      "frequency": 2,
+      "tags": [
+        "ollama",
+        "custom",
+        "modelfile"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 4,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "ol-11",
+      "toolId": "ollama",
+      "section": "Modelos",
+      "name": "ollama push model",
+      "description": "Sube un modelo a ollama.com",
+      "hint": "Requiere cuenta y model:tag",
+      "importance": "low",
+      "frequency": 1,
+      "tags": [
+        "ollama",
+        "publish"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 5,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "ol-12",
+      "toolId": "ollama",
+      "section": "Servidor",
+      "name": "ollama serve",
+      "description": "Arranca el servidor en background",
+      "hint": "Ya se ejecuta auto al usar run/pull si no está activo",
+      "importance": "high",
+      "frequency": 2,
+      "tags": [
+        "ollama",
+        "server"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "ol-13",
+      "toolId": "ollama",
+      "section": "Servidor",
+      "name": "ollama stop model",
+      "description": "Descarga modelo de VRAM inmediatamente",
+      "hint": "Útil para liberar GPU entre modelos",
+      "importance": "medium",
+      "frequency": 3,
+      "tags": [
+        "ollama",
+        "memory"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "ol-14",
+      "toolId": "ollama",
+      "section": "Servidor",
+      "name": "OLLAMA_HOST=url",
+      "description": "Variable: apunta cliente a servidor remoto",
+      "hint": "OLLAMA_HOST=http://192.168.1.10:11434 ollama list",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "ollama",
+        "env",
+        "remote"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 2,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "ol-15",
+      "toolId": "ollama",
+      "section": "Servidor",
+      "name": "curl localhost:11434/api/generate",
+      "description": "API HTTP para integrar desde apps",
+      "hint": "curl -d '{\"model\":\"llama3.2\",\"prompt\":\"hola\"}' http://localhost:11434/api/generate",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "ollama",
+        "api",
+        "http"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 3,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": [
+        {
+          "flag": "/api/generate",
+          "description": "Completion one-shot"
+        },
+        {
+          "flag": "/api/chat",
+          "description": "Chat multi-turno con histórico"
+        },
+        {
+          "flag": "/api/embeddings",
+          "description": "Embeddings vectoriales del prompt"
+        },
+        {
+          "flag": "/api/tags",
+          "description": "Lista modelos disponibles (GET)"
+        }
+      ]
+    },
+    {
+      "id": "git-10",
+      "toolId": "git",
+      "section": "Comandos Esenciales",
+      "name": "git reset HEAD~1",
+      "description": "Deshace último commit manteniendo cambios",
+      "hint": "--soft mantiene staging · --mixed (default) saca de staging · --hard DESCARTA cambios",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "git",
+        "undo",
+        "reset"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": [
+        {
+          "flag": "--soft",
+          "description": "Mantiene cambios staged"
+        },
+        {
+          "flag": "--mixed",
+          "description": "Default: mantiene cambios unstaged"
+        },
+        {
+          "flag": "--hard",
+          "description": "DESCARTA todos los cambios — peligroso"
+        }
+      ]
+    },
+    {
+      "id": "git-11",
+      "toolId": "git",
+      "section": "Comandos Esenciales",
+      "name": "git revert commit",
+      "description": "Crea commit inverso de otro commit (seguro)",
+      "hint": "No reescribe historia — ideal para ramas ya pusheadas",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "git",
+        "undo",
+        "revert"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "git-12",
+      "toolId": "git",
+      "section": "Avanzado",
+      "name": "git rebase -i HEAD~N",
+      "description": "Rebase interactivo: squash, reword, reorder",
+      "hint": "pick · squash · reword · drop · fixup",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "git",
+        "rebase",
+        "history-rewrite"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "git-13",
+      "toolId": "git",
+      "section": "Avanzado",
+      "name": "git cherry-pick commit",
+      "description": "Aplica un commit de otra rama a la actual",
+      "hint": "-x añade referencia al commit original en el mensaje",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "git",
+        "cherry-pick"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 2,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "git-14",
+      "toolId": "git",
+      "section": "Avanzado",
+      "name": "git tag v1.0.0",
+      "description": "Crea un tag ligero en el commit actual",
+      "hint": "-a v1.0.0 -m \"msg\" para tag anotado · git push --tags",
+      "importance": "medium",
+      "frequency": 3,
+      "tags": [
+        "git",
+        "tag",
+        "release"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 3,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "git-15",
+      "toolId": "git",
+      "section": "Avanzado",
+      "name": "git worktree add path branch",
+      "description": "Checkout paralelo de otra rama",
+      "hint": "git worktree list · git worktree remove path",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "git",
+        "worktree"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 4,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "git-16",
+      "toolId": "git",
+      "section": "Avanzado",
+      "name": "git bisect start",
+      "description": "Búsqueda binaria del commit que introdujo un bug",
+      "hint": "git bisect good <sha> · git bisect bad HEAD · git bisect reset",
+      "importance": "medium",
+      "frequency": 1,
+      "tags": [
+        "git",
+        "debug",
+        "bisect"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 5,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "git-17",
+      "toolId": "git",
+      "section": "Remoto",
+      "name": "git fetch --all --prune",
+      "description": "Trae refs remotas y limpia branches borradas",
+      "hint": "",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "git",
+        "fetch",
+        "cleanup"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 2,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "git-18",
+      "toolId": "git",
+      "section": "Remoto",
+      "name": "git push --force-with-lease",
+      "description": "Force push seguro (no sobrescribe si hubo cambios remotos)",
+      "hint": "Preferible siempre a --force",
+      "importance": "high",
+      "frequency": 2,
+      "tags": [
+        "git",
+        "push",
+        "force"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 3,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "docker-10",
+      "toolId": "docker",
+      "section": "Comandos Esenciales",
+      "name": "docker images",
+      "description": "Lista imágenes locales",
+      "hint": "-a incluye intermedias · --digests muestra digests",
+      "importance": "high",
+      "frequency": 4,
+      "tags": [
+        "docker",
+        "images"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "docker-11",
+      "toolId": "docker",
+      "section": "Comandos Esenciales",
+      "name": "docker rm container",
+      "description": "Elimina container(s) detenidos",
+      "hint": "-f fuerza eliminación de containers corriendo · docker rm $(docker ps -aq) para todos",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "docker",
+        "cleanup"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "docker-12",
+      "toolId": "docker",
+      "section": "Comandos Esenciales",
+      "name": "docker rmi image",
+      "description": "Elimina imagen local",
+      "hint": "-f fuerza · docker rmi $(docker images -q) para todas",
+      "importance": "high",
+      "frequency": 2,
+      "tags": [
+        "docker",
+        "cleanup"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 2,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "docker-13",
+      "toolId": "docker",
+      "section": "Comandos Esenciales",
+      "name": "docker stop container",
+      "description": "Detiene container gracefully (SIGTERM)",
+      "hint": "docker kill para SIGKILL inmediato",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "docker",
+        "lifecycle"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 3,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "docker-14",
+      "toolId": "docker",
+      "section": "Comandos Esenciales",
+      "name": "docker inspect container",
+      "description": "Dump JSON completo del estado",
+      "hint": "docker inspect -f '{{.NetworkSettings.IPAddress}}' name",
+      "importance": "medium",
+      "frequency": 3,
+      "tags": [
+        "docker",
+        "inspection",
+        "debug"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 4,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "docker-15",
+      "toolId": "docker",
+      "section": "Networks & Volumes",
+      "name": "docker network ls",
+      "description": "Lista redes Docker",
+      "hint": "docker network create mynet · docker network inspect mynet",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "docker",
+        "network"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "docker-16",
+      "toolId": "docker",
+      "section": "Networks & Volumes",
+      "name": "docker volume ls",
+      "description": "Lista volúmenes persistentes",
+      "hint": "docker volume create data · docker volume inspect data",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "docker",
+        "volume"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "docker-17",
+      "toolId": "docker",
+      "section": "Mantenimiento",
+      "name": "docker system prune",
+      "description": "Elimina containers parados, imágenes sin usar, caches",
+      "hint": "-a incluye todas las imágenes no usadas · --volumes incluye volúmenes",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "docker",
+        "cleanup",
+        "maintenance"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "docker-18",
+      "toolId": "docker",
+      "section": "Mantenimiento",
+      "name": "docker stats",
+      "description": "Uso de CPU/RAM/IO por container en tiempo real",
+      "hint": "--no-stream para snapshot único",
+      "importance": "medium",
+      "frequency": 3,
+      "tags": [
+        "docker",
+        "monitoring"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "docker-19",
+      "toolId": "docker",
+      "section": "Mantenimiento",
+      "name": "docker cp container:path ./local",
+      "description": "Copia archivos entre host y container",
+      "hint": "Funciona en ambas direcciones",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "docker",
+        "copy"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 2,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "npm-10",
+      "toolId": "npm",
+      "section": "Comandos Esenciales",
+      "name": "npm ci",
+      "description": "Instalación limpia y reproducible",
+      "hint": "Borra node_modules y usa package-lock.json — ideal en CI",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "npm",
+        "ci",
+        "install"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "npm-11",
+      "toolId": "npm",
+      "section": "Mantenimiento",
+      "name": "npm update",
+      "description": "Actualiza deps dentro de los rangos de package.json",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "npm",
+        "update"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "npm-12",
+      "toolId": "npm",
+      "section": "Mantenimiento",
+      "name": "npm outdated",
+      "description": "Muestra deps con versiones más nuevas",
+      "hint": "Columnas: current / wanted / latest",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "npm",
+        "update",
+        "inspection"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "npm-13",
+      "toolId": "npm",
+      "section": "Mantenimiento",
+      "name": "npm audit",
+      "description": "Escanea vulnerabilidades conocidas",
+      "hint": "npm audit fix para auto-fix · --force para updates con breaking",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "npm",
+        "security"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 2,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "npm-14",
+      "toolId": "npm",
+      "section": "Mantenimiento",
+      "name": "npm ls depth=0",
+      "description": "Lista deps instaladas a N niveles",
+      "hint": "npm ls package-name para ver quién lo depende",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "npm",
+        "inspection"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 3,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "npm-15",
+      "toolId": "npm",
+      "section": "Avanzado",
+      "name": "npx package",
+      "description": "Ejecuta binario sin instalarlo globalmente",
+      "hint": "npx create-react-app myapp · npx prettier --check .",
+      "importance": "critical",
+      "frequency": 4,
+      "tags": [
+        "npm",
+        "exec",
+        "npx"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "npm-16",
+      "toolId": "npm",
+      "section": "Avanzado",
+      "name": "npm exec -- cmd",
+      "description": "Equivalente a npx con flags adicionales",
+      "hint": "",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "npm",
+        "exec"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "npm-17",
+      "toolId": "npm",
+      "section": "Avanzado",
+      "name": "npm link",
+      "description": "Symlinka paquete local para desarrollo",
+      "hint": "cd lib && npm link → cd app && npm link lib-name",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "npm",
+        "link",
+        "monorepo"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 2,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "npm-18",
+      "toolId": "npm",
+      "section": "Publishing",
+      "name": "npm publish",
+      "description": "Publica paquete al registry",
+      "hint": "--access public para scoped · --tag beta para canales",
+      "importance": "medium",
+      "frequency": 1,
+      "tags": [
+        "npm",
+        "publish"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "npm-19",
+      "toolId": "npm",
+      "section": "Publishing",
+      "name": "npm version patch|minor|major",
+      "description": "Bump versión + commit + tag",
+      "hint": "npm version patch -m \"release %s\"",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "npm",
+        "version",
+        "release"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "npm-20",
+      "toolId": "npm",
+      "section": "Mantenimiento",
+      "name": "npm cache clean --force",
+      "description": "Limpia caché npm",
+      "hint": "Último recurso ante errores raros de install",
+      "importance": "low",
+      "frequency": 1,
+      "tags": [
+        "npm",
+        "cache"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 4,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "bash-10",
+      "toolId": "bash",
+      "section": "Búsqueda y Filtro",
+      "name": "sed -i 's/old/new/g' file",
+      "description": "Reemplazo inline con regex",
+      "hint": "En macOS usar sed -i '' 's/.../' · -E para ERE",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "bash",
+        "sed",
+        "replace"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "bash-11",
+      "toolId": "bash",
+      "section": "Búsqueda y Filtro",
+      "name": "awk '{print $2}'",
+      "description": "Procesamiento por columnas",
+      "hint": "-F: usa ':' como separador · awk '/pattern/ {action}'",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "bash",
+        "awk",
+        "columns"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "bash-12",
+      "toolId": "bash",
+      "section": "Búsqueda y Filtro",
+      "name": "xargs -I{} cmd {}",
+      "description": "Convierte stdin en argumentos de comando",
+      "hint": "find . -name '*.log' | xargs rm · xargs -P4 para paralelismo",
+      "importance": "medium",
+      "frequency": 3,
+      "tags": [
+        "bash",
+        "xargs",
+        "pipe"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 2,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "bash-13",
+      "toolId": "bash",
+      "section": "Archivos",
+      "name": "tar -xzvf file.tar.gz",
+      "description": "Extrae archivo tar.gz",
+      "hint": "-c crear · -x extraer · -z gzip · -j bzip2 · -v verbose",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "bash",
+        "tar",
+        "archive"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "bash-14",
+      "toolId": "bash",
+      "section": "Red",
+      "name": "curl -L -O url",
+      "description": "Descarga archivo siguiendo redirecciones",
+      "hint": "-L sigue redirects · -O mantiene nombre · -s silencioso",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "bash",
+        "curl",
+        "download"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "bash-15",
+      "toolId": "bash",
+      "section": "Red",
+      "name": "wget url",
+      "description": "Descargador simple (alternativa a curl)",
+      "hint": "-c continua descargas interrumpidas · -r recursivo",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "bash",
+        "wget",
+        "download"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "bash-16",
+      "toolId": "bash",
+      "section": "Red",
+      "name": "rsync -avz src dst",
+      "description": "Sincronización eficiente (local o remota)",
+      "hint": "-a archivo · -v verbose · -z compresión · --delete borra en dst los que no están en src",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "bash",
+        "rsync",
+        "sync"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 2,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "bash-17",
+      "toolId": "bash",
+      "section": "Red",
+      "name": "ssh user@host",
+      "description": "Conexión SSH remota",
+      "hint": "-p port · -i key.pem · -L 8080:localhost:80 port-forward",
+      "importance": "high",
+      "frequency": 3,
+      "tags": [
+        "bash",
+        "ssh"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 3,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": [
+        {
+          "flag": "-p 2222",
+          "description": "Puerto no estándar"
+        },
+        {
+          "flag": "-i ~/.ssh/key",
+          "description": "Identidad (clave privada) concreta"
+        },
+        {
+          "flag": "-L 8080:localhost:80",
+          "description": "Port forward local"
+        },
+        {
+          "flag": "-R 9000:localhost:3000",
+          "description": "Reverse tunnel"
+        },
+        {
+          "flag": "-N",
+          "description": "No ejecutar comando (solo túneles)"
+        }
+      ]
+    },
+    {
+      "id": "bash-18",
+      "toolId": "bash",
+      "section": "Sistema",
+      "name": "df -h",
+      "description": "Espacio libre por filesystem",
+      "hint": "-h human readable · -i muestra inodes",
+      "importance": "medium",
+      "frequency": 2,
+      "tags": [
+        "bash",
+        "disk"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 0,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "bash-19",
+      "toolId": "bash",
+      "section": "Sistema",
+      "name": "du -sh path",
+      "description": "Tamaño total de directorio",
+      "hint": "du -sh */ | sort -h para ranking",
+      "importance": "medium",
+      "frequency": 3,
+      "tags": [
+        "bash",
+        "disk",
+        "size"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 1,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    },
+    {
+      "id": "bash-20",
+      "toolId": "bash",
+      "section": "Sistema",
+      "name": "lsof -i :port",
+      "description": "Qué proceso está usando un puerto",
+      "hint": "lsof -i :3000 · fuser 3000/tcp",
+      "importance": "medium",
+      "frequency": 3,
+      "tags": [
+        "bash",
+        "ports",
+        "debug"
+      ],
+      "notes": "",
+      "favorite": false,
+      "order": 2,
+      "createdAt": "2026-04-09T22:23:49.087733Z",
+      "updatedAt": "2026-04-09T22:23:49.087733Z",
+      "modifiers": []
+    }
+  ]
+}
