@@ -29,9 +29,10 @@ interface CommandTableProps {
   tool: Tool;
   onEdit: (cmd: Command) => void;
   onAdd: () => void;
+  onOpenDocs: (cmd: Command) => void;
 }
 
-export function CommandTable({ tool, onEdit, onAdd }: CommandTableProps) {
+export function CommandTable({ tool, onEdit, onAdd, onOpenDocs }: CommandTableProps) {
   const allCommands = useStore((s) => s.commands);
   const filters = useStore((s) => s.filters);
   const sortKey = useStore((s) => s.sortKey);
@@ -343,6 +344,7 @@ export function CommandTable({ tool, onEdit, onAdd }: CommandTableProps) {
                               onEdit={() => onEdit(cmd)}
                               onDelete={() => setConfirmDelete(cmd.id)}
                               onToggleFavorite={() => toggleFavorite(cmd.id)}
+                              onOpenDocs={() => onOpenDocs(cmd)}
                               density={density}
                             />
                             {expanded && hasModifiers &&

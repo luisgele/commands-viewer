@@ -1,4 +1,4 @@
-import { Plus, Pencil, Trash2, GripVertical } from "lucide-react";
+import { Plus, Pencil, Trash2, GripVertical, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import clsx from "clsx";
 import {
@@ -200,6 +200,19 @@ function SortableToolTab({
             : "opacity-0 group-hover:opacity-60 group-focus-within:opacity-100",
         )}
       >
+        {tool.docUrl && (
+          <a
+            href={tool.docUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="flex h-7 w-7 items-center justify-center rounded text-[color:var(--color-text-muted)] transition hover:bg-[color:var(--color-bg)] hover:text-[color:var(--color-accent-cyan)]"
+            aria-label={`Documentación de ${tool.name}`}
+            title={`Documentación de ${tool.name}`}
+          >
+            <ExternalLink size={13} />
+          </a>
+        )}
         <button
           type="button"
           onClick={(e) => {
@@ -239,6 +252,7 @@ function EditToolInline({ tool, onClose, onSave }: EditToolInlineProps) {
   const [name, setName] = useState(tool.name);
   const [icon, setIcon] = useState(tool.icon);
   const [color, setColor] = useState(tool.color);
+  const [docUrl, setDocUrl] = useState(tool.docUrl ?? "");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -247,7 +261,7 @@ function EditToolInline({ tool, onClose, onSave }: EditToolInlineProps) {
     try {
       setSaving(true);
       setError(null);
-      await onSave({ name: name.trim(), icon: icon.trim() || "◆", color });
+      await onSave({ name: name.trim(), icon: icon.trim() || "◆", color, docUrl: docUrl.trim() || undefined });
     } catch (err) {
       setError((err as Error).message);
       setSaving(false);
@@ -286,6 +300,14 @@ function EditToolInline({ tool, onClose, onSave }: EditToolInlineProps) {
           />
         ))}
       </div>
+      <input
+        type="url"
+        value={docUrl}
+        onChange={(e) => setDocUrl(e.target.value)}
+        placeholder="URL docs oficiales"
+        disabled={saving}
+        className="h-8 min-w-[220px] flex-1 rounded-md border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-2 font-mono text-xs text-[color:var(--color-text-bright)] outline-none focus:border-[color:var(--color-accent-cyan)] disabled:opacity-50"
+      />
       {error && (
         <span className="font-mono text-[0.65rem] text-red-400">{error}</span>
       )}

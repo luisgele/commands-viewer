@@ -24,6 +24,7 @@ export interface CommandFormValues {
   notes: string;
   favorite: boolean;
   modifiers: Modifier[];
+  docUrl?: string;
 }
 
 const EMPTY: CommandFormValues = {
@@ -37,6 +38,7 @@ const EMPTY: CommandFormValues = {
   notes: "",
   favorite: false,
   modifiers: [],
+  docUrl: "",
 };
 
 export function CommandModal({
@@ -60,6 +62,7 @@ export function CommandModal({
           notes: command.notes,
           favorite: command.favorite,
           modifiers: (command.modifiers ?? []).map((m) => ({ ...m })),
+          docUrl: command.docUrl ?? "",
         }
       : { ...EMPTY, section: existingSections[0] ?? "General" },
   );
@@ -112,6 +115,7 @@ export function CommandModal({
       const cleaned: CommandFormValues = {
         ...values,
         modifiers: values.modifiers.filter((m) => m.flag.trim().length > 0),
+        docUrl: values.docUrl?.trim() || undefined,
       };
       await onSave(cleaned);
     } catch (err) {
@@ -390,6 +394,16 @@ export function CommandModal({
                 rows={4}
                 placeholder="Contexto propio, lecciones aprendidas, cuándo usar..."
                 className="w-full rounded-md border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 py-2 text-sm text-[color:var(--color-text)] outline-none focus:border-[color:var(--color-accent-cyan)]"
+              />
+            </Field>
+
+            <Field label="URL Documentación oficial">
+              <input
+                type="url"
+                value={values.docUrl ?? ""}
+                onChange={(e) => patch("docUrl", e.target.value)}
+                placeholder="https://docs.ejemplo.com/comando"
+                className="h-9 w-full rounded-md border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 font-mono text-sm text-[color:var(--color-text-bright)] outline-none focus:border-[color:var(--color-accent-cyan)]"
               />
             </Field>
 

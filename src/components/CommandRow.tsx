@@ -1,6 +1,7 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import {
+  BookOpen,
   ChevronDown,
   ChevronRight,
   GripVertical,
@@ -19,6 +20,7 @@ interface CommandRowProps {
   onEdit: () => void;
   onDelete: () => void;
   onToggleFavorite: () => void;
+  onOpenDocs: () => void;
   sortable: boolean;
   expanded: boolean;
   hasModifiers: boolean;
@@ -31,6 +33,7 @@ export function CommandRow({
   onEdit,
   onDelete,
   onToggleFavorite,
+  onOpenDocs,
   sortable,
   expanded,
   hasModifiers,
@@ -162,6 +165,19 @@ export function CommandRow({
       </td>
       <td className={clsx("w-24 rounded-r-lg px-2 text-right align-middle", cellPadY)}>
         <div className="flex items-center justify-end gap-0.5 opacity-70 transition group-hover:opacity-100 focus-within:opacity-100">
+          <button
+            type="button"
+            onClick={onOpenDocs}
+            disabled={isPending}
+            className={clsx(
+              "flex items-center justify-center rounded-md text-[color:var(--color-text-muted)] transition hover:bg-[color:var(--color-bg)] hover:text-[color:var(--color-accent-cyan)] disabled:cursor-wait",
+              btnSize,
+            )}
+            aria-label="Ver documentación"
+            title="Ver documentación"
+          >
+            <BookOpen size={iconSize} />
+          </button>
           <button
             type="button"
             onClick={onEdit}

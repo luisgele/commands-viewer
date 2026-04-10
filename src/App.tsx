@@ -4,6 +4,7 @@ import { Tabs } from "./components/Tabs";
 import { FilterBar } from "./components/FilterBar";
 import { CommandTable } from "./components/CommandTable";
 import { CommandModal, type CommandFormValues } from "./components/CommandModal";
+import { DocModal } from "./components/DocModal";
 import { ToolModal } from "./components/ToolModal";
 import { FormatInfoModal } from "./components/FormatInfoModal";
 import { SettingsModal } from "./components/SettingsModal";
@@ -27,6 +28,7 @@ function App() {
   const addTool = useStore((s) => s.addTool);
 
   const [editingCommand, setEditingCommand] = useState<Command | null>(null);
+  const [docModalCommand, setDocModalCommand] = useState<Command | null>(null);
   const [showCommandModal, setShowCommandModal] = useState(false);
   const [showToolModal, setShowToolModal] = useState(false);
   const [showFormatModal, setShowFormatModal] = useState(false);
@@ -59,6 +61,8 @@ function App() {
     setEditingCommand(cmd);
     setShowCommandModal(true);
   };
+
+  const handleOpenDocs = (cmd: Command) => setDocModalCommand(cmd);
 
   const handleSaveCommand = async (values: CommandFormValues) => {
     if (!activeTool) return;
@@ -168,7 +172,7 @@ function App() {
             Cargando...
           </div>
         ) : activeTool ? (
-          <CommandTable tool={activeTool} onEdit={handleOpenEdit} onAdd={handleOpenCreate} />
+          <CommandTable tool={activeTool} onEdit={handleOpenEdit} onAdd={handleOpenCreate} onOpenDocs={handleOpenDocs} />
         ) : (
           <NoTools onAddTool={() => setShowToolModal(true)} />
         )}
@@ -209,6 +213,13 @@ function App() {
 
       {showSettingsModal && (
         <SettingsModal onClose={() => setShowSettingsModal(false)} />
+      )}
+
+      {docModalCommand && (
+        <DocModal
+          command={docModalCommand}
+          onClose={() => setDocModalCommand(null)}
+        />
       )}
 
       {pendingImport && (

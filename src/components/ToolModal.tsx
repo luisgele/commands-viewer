@@ -6,13 +6,14 @@ import { useFocusTrap } from "../lib/useFocusTrap";
 
 interface ToolModalProps {
   onClose: () => void;
-  onSave: (values: { name: string; icon: string; color: string }) => Promise<void>;
+  onSave: (values: { name: string; icon: string; color: string; docUrl?: string }) => Promise<void>;
 }
 
 export function ToolModal({ onClose, onSave }: ToolModalProps) {
   const [name, setName] = useState("");
   const [icon, setIcon] = useState("◆");
   const [color, setColor] = useState(TOOL_COLOR_PALETTE[0]);
+  const [docUrl, setDocUrl] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -32,7 +33,7 @@ export function ToolModal({ onClose, onSave }: ToolModalProps) {
     try {
       setSaving(true);
       setError(null);
-      await onSave({ name: name.trim(), icon: icon.trim() || "◆", color });
+      await onSave({ name: name.trim(), icon: icon.trim() || "◆", color, docUrl: docUrl.trim() || undefined });
     } catch (err) {
       setError((err as Error).message);
       setSaving(false);
@@ -108,6 +109,18 @@ export function ToolModal({ onClose, onSave }: ToolModalProps) {
                 />
               ))}
             </div>
+          </label>
+          <label className="block">
+            <span className="mb-1.5 block font-mono text-[0.65rem] font-semibold uppercase tracking-wider text-[color:var(--color-text-muted)]">
+              Documentación oficial (URL)
+            </span>
+            <input
+              type="url"
+              value={docUrl}
+              onChange={(e) => setDocUrl(e.target.value)}
+              placeholder="https://docs.ejemplo.com/comandos"
+              className="h-9 w-full rounded-md border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 font-mono text-sm text-[color:var(--color-text-bright)] outline-none focus:border-[color:var(--color-accent-cyan)]"
+            />
           </label>
           {error && (
             <div className="rounded-md border border-red-500/40 bg-red-500/10 px-3 py-2 text-xs text-red-400">
