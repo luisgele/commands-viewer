@@ -66,6 +66,9 @@ ehthumbs.db
 .claude/
 CLAUDE.local.md
 
+# ── Git worktrees ─────────────────────────────────────────
+.worktrees/
+
 # ── Coverage / test reports ───────────────────────────────
 coverage
 *.lcov
