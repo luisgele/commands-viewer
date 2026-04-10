@@ -7,6 +7,8 @@ export interface Tool {
   icon: string;
   color: string;
   order: number;
+  docUrl?: string; // URL to official docs for this tool
+  dataFile?: string; // Internal path to the tool's commands JSON file (server-only, not used by frontend)
 }
 
 export interface Modifier {
@@ -29,6 +31,7 @@ export interface Command {
   favorite: boolean;
   order: number;
   modifiers: Modifier[];
+  docUrl?: string; // URL to the official docs for this specific command
 }
 
 export interface Database {
