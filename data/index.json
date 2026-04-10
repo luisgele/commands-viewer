@@ -57,7 +57,7 @@
       "icon": "🦙",
       "color": "#00a67e",
       "order": 5,
-      "docUrl": "https://github.com/ollama/ollama/blob/main/docs/README.md",
+      "docUrl": "https://docs.ollama.com/cli",
       "dataFile": "commands/ollama.json"
     }
   ]

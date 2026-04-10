@@ -182,22 +182,7 @@ export function DocModal({ command, onClose }: DocModalProps) {
                 >
                   <ExternalLink size={13} />
                   Abrir en navegador ↗
-                </button>
-
-                {/* iframe — secondary */}
-                <div className="overflow-hidden rounded-md border border-[color:var(--color-border)]">
-                  <iframe
-                    src={command.docUrl}
-                    title="Documentación oficial"
-                    sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-                    className="h-[350px] w-full bg-white"
-                  />
-                </div>
-
-                <p className="text-[0.65rem] text-[color:var(--color-text-muted)]">
-                  Si el iframe no carga, usa el botón de arriba para abrir la
-                  documentación en el navegador.
-                </p>
+                </button>               
               </div>
             ) : (
               <p className="text-sm italic text-[color:var(--color-text-muted)]">

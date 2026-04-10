@@ -9,16 +9,28 @@
       "hint": "ollama run llama3.2 · Ctrl+D para salir",
       "importance": "critical",
       "frequency": 5,
-      "tags": ["ollama", "chat"],
+      "tags": [
+        "ollama",
+        "chat"
+      ],
       "notes": "",
       "favorite": false,
       "order": 0,
-      "docUrl": "https://github.com/ollama/ollama/blob/main/docs/README.md",
       "modifiers": [
-        { "flag": "--verbose", "description": "Muestra tokens/s y estadísticas de tokens" },
-        { "flag": "--format json", "description": "Fuerza respuesta estructurada JSON" },
-        { "flag": "--keepalive 5m", "description": "Cuánto tiempo mantener el modelo en VRAM" }
-      ]
+        {
+          "flag": "--verbose",
+          "description": "Muestra tokens/s y estadísticas de tokens"
+        },
+        {
+          "flag": "--format json",
+          "description": "Fuerza respuesta estructurada JSON"
+        },
+        {
+          "flag": "--keepalive 5m",
+          "description": "Cuánto tiempo mantener el modelo en VRAM"
+        }
+      ],
+      "docUrl": "https://docs.ollama.com/cli"
     },
     {
       "id": "ol-2",
@@ -29,7 +41,11 @@
       "hint": "echo 'prompt' | ollama run llama3.2",
       "importance": "critical",
       "frequency": 5,
-      "tags": ["ollama", "oneshot", "scripting"],
+      "tags": [
+        "ollama",
+        "oneshot",
+        "scripting"
+      ],
       "notes": "",
       "favorite": false,
       "order": 1,
@@ -45,7 +61,10 @@
       "hint": "Alias: ollama ls",
       "importance": "critical",
       "frequency": 5,
-      "tags": ["ollama", "inspection"],
+      "tags": [
+        "ollama",
+        "inspection"
+      ],
       "notes": "",
       "favorite": false,
       "order": 2,
@@ -61,7 +80,10 @@
       "hint": "",
       "importance": "high",
       "frequency": 4,
-      "tags": ["ollama", "monitoring"],
+      "tags": [
+        "ollama",
+        "monitoring"
+      ],
       "notes": "",
       "favorite": false,
       "order": 3,
@@ -77,7 +99,10 @@
       "hint": "ollama help <command> para detalle",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["ollama", "help"],
+      "tags": [
+        "ollama",
+        "help"
+      ],
       "notes": "",
       "favorite": false,
       "order": 4,
@@ -93,7 +118,10 @@
       "hint": "ollama pull llama3.2:70b · ollama pull qwen2.5-coder",
       "importance": "critical",
       "frequency": 4,
-      "tags": ["ollama", "download"],
+      "tags": [
+        "ollama",
+        "download"
+      ],
       "notes": "",
       "favorite": false,
       "order": 0,
@@ -109,16 +137,31 @@
       "hint": "",
       "importance": "high",
       "frequency": 3,
-      "tags": ["ollama", "inspection"],
+      "tags": [
+        "ollama",
+        "inspection"
+      ],
       "notes": "",
       "favorite": false,
       "order": 1,
       "docUrl": "https://github.com/ollama/ollama/blob/main/docs/README.md",
       "modifiers": [
-        { "flag": "--modelfile", "description": "Imprime el Modelfile usado" },
-        { "flag": "--parameters", "description": "Parámetros (temperature, top_p, etc.)" },
-        { "flag": "--template", "description": "Template de prompt del modelo" },
-        { "flag": "--system", "description": "System prompt embebido" }
+        {
+          "flag": "--modelfile",
+          "description": "Imprime el Modelfile usado"
+        },
+        {
+          "flag": "--parameters",
+          "description": "Parámetros (temperature, top_p, etc.)"
+        },
+        {
+          "flag": "--template",
+          "description": "Template de prompt del modelo"
+        },
+        {
+          "flag": "--system",
+          "description": "System prompt embebido"
+        }
       ]
     },
     {
@@ -130,7 +173,10 @@
       "hint": "",
       "importance": "high",
       "frequency": 3,
-      "tags": ["ollama", "cleanup"],
+      "tags": [
+        "ollama",
+        "cleanup"
+      ],
       "notes": "",
       "favorite": false,
       "order": 2,
@@ -146,7 +192,10 @@
       "hint": "ollama cp llama3.2 mymodel",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["ollama", "copy"],
+      "tags": [
+        "ollama",
+        "copy"
+      ],
       "notes": "",
       "favorite": false,
       "order": 3,
@@ -162,7 +211,11 @@
       "hint": "FROM llama3.2\\nSYSTEM \"...\" · PARAMETER temperature 0.5",
       "importance": "high",
       "frequency": 2,
-      "tags": ["ollama", "custom", "modelfile"],
+      "tags": [
+        "ollama",
+        "custom",
+        "modelfile"
+      ],
       "notes": "",
       "favorite": false,
       "order": 4,
@@ -178,7 +231,10 @@
       "hint": "Requiere cuenta y model:tag",
       "importance": "low",
       "frequency": 1,
-      "tags": ["ollama", "publish"],
+      "tags": [
+        "ollama",
+        "publish"
+      ],
       "notes": "",
       "favorite": false,
       "order": 5,
@@ -194,7 +250,10 @@
       "hint": "Ya se ejecuta auto al usar run/pull si no está activo",
       "importance": "high",
       "frequency": 2,
-      "tags": ["ollama", "server"],
+      "tags": [
+        "ollama",
+        "server"
+      ],
       "notes": "",
       "favorite": false,
       "order": 0,
@@ -210,7 +269,10 @@
       "hint": "Útil para liberar GPU entre modelos",
       "importance": "medium",
       "frequency": 3,
-      "tags": ["ollama", "memory"],
+      "tags": [
+        "ollama",
+        "memory"
+      ],
       "notes": "",
       "favorite": false,
       "order": 1,
@@ -226,7 +288,11 @@
       "hint": "OLLAMA_HOST=http://192.168.1.10:11434 ollama list",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["ollama", "env", "remote"],
+      "tags": [
+        "ollama",
+        "env",
+        "remote"
+      ],
       "notes": "",
       "favorite": false,
       "order": 2,
@@ -242,16 +308,32 @@
       "hint": "curl -d '{\"model\":\"llama3.2\",\"prompt\":\"hola\"}' http://localhost:11434/api/generate",
       "importance": "high",
       "frequency": 3,
-      "tags": ["ollama", "api", "http"],
+      "tags": [
+        "ollama",
+        "api",
+        "http"
+      ],
       "notes": "",
       "favorite": false,
       "order": 3,
       "docUrl": "https://github.com/ollama/ollama/blob/main/docs/api.md",
       "modifiers": [
-        { "flag": "/api/generate", "description": "Completion one-shot" },
-        { "flag": "/api/chat", "description": "Chat multi-turno con histórico" },
-        { "flag": "/api/embeddings", "description": "Embeddings vectoriales del prompt" },
-        { "flag": "/api/tags", "description": "Lista modelos disponibles (GET)" }
+        {
+          "flag": "/api/generate",
+          "description": "Completion one-shot"
+        },
+        {
+          "flag": "/api/chat",
+          "description": "Chat multi-turno con histórico"
+        },
+        {
+          "flag": "/api/embeddings",
+          "description": "Embeddings vectoriales del prompt"
+        },
+        {
+          "flag": "/api/tags",
+          "description": "Lista modelos disponibles (GET)"
+        }
       ]
     },
     {
@@ -263,7 +345,11 @@
       "hint": "OLLAMA_NUM_GPU=0 para forzar CPU · OLLAMA_GPU_OVERHEAD para reserva VRAM",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["ollama", "gpu", "performance"],
+      "tags": [
+        "ollama",
+        "gpu",
+        "performance"
+      ],
       "notes": "",
       "favorite": false,
       "order": 0,
@@ -279,7 +365,11 @@
       "hint": "Útil para apuntar a disco con más espacio",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["ollama", "env", "storage"],
+      "tags": [
+        "ollama",
+        "env",
+        "storage"
+      ],
       "notes": "",
       "favorite": false,
       "order": 1,
@@ -295,7 +385,11 @@
       "hint": "Muestra tokens/s, tiempo de carga y contexto utilizado",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["ollama", "chat", "debug"],
+      "tags": [
+        "ollama",
+        "chat",
+        "debug"
+      ],
       "notes": "",
       "favorite": false,
       "order": 5,
@@ -311,7 +405,11 @@
       "hint": "curl -d '{\"model\":\"llama3.2\",\"messages\":[{\"role\":\"user\",\"content\":\"hola\"}]}' http://localhost:11434/api/chat",
       "importance": "high",
       "frequency": 3,
-      "tags": ["ollama", "api", "chat"],
+      "tags": [
+        "ollama",
+        "api",
+        "chat"
+      ],
       "notes": "",
       "favorite": false,
       "order": 0,
@@ -327,7 +425,11 @@
       "hint": "curl -d '{\"model\":\"nomic-embed-text\",\"prompt\":\"texto\"}' http://localhost:11434/api/embeddings",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["ollama", "api", "embeddings"],
+      "tags": [
+        "ollama",
+        "api",
+        "embeddings"
+      ],
       "notes": "",
       "favorite": false,
       "order": 1,
@@ -343,7 +445,11 @@
       "hint": "curl http://localhost:11434/api/tags",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["ollama", "api", "inspection"],
+      "tags": [
+        "ollama",
+        "api",
+        "inspection"
+      ],
       "notes": "",
       "favorite": false,
       "order": 2,
@@ -359,7 +465,11 @@
       "hint": "FROM llama3.2:latest · FROM ./model.gguf para GGUF local",
       "importance": "high",
       "frequency": 2,
-      "tags": ["ollama", "modelfile", "custom"],
+      "tags": [
+        "ollama",
+        "modelfile",
+        "custom"
+      ],
       "notes": "",
       "favorite": false,
       "order": 0,
@@ -375,7 +485,11 @@
       "hint": "PARAMETER temperature 0.7 · PARAMETER top_p 0.9 · PARAMETER num_ctx 4096",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["ollama", "modelfile", "parameters"],
+      "tags": [
+        "ollama",
+        "modelfile",
+        "parameters"
+      ],
       "notes": "",
       "favorite": false,
       "order": 1,
@@ -391,7 +505,11 @@
       "hint": "SYSTEM \"\"\"Eres un experto en Python...\"\"\" para strings multilínea",
       "importance": "high",
       "frequency": 2,
-      "tags": ["ollama", "modelfile", "system-prompt"],
+      "tags": [
+        "ollama",
+        "modelfile",
+        "system-prompt"
+      ],
       "notes": "",
       "favorite": false,
       "order": 2,
@@ -407,7 +525,11 @@
       "hint": "--keepalive -1 para mantener cargado indefinidamente",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["ollama", "memory", "gpu"],
+      "tags": [
+        "ollama",
+        "memory",
+        "gpu"
+      ],
       "notes": "",
       "favorite": false,
       "order": 6,
