@@ -182,7 +182,7 @@ export function DocModal({ command, onClose }: DocModalProps) {
                 >
                   <ExternalLink size={13} />
                   Abrir en navegador ↗
-                </button>               
+                </button>
               </div>
             ) : (
               <p className="text-sm italic text-[color:var(--color-text-muted)]">

@@ -99,9 +99,8 @@ export function Tabs({ onAddTool }: TabsProps) {
             setEditingTool(null);
           }}
           onDelete={() => {
-            const tool = editingTool;
+            setConfirmDeleteTool(editingTool);
             setEditingTool(null);
-            setConfirmDeleteTool(tool);
           }}
         />
       )}
