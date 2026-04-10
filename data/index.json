@@ -1,0 +1,64 @@
+{
+  "tools": [
+    {
+      "id": "claude-code",
+      "name": "Claude Code",
+      "slug": "claude-code",
+      "icon": "◆",
+      "color": "#ff6b35",
+      "order": 0,
+      "docUrl": "https://docs.anthropic.com/en/docs/claude-code/cli-usage",
+      "dataFile": "commands/claude-code.json"
+    },
+    {
+      "id": "git",
+      "name": "Git",
+      "slug": "git",
+      "icon": "⎇",
+      "color": "#00d4ff",
+      "order": 1,
+      "docUrl": "https://git-scm.com/docs",
+      "dataFile": "commands/git.json"
+    },
+    {
+      "id": "docker",
+      "name": "Docker",
+      "slug": "docker",
+      "icon": "▣",
+      "color": "#3ddc84",
+      "order": 2,
+      "docUrl": "https://docs.docker.com/reference/cli/docker/",
+      "dataFile": "commands/docker.json"
+    },
+    {
+      "id": "npm",
+      "name": "npm",
+      "slug": "npm",
+      "icon": "▲",
+      "color": "#a78bfa",
+      "order": 3,
+      "docUrl": "https://docs.npmjs.com/cli/v11/commands/",
+      "dataFile": "commands/npm.json"
+    },
+    {
+      "id": "bash",
+      "name": "Bash",
+      "slug": "bash",
+      "icon": "❯",
+      "color": "#f472b6",
+      "order": 4,
+      "docUrl": "https://www.gnu.org/software/bash/manual/bash.html",
+      "dataFile": "commands/bash.json"
+    },
+    {
+      "id": "ollama",
+      "name": "Ollama",
+      "slug": "ollama",
+      "icon": "🦙",
+      "color": "#00a67e",
+      "order": 5,
+      "docUrl": "https://github.com/ollama/ollama/blob/main/docs/README.md",
+      "dataFile": "commands/ollama.json"
+    }
+  ]
+}
