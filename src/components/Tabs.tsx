@@ -1,4 +1,4 @@
-import { Plus, Pencil, Trash2, GripVertical } from "lucide-react";
+import { Plus, Pencil, Trash2, GripVertical, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import clsx from "clsx";
 import {
@@ -18,8 +18,8 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import type { Tool } from "../types";
 import { useStore } from "../store/useStore";
-import { TOOL_COLOR_PALETTE } from "../lib/constants";
 import { ConfirmDialog } from "./ConfirmDialog";
+import { ToolModal } from "./ToolModal";
 
 interface TabsProps {
   onAddTool: () => void;
@@ -33,7 +33,7 @@ export function Tabs({ onAddTool }: TabsProps) {
   const updateTool = useStore((s) => s.updateTool);
   const deleteTool = useStore((s) => s.deleteTool);
   const reorderTools = useStore((s) => s.reorderTools);
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingTool, setEditingTool] = useState<Tool | null>(null);
   const [confirmDeleteTool, setConfirmDeleteTool] = useState<Tool | null>(null);
 
   const commandCount = (toolId: string) =>
@@ -78,7 +78,7 @@ export function Tabs({ onAddTool }: TabsProps) {
                 onActivate={() => setActiveTool(tool.id)}
                 onEdit={() => {
                   setActiveTool(tool.id);
-                  setEditingId(tool.id);
+                  setEditingTool(tool);
                 }}
                 onDelete={() => handleDelete(tool)}
               />
@@ -94,13 +94,14 @@ export function Tabs({ onAddTool }: TabsProps) {
           Nueva herramienta
         </button>
       </div>
-      {editingId && (
-        <EditToolInline
-          tool={tools.find((t) => t.id === editingId)!}
-          onClose={() => setEditingId(null)}
-          onSave={async (patch) => {
-            await updateTool(editingId, patch);
-            setEditingId(null);
+
+      {editingTool && (
+        <ToolModal
+          tool={editingTool}
+          onClose={() => setEditingTool(null)}
+          onSave={async (values) => {
+            await updateTool(editingTool.id, values);
+            setEditingTool(null);
           }}
         />
       )}
@@ -200,6 +201,19 @@ function SortableToolTab({
             : "opacity-0 group-hover:opacity-60 group-focus-within:opacity-100",
         )}
       >
+        {tool.docUrl && (
+          <a
+            href={tool.docUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="flex h-7 w-7 items-center justify-center rounded text-[color:var(--color-text-muted)] transition hover:bg-[color:var(--color-bg)] hover:text-[color:var(--color-accent-cyan)]"
+            aria-label={`Documentación de ${tool.name}`}
+            title={`Documentación de ${tool.name}`}
+          >
+            <ExternalLink size={13} />
+          </a>
+        )}
         <button
           type="button"
           onClick={(e) => {
@@ -223,88 +237,6 @@ function SortableToolTab({
           title={`Eliminar ${tool.name}`}
         >
           <Trash2 size={13} />
-        </button>
-      </div>
-    </div>
-  );
-}
-
-interface EditToolInlineProps {
-  tool: Tool;
-  onClose: () => void;
-  onSave: (patch: Partial<Tool>) => Promise<void>;
-}
-
-function EditToolInline({ tool, onClose, onSave }: EditToolInlineProps) {
-  const [name, setName] = useState(tool.name);
-  const [icon, setIcon] = useState(tool.icon);
-  const [color, setColor] = useState(tool.color);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleSave = async () => {
-    if (!name.trim()) { setError("El nombre es obligatorio"); return; }
-    try {
-      setSaving(true);
-      setError(null);
-      await onSave({ name: name.trim(), icon: icon.trim() || "◆", color });
-    } catch (err) {
-      setError((err as Error).message);
-      setSaving(false);
-    }
-  };
-
-  return (
-    <div className="mx-auto flex max-w-[1400px] flex-wrap items-center gap-3 border-t border-[color:var(--color-border)] px-6 py-3">
-      <input
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Nombre"
-        disabled={saving}
-        className="h-8 rounded-md border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-2 font-mono text-xs text-[color:var(--color-text-bright)] outline-none focus:border-[color:var(--color-accent-cyan)] disabled:opacity-50"
-      />
-      <input
-        value={icon}
-        onChange={(e) => setIcon(e.target.value)}
-        placeholder="Icono"
-        maxLength={2}
-        disabled={saving}
-        className="h-8 w-12 rounded-md border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-2 text-center font-mono text-xs text-[color:var(--color-text-bright)] outline-none focus:border-[color:var(--color-accent-cyan)] disabled:opacity-50"
-      />
-      <div className="flex items-center gap-1">
-        {TOOL_COLOR_PALETTE.map((c) => (
-          <button
-            key={c}
-            type="button"
-            onClick={() => setColor(c)}
-            disabled={saving}
-            className={clsx(
-              "h-6 w-6 rounded-full border-2",
-              color === c ? "border-white" : "border-transparent",
-            )}
-            style={{ background: c }}
-          />
-        ))}
-      </div>
-      {error && (
-        <span className="font-mono text-[0.65rem] text-red-400">{error}</span>
-      )}
-      <div className="ml-auto flex items-center gap-2">
-        <button
-          type="button"
-          onClick={onClose}
-          disabled={saving}
-          className="h-8 rounded-md border border-[color:var(--color-border)] bg-[color:var(--color-bg-card-alt)] px-3 font-mono text-xs text-[color:var(--color-text-muted)] hover:text-[color:var(--color-text)] disabled:opacity-50"
-        >
-          Cancelar
-        </button>
-        <button
-          type="button"
-          onClick={handleSave}
-          disabled={saving}
-          className="h-8 rounded-md bg-[color:var(--color-accent-cyan)]/20 px-3 font-mono text-xs text-[color:var(--color-accent-cyan)] hover:bg-[color:var(--color-accent-cyan)]/30 disabled:opacity-50"
-        >
-          {saving ? "Guardando..." : "Guardar"}
         </button>
       </div>
     </div>

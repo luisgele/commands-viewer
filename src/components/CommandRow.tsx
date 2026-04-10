@@ -1,6 +1,7 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import {
+  BookOpen,
   ChevronDown,
   ChevronRight,
   GripVertical,
@@ -19,6 +20,7 @@ interface CommandRowProps {
   onEdit: () => void;
   onDelete: () => void;
   onToggleFavorite: () => void;
+  onOpenDocs: () => void;
   sortable: boolean;
   expanded: boolean;
   hasModifiers: boolean;
@@ -31,6 +33,7 @@ export function CommandRow({
   onEdit,
   onDelete,
   onToggleFavorite,
+  onOpenDocs,
   sortable,
   expanded,
   hasModifiers,
@@ -120,9 +123,24 @@ export function CommandRow({
         </button>
       </td>
       <td className={clsx("whitespace-nowrap px-3 align-middle", cellPadY)}>
-        <span className="font-mono text-[0.84rem] font-semibold text-[color:var(--color-text-bright)]">
-          {command.name}
-        </span>
+        <div className="flex items-center gap-1.5">
+          <button
+            type="button"
+            onClick={onOpenDocs}
+            disabled={isPending}
+            className={clsx(
+              "flex shrink-0 items-center justify-center rounded text-[color:var(--color-text-muted)]/40 transition hover:text-[color:var(--color-accent-cyan)] disabled:cursor-wait",
+              isCompact ? "h-5 w-5" : "h-6 w-6",
+            )}
+            aria-label="Ver documentación"
+            title="Ver documentación"
+          >
+            <BookOpen size={isCompact ? 11 : 12} />
+          </button>
+          <span className="font-mono text-[0.84rem] font-semibold text-[color:var(--color-text-bright)]">
+            {command.name}
+          </span>
+        </div>
       </td>
       <td className={clsx("px-3 align-middle text-[0.84rem]", cellPadY)}>
         <div className="text-[color:var(--color-text)]">{command.description}</div>

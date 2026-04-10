@@ -3,16 +3,20 @@ import { X } from "lucide-react";
 import clsx from "clsx";
 import { TOOL_COLOR_PALETTE } from "../lib/constants";
 import { useFocusTrap } from "../lib/useFocusTrap";
+import type { Tool } from "../types";
 
 interface ToolModalProps {
+  tool?: Tool;
   onClose: () => void;
-  onSave: (values: { name: string; icon: string; color: string }) => Promise<void>;
+  onSave: (values: { name: string; icon: string; color: string; docUrl?: string }) => Promise<void>;
 }
 
-export function ToolModal({ onClose, onSave }: ToolModalProps) {
-  const [name, setName] = useState("");
-  const [icon, setIcon] = useState("◆");
-  const [color, setColor] = useState(TOOL_COLOR_PALETTE[0]);
+export function ToolModal({ tool, onClose, onSave }: ToolModalProps) {
+  const isEdit = tool !== undefined;
+  const [name, setName] = useState(tool?.name ?? "");
+  const [icon, setIcon] = useState(tool?.icon ?? "◆");
+  const [color, setColor] = useState(tool?.color ?? TOOL_COLOR_PALETTE[0]);
+  const [docUrl, setDocUrl] = useState(tool?.docUrl ?? "");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -32,7 +36,7 @@ export function ToolModal({ onClose, onSave }: ToolModalProps) {
     try {
       setSaving(true);
       setError(null);
-      await onSave({ name: name.trim(), icon: icon.trim() || "◆", color });
+      await onSave({ name: name.trim(), icon: icon.trim() || "◆", color, docUrl: docUrl.trim() || undefined });
     } catch (err) {
       setError((err as Error).message);
       setSaving(false);
@@ -46,7 +50,7 @@ export function ToolModal({ onClose, onSave }: ToolModalProps) {
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
-      aria-label="Nueva herramienta"
+      aria-label={isEdit ? "Editar herramienta" : "Nueva herramienta"}
     >
       <div
         ref={trapRef}
@@ -54,7 +58,7 @@ export function ToolModal({ onClose, onSave }: ToolModalProps) {
       >
         <header className="flex items-center justify-between border-b border-[color:var(--color-border)] px-6 py-4">
           <h2 className="font-mono text-base font-semibold text-[color:var(--color-text-bright)]">
-            Nueva herramienta
+            {isEdit ? "Editar herramienta" : "Nueva herramienta"}
           </h2>
           <button
             type="button"
@@ -109,6 +113,18 @@ export function ToolModal({ onClose, onSave }: ToolModalProps) {
               ))}
             </div>
           </label>
+          <label className="block">
+            <span className="mb-1.5 block font-mono text-[0.65rem] font-semibold uppercase tracking-wider text-[color:var(--color-text-muted)]">
+              Documentación oficial (URL)
+            </span>
+            <input
+              type="url"
+              value={docUrl}
+              onChange={(e) => setDocUrl(e.target.value)}
+              placeholder="https://docs.ejemplo.com/comandos"
+              className="h-9 w-full rounded-md border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 font-mono text-sm text-[color:var(--color-text-bright)] outline-none focus:border-[color:var(--color-accent-cyan)]"
+            />
+          </label>
           {error && (
             <div className="rounded-md border border-red-500/40 bg-red-500/10 px-3 py-2 text-xs text-red-400">
               {error}
@@ -130,7 +146,7 @@ export function ToolModal({ onClose, onSave }: ToolModalProps) {
             disabled={saving}
             className="rounded-md border border-[color:var(--color-accent-cyan)]/40 bg-[color:var(--color-accent-cyan)]/20 px-5 py-2 font-mono text-xs text-[color:var(--color-accent-cyan)] hover:bg-[color:var(--color-accent-cyan)]/30 disabled:opacity-50"
           >
-            {saving ? "Creando..." : "Crear"}
+            {saving ? (isEdit ? "Guardando..." : "Creando...") : (isEdit ? "Guardar" : "Crear")}
           </button>
         </footer>
       </div>
