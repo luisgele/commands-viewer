@@ -123,9 +123,24 @@ export function CommandRow({
         </button>
       </td>
       <td className={clsx("whitespace-nowrap px-3 align-middle", cellPadY)}>
-        <span className="font-mono text-[0.84rem] font-semibold text-[color:var(--color-text-bright)]">
-          {command.name}
-        </span>
+        <div className="flex items-center gap-1.5">
+          <button
+            type="button"
+            onClick={onOpenDocs}
+            disabled={isPending}
+            className={clsx(
+              "flex shrink-0 items-center justify-center rounded text-[color:var(--color-text-muted)]/40 transition hover:text-[color:var(--color-accent-cyan)] disabled:cursor-wait",
+              isCompact ? "h-5 w-5" : "h-6 w-6",
+            )}
+            aria-label="Ver documentación"
+            title="Ver documentación"
+          >
+            <BookOpen size={isCompact ? 11 : 12} />
+          </button>
+          <span className="font-mono text-[0.84rem] font-semibold text-[color:var(--color-text-bright)]">
+            {command.name}
+          </span>
+        </div>
       </td>
       <td className={clsx("px-3 align-middle text-[0.84rem]", cellPadY)}>
         <div className="text-[color:var(--color-text)]">{command.description}</div>
@@ -165,19 +180,6 @@ export function CommandRow({
       </td>
       <td className={clsx("w-24 rounded-r-lg px-2 text-right align-middle", cellPadY)}>
         <div className="flex items-center justify-end gap-0.5 opacity-70 transition group-hover:opacity-100 focus-within:opacity-100">
-          <button
-            type="button"
-            onClick={onOpenDocs}
-            disabled={isPending}
-            className={clsx(
-              "flex items-center justify-center rounded-md text-[color:var(--color-text-muted)] transition hover:bg-[color:var(--color-bg)] hover:text-[color:var(--color-accent-cyan)] disabled:cursor-wait",
-              btnSize,
-            )}
-            aria-label="Ver documentación"
-            title="Ver documentación"
-          >
-            <BookOpen size={iconSize} />
-          </button>
           <button
             type="button"
             onClick={onEdit}

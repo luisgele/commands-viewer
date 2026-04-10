@@ -12,7 +12,7 @@ import {
   arrayMove,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { ArrowDown, ArrowUp, ArrowUpDown, Plus } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpDown, ExternalLink, Plus } from "lucide-react";
 import clsx from "clsx";
 import type { Command, Modifier, SortKey, Tool } from "../types";
 import { useStore } from "../store/useStore";
@@ -169,9 +169,22 @@ export function CommandTable({ tool, onEdit, onAdd, onOpenDocs }: CommandTablePr
             <span className="text-lg">{tool.icon}</span>
           </div>
           <div>
-            <h2 className="font-mono text-lg font-bold text-[color:var(--color-text-bright)]">
-              {tool.name}
-            </h2>
+            <div className="flex items-center gap-2">
+              <h2 className="font-mono text-lg font-bold text-[color:var(--color-text-bright)]">
+                {tool.name}
+              </h2>
+              {tool.docUrl && (
+                <a
+                  href={tool.docUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={`Documentación oficial de ${tool.name}`}
+                  className="text-[color:var(--color-text-muted)] transition hover:text-[color:var(--color-accent-cyan)]"
+                >
+                  <ExternalLink size={14} />
+                </a>
+              )}
+            </div>
             <p className="text-xs text-[color:var(--color-text-muted)]">
               {toolCommands.length} comando{toolCommands.length === 1 ? "" : "s"}
               {filtered.length !== toolCommands.length && ` · ${filtered.length} visible${filtered.length === 1 ? "" : "s"}`}

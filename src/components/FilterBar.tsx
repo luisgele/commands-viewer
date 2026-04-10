@@ -1,10 +1,10 @@
-import { Search, Star, X } from "lucide-react";
+import { ChevronDown, ChevronRight, Search, Star, X } from "lucide-react";
 import clsx from "clsx";
 import { useStore } from "../store/useStore";
 import { IMPORTANCE_LABELS, IMPORTANCE_ORDER } from "../lib/constants";
 import { uniqueTags } from "../lib/selectors";
 import { TagChip } from "./Badges";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 export function FilterBar() {
   const filters = useStore((s) => s.filters);
@@ -23,6 +23,7 @@ export function FilterBar() {
 
   const filterCount = activeFilterCount();
   const hasActiveFilters = filterCount > 0;
+  const [tagsOpen, setTagsOpen] = useState(true);
 
   return (
     <div
@@ -135,18 +136,34 @@ export function FilterBar() {
       </div>
 
       {tags.length > 0 && (
-        <div className="mx-auto flex max-w-[1400px] flex-wrap items-center gap-1.5 border-t border-[color:var(--color-border)]/50 px-6 py-2">
-          <span className="font-mono text-[0.65rem] uppercase tracking-wider text-[color:var(--color-text-muted)]">
-            tags:
-          </span>
-          {tags.map((tag) => (
-            <TagChip
-              key={tag}
-              tag={tag}
-              active={filters.tag === tag}
-              onClick={() => setFilter("tag", filters.tag === tag ? null : tag)}
-            />
-          ))}
+        <div className="border-t border-[color:var(--color-border)]/50">
+          <div className="mx-auto max-w-[1400px]">
+            <button
+              type="button"
+              onClick={() => setTagsOpen((v) => !v)}
+              className="flex w-full items-center gap-1.5 px-6 py-1.5 font-mono text-[0.65rem] uppercase tracking-wider text-[color:var(--color-text-muted)] transition hover:text-[color:var(--color-text)]"
+            >
+              {tagsOpen ? <ChevronDown size={11} /> : <ChevronRight size={11} />}
+              tags ({tags.length})
+              {filters.tag && (
+                <span className="ml-1 rounded-full bg-[color:var(--color-accent-cyan)]/20 px-1.5 py-0.5 text-[0.6rem] text-[color:var(--color-accent-cyan)]">
+                  activo
+                </span>
+              )}
+            </button>
+            {tagsOpen && (
+              <div className="flex flex-wrap items-center gap-1.5 px-6 pb-2">
+                {tags.map((tag) => (
+                  <TagChip
+                    key={tag}
+                    tag={tag}
+                    active={filters.tag === tag}
+                    onClick={() => setFilter("tag", filters.tag === tag ? null : tag)}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

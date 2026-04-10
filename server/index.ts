@@ -239,7 +239,7 @@ function normalizeTool(input: unknown, existing?: Tool): Tool {
     icon: asString(o.icon, existing?.icon ?? "◆"),
     color: asString(o.color, existing?.color ?? "#ff6b35"),
     order: typeof o.order === "number" ? o.order : (existing?.order ?? 0),
-    docUrl: asString(o.docUrl, existing?.docUrl ?? ""),
+    docUrl: (typeof o.docUrl === "string" && o.docUrl.trim()) ? o.docUrl.trim() : (existing?.docUrl ?? ""),
     dataFile: asString(o.dataFile, existing?.dataFile ?? ""),
   };
 }
@@ -264,7 +264,7 @@ function normalizeCommand(input: unknown, existing?: Command): Command {
     favorite: typeof o.favorite === "boolean" ? o.favorite : (existing?.favorite ?? false),
     order: typeof o.order === "number" ? o.order : (existing?.order ?? 0),
     modifiers: "modifiers" in o ? asModifierArray(o.modifiers) : (existing?.modifiers ?? []),
-    docUrl: asString(o.docUrl, existing?.docUrl ?? ""),
+    docUrl: (typeof o.docUrl === "string" && o.docUrl.trim()) ? o.docUrl.trim() : (existing?.docUrl ?? ""),
   };
 }
 
