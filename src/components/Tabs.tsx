@@ -1,4 +1,4 @@
-import { Plus, Pencil, Trash2, GripVertical, ExternalLink } from "lucide-react";
+import { Plus, Pencil, GripVertical, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import clsx from "clsx";
 import {
@@ -39,10 +39,6 @@ export function Tabs({ onAddTool }: TabsProps) {
   const commandCount = (toolId: string) =>
     commands.filter((c) => c.toolId === toolId).length;
 
-  const handleDelete = (tool: Tool) => {
-    setConfirmDeleteTool(tool);
-  };
-
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
   );
@@ -80,7 +76,6 @@ export function Tabs({ onAddTool }: TabsProps) {
                   setActiveTool(tool.id);
                   setEditingTool(tool);
                 }}
-                onDelete={() => handleDelete(tool)}
               />
             ))}
           </SortableContext>
@@ -102,6 +97,11 @@ export function Tabs({ onAddTool }: TabsProps) {
           onSave={async (values) => {
             await updateTool(editingTool.id, values);
             setEditingTool(null);
+          }}
+          onDelete={() => {
+            const tool = editingTool;
+            setEditingTool(null);
+            setConfirmDeleteTool(tool);
           }}
         />
       )}
@@ -132,7 +132,6 @@ interface SortableToolTabProps {
   count: number;
   onActivate: () => void;
   onEdit: () => void;
-  onDelete: () => void;
 }
 
 function SortableToolTab({
@@ -141,8 +140,8 @@ function SortableToolTab({
   count,
   onActivate,
   onEdit,
-  onDelete,
 }: SortableToolTabProps) {
+  const [hovered, setHovered] = useState(false);
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id: tool.id });
 
@@ -168,6 +167,8 @@ function SortableToolTab({
           ? "border-[color:var(--color-border-glow)] bg-[color:var(--color-bg-card)] text-[color:var(--color-text-bright)]"
           : "border-transparent text-[color:var(--color-text-muted)] hover:bg-[color:var(--color-bg-card)] hover:text-[color:var(--color-text)]",
       )}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
       <button
         type="button"
@@ -193,52 +194,35 @@ function SortableToolTab({
           {count}
         </span>
       </button>
-      <div
-        className={clsx(
-          "flex items-center gap-0.5 border-l border-[color:var(--color-border)] pl-1.5 transition",
-          active
-            ? "opacity-100"
-            : "opacity-0 group-hover:opacity-60 group-focus-within:opacity-100",
-        )}
-      >
-        {tool.docUrl && (
-          <a
-            href={tool.docUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
+      {(active || hovered) && (
+        <div className="flex items-center gap-0.5 border-l border-[color:var(--color-border)] pl-1.5">
+          {tool.docUrl && (
+            <a
+              href={tool.docUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="flex h-7 w-7 items-center justify-center rounded text-[color:var(--color-text-muted)] transition hover:bg-[color:var(--color-bg)] hover:text-[color:var(--color-accent-cyan)]"
+              aria-label={`Documentación de ${tool.name}`}
+              title={`Documentación de ${tool.name}`}
+            >
+              <ExternalLink size={13} />
+            </a>
+          )}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit();
+            }}
             className="flex h-7 w-7 items-center justify-center rounded text-[color:var(--color-text-muted)] transition hover:bg-[color:var(--color-bg)] hover:text-[color:var(--color-accent-cyan)]"
-            aria-label={`Documentación de ${tool.name}`}
-            title={`Documentación de ${tool.name}`}
+            aria-label={`Editar ${tool.name}`}
+            title={`Editar ${tool.name}`}
           >
-            <ExternalLink size={13} />
-          </a>
-        )}
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            onEdit();
-          }}
-          className="flex h-7 w-7 items-center justify-center rounded text-[color:var(--color-text-muted)] transition hover:bg-[color:var(--color-bg)] hover:text-[color:var(--color-accent-cyan)]"
-          aria-label={`Editar ${tool.name}`}
-          title={`Editar ${tool.name}`}
-        >
-          <Pencil size={13} />
-        </button>
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            onDelete();
-          }}
-          className="flex h-7 w-7 items-center justify-center rounded text-[color:var(--color-text-muted)] transition hover:bg-[color:var(--color-bg)] hover:text-[color:var(--color-accent-orange)]"
-          aria-label={`Eliminar ${tool.name}`}
-          title={`Eliminar ${tool.name}`}
-        >
-          <Trash2 size={13} />
-        </button>
-      </div>
+            <Pencil size={13} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

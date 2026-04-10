@@ -9,9 +9,10 @@ interface ToolModalProps {
   tool?: Tool;
   onClose: () => void;
   onSave: (values: { name: string; icon: string; color: string; docUrl?: string }) => Promise<void>;
+  onDelete?: () => void;
 }
 
-export function ToolModal({ tool, onClose, onSave }: ToolModalProps) {
+export function ToolModal({ tool, onClose, onSave, onDelete }: ToolModalProps) {
   const isEdit = tool !== undefined;
   const [name, setName] = useState(tool?.name ?? "");
   const [icon, setIcon] = useState(tool?.icon ?? "◆");
@@ -131,23 +132,37 @@ export function ToolModal({ tool, onClose, onSave }: ToolModalProps) {
             </div>
           )}
         </div>
-        <footer className="flex items-center justify-end gap-2 border-t border-[color:var(--color-border)] px-6 py-4">
-          <button
-            type="button"
-            onClick={onClose}
-            disabled={saving}
-            className="rounded-md border border-[color:var(--color-border)] bg-[color:var(--color-bg-card-alt)] px-4 py-2 font-mono text-xs text-[color:var(--color-text-muted)] hover:text-[color:var(--color-text)]"
-          >
-            Cancelar
-          </button>
-          <button
-            type="button"
-            onClick={handleSave}
-            disabled={saving}
-            className="rounded-md border border-[color:var(--color-accent-cyan)]/40 bg-[color:var(--color-accent-cyan)]/20 px-5 py-2 font-mono text-xs text-[color:var(--color-accent-cyan)] hover:bg-[color:var(--color-accent-cyan)]/30 disabled:opacity-50"
-          >
-            {saving ? (isEdit ? "Guardando..." : "Creando...") : (isEdit ? "Guardar" : "Crear")}
-          </button>
+        <footer className="flex items-center justify-between gap-2 border-t border-[color:var(--color-border)] px-6 py-4">
+          <div>
+            {isEdit && onDelete && (
+              <button
+                type="button"
+                onClick={onDelete}
+                disabled={saving}
+                className="rounded-md border border-red-500/30 bg-red-500/10 px-4 py-2 font-mono text-xs text-red-400 hover:bg-red-500/20 disabled:opacity-50"
+              >
+                Eliminar herramienta
+              </button>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={saving}
+              className="rounded-md border border-[color:var(--color-border)] bg-[color:var(--color-bg-card-alt)] px-4 py-2 font-mono text-xs text-[color:var(--color-text-muted)] hover:text-[color:var(--color-text)]"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={saving}
+              className="rounded-md border border-[color:var(--color-accent-cyan)]/40 bg-[color:var(--color-accent-cyan)]/20 px-5 py-2 font-mono text-xs text-[color:var(--color-accent-cyan)] hover:bg-[color:var(--color-accent-cyan)]/30 disabled:opacity-50"
+            >
+              {saving ? (isEdit ? "Guardando..." : "Creando...") : (isEdit ? "Guardar" : "Crear")}
+            </button>
+          </div>
         </footer>
       </div>
     </div>
