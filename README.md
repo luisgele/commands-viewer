@@ -10,17 +10,17 @@ interface: commands, examples, flags, tags, favorites, notes, and manual
  ordering by tool. The goal is not just to collect snippets, but to keep a
 living reference you can actually browse, refine, and maintain over time.
 
-![Commands Viewer screenshot](docs/main.png)
+![Commands Viewer screenshot](docs/main.png){width=90%}
 
 
 ### Compact Mode
 
-![Commands Viewer COMPACT](docs/compact-mode.png)
+![Commands Viewer COMPACT](docs/compact-mode.png){width=90%}
 
 
 ### New Command
 
-![Commands Viewer NEW COMMAND](docs/new-command.png)
+![Commands Viewer NEW COMMAND](docs/new-command.png){width=40%}
 
 
 ## What It Is

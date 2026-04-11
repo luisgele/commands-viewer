@@ -11,19 +11,17 @@ manual por herramienta. La idea no es coleccionar snippets sin contexto, sino
 tener una referencia viva que puedas consultar, depurar y mantener con el
 tiempo.
 
-![Commands Viewer screenshot](docs/main.png)
-
-
+![Commands Viewer screenshot](docs/main.png){width=90%}
 
 
 ### Compact Mode
 
-![Commands Viewer COMPACT](docs/compact-mode.png)
+![Commands Viewer COMPACT](docs/compact-mode.png){width=90%}
 
 
 ### New Command
 
-![Commands Viewer NEW COMMAND](docs/new-command.png)
+![Commands Viewer NEW COMMAND](docs/new-command.png){width=40%}
 
 
 
