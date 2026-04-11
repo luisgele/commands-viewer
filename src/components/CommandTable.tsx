@@ -248,7 +248,7 @@ export function CommandTable({ tool, onEdit, onAdd, onOpenDocs }: CommandTablePr
                   items={commands.map((c) => c.id)}
                   strategy={verticalListSortingStrategy}
                 >
-                  <table className="w-full border-separate border-spacing-y-1">
+                  <table className="w-full table-fixed border-separate border-spacing-y-1">
                     <thead>
                       <tr>
                         <th className="w-6 pl-1" />
@@ -259,7 +259,7 @@ export function CommandTable({ tool, onEdit, onAdd, onOpenDocs }: CommandTablePr
                           aria-sort={ariaSortFor("name")}
                           tabIndex={0}
                           role="columnheader"
-                          className="cursor-pointer px-3 py-1.5 text-left transition hover:text-[color:var(--color-text-bright)]"
+                          className="w-56 cursor-pointer px-3 py-1.5 text-left transition hover:text-[color:var(--color-text-bright)]"
                           onClick={() => setSort("name")}
                           onKeyDown={(e) => {
                             if (e.key === "Enter" || e.key === " ") {

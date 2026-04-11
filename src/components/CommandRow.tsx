@@ -123,7 +123,7 @@ export function CommandRow({
           <Star size={iconSize} fill={command.favorite ? "currentColor" : "none"} />
         </button>
       </td>
-      <td className={clsx("whitespace-nowrap px-3 align-middle", cellPadY)}>
+      <td className={clsx("overflow-hidden whitespace-nowrap px-3 align-middle", cellPadY)}>
         <div className="flex items-center gap-1.5">
           <button
             type="button"
@@ -138,19 +138,16 @@ export function CommandRow({
           >
             <BookOpen size={isUltra ? 9 : isCompactLike ? 11 : 12} />
           </button>
-          <span className="font-mono text-[0.92rem] font-semibold tracking-tight text-[color:var(--color-accent-cyan)]">
+          <span
+            className="truncate font-mono text-[0.92rem] font-semibold tracking-tight text-[color:var(--color-accent-cyan)]"
+            title={command.name}
+          >
             {command.name}
           </span>
         </div>
       </td>
       <td className={clsx("px-3 align-middle text-[0.84rem]", cellPadY)}>
-        <div
-          className={clsx(
-            "text-[color:var(--color-text)]",
-            isUltra && "truncate",
-          )}
-          title={isUltra ? command.description : undefined}
-        >
+        <div className="text-[color:var(--color-text)]">
           {command.description}
         </div>
         {!isUltra && command.hint && (
