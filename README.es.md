@@ -13,6 +13,20 @@ tiempo.
 
 ![Commands Viewer screenshot](docs/main.png)
 
+
+
+
+### Compact Mode
+
+![Commands Viewer COMPACT](docs/compact-mode.png)
+
+
+### New Command
+
+![Commands Viewer NEW COMMAND](docs/new-command.png)
+
+
+
 ## Qué es
 
 Piensa en esto como una mezcla entre:
