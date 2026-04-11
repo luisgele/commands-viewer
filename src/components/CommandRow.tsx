@@ -40,10 +40,11 @@ export function CommandRow({
   onToggleExpand,
   density,
 }: CommandRowProps) {
-  const isCompact = density === "compact";
-  const cellPadY = isCompact ? "py-1.5" : "py-3";
-  const btnSize = isCompact ? "h-7 w-7" : "h-9 w-9";
-  const iconSize = isCompact ? 13 : 14;
+  const isUltra = density === "ultra";
+  const isCompactLike = density === "compact" || isUltra;
+  const cellPadY = isUltra ? "py-0.5" : isCompactLike ? "py-1.5" : "py-3";
+  const btnSize = isUltra ? "h-6 w-6" : isCompactLike ? "h-7 w-7" : "h-9 w-9";
+  const iconSize = isUltra ? 12 : isCompactLike ? 13 : 14;
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id: command.id, disabled: !sortable });
 
@@ -130,26 +131,34 @@ export function CommandRow({
             disabled={isPending}
             className={clsx(
               "flex shrink-0 items-center justify-center rounded text-[color:var(--color-text-muted)]/40 transition hover:text-[color:var(--color-accent-cyan)] disabled:cursor-wait",
-              isCompact ? "h-5 w-5" : "h-6 w-6",
+              isUltra ? "h-4 w-4" : isCompactLike ? "h-5 w-5" : "h-6 w-6",
             )}
             aria-label="Ver documentación"
             title="Ver documentación"
           >
-            <BookOpen size={isCompact ? 11 : 12} />
+            <BookOpen size={isUltra ? 9 : isCompactLike ? 11 : 12} />
           </button>
-          <span className="font-mono text-[0.84rem] font-semibold text-[color:var(--color-text-bright)]">
+          <span className="font-mono text-[0.92rem] font-semibold tracking-tight text-[color:var(--color-accent-cyan)]">
             {command.name}
           </span>
         </div>
       </td>
       <td className={clsx("px-3 align-middle text-[0.84rem]", cellPadY)}>
-        <div className="text-[color:var(--color-text)]">{command.description}</div>
-        {command.hint && (
+        <div
+          className={clsx(
+            "text-[color:var(--color-text)]",
+            isUltra && "truncate",
+          )}
+          title={isUltra ? command.description : undefined}
+        >
+          {command.description}
+        </div>
+        {!isUltra && command.hint && (
           <div className="mt-1 font-mono text-[0.7rem] italic text-[color:var(--color-text-muted)]">
             {command.hint}
           </div>
         )}
-        {hasNotes && (
+        {!isUltra && hasNotes && (
           <div className="mt-1.5 flex items-start gap-1.5 rounded-md border border-[color:var(--color-accent-cyan)]/20 bg-[color:var(--color-accent-cyan)]/[0.04] px-2 py-1 text-[0.72rem] text-[color:var(--color-text)]">
             <StickyNote
               size={11}
@@ -159,7 +168,7 @@ export function CommandRow({
             <span className="whitespace-pre-wrap">{command.notes}</span>
           </div>
         )}
-        {command.tags.length > 0 && (
+        {!isUltra && command.tags.length > 0 && (
           <div className="mt-1.5 flex flex-wrap gap-1">
             {command.tags.map((t) => (
               <span

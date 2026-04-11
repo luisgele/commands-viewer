@@ -10,7 +10,7 @@ interface Filters {
   tag: string | null;
 }
 
-export type Density = "compact" | "comfortable";
+export type Density = "ultra" | "compact" | "comfortable";
 
 interface Settings {
   density: Density;
@@ -24,9 +24,13 @@ function loadSettings(): Settings {
     const raw = window.localStorage.getItem(SETTINGS_KEY);
     if (!raw) return { density: "compact" };
     const parsed = JSON.parse(raw) as Partial<Settings>;
-    return {
-      density: parsed.density === "comfortable" ? "comfortable" : "compact",
-    };
+    const density: Density =
+      parsed.density === "ultra" ||
+      parsed.density === "comfortable" ||
+      parsed.density === "compact"
+        ? parsed.density
+        : "compact";
+    return { density };
   } catch {
     return { density: "compact" };
   }

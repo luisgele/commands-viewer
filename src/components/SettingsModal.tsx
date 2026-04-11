@@ -15,9 +15,16 @@ const DENSITY_OPTIONS: Array<{
   preview: string[];
 }> = [
   {
+    value: "ultra",
+    label: "Ultra",
+    description:
+      "Densidad máxima. Oculta etiquetas, notas y pistas; cada fila en una sola línea. Ideal para escanear muchos comandos.",
+    preview: ["•", "•", "•", "•", "•", "•", "•"],
+  },
+  {
     value: "compact",
     label: "Compacto",
-    description: "Máxima densidad visual. Botones pequeños. Scanea más comandos por pantalla.",
+    description: "Alta densidad con etiquetas y notas visibles. Botones pequeños.",
     preview: ["•", "•", "•", "•", "•"],
   },
   {
