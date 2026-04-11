@@ -16,15 +16,15 @@ const DENSITY_OPTIONS: Array<{
 }> = [
   {
     value: "ultra",
-    label: "Ultra",
+    label: "Compacto",
     description:
       "Densidad máxima. Oculta etiquetas, notas y pistas; cada fila en una sola línea. Ideal para escanear muchos comandos.",
     preview: ["•", "•", "•", "•", "•", "•", "•"],
   },
   {
     value: "compact",
-    label: "Compacto",
-    description: "Alta densidad con etiquetas y notas visibles. Botones pequeños.",
+    label: "Normal",
+    description: "Modo normal con etiquetas y notas visibles. Botones pequeños.",
     preview: ["•", "•", "•", "•", "•"],
   },
   {
