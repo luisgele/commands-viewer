@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import {
   DndContext,
   PointerSensor,
@@ -25,6 +25,21 @@ import {
 import { CommandRow } from "./CommandRow";
 import { ConfirmDialog } from "./ConfirmDialog";
 
+const MIN_CMD_COL_W = 120;
+const MIN_DESC_COL_W = 240;
+const DEFAULT_CMD_COL_W = 224;
+const LS_CMD_COL_W = "commandTable.cmdColWidth";
+const LS_DESC_COL_W = "commandTable.descColWidth";
+
+function readStoredColW(key: string, min: number): number | null {
+  if (typeof window === "undefined") return null;
+  const raw = window.localStorage.getItem(key);
+  if (raw === null) return null;
+  const v = Number(raw);
+  if (!Number.isFinite(v) || v < min) return null;
+  return v;
+}
+
 interface CommandTableProps {
   tool: Tool;
   onEdit: (cmd: Command) => void;
@@ -47,6 +62,67 @@ export function CommandTable({ tool, onEdit, onAdd, onOpenDocs }: CommandTablePr
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
   const [autoExpandedIds, setAutoExpandedIds] = useState<Set<string>>(new Set());
+
+  const descThRef = useRef<HTMLTableCellElement>(null);
+  const [cmdColWidth, setCmdColWidth] = useState<number>(
+    () => readStoredColW(LS_CMD_COL_W, MIN_CMD_COL_W) ?? DEFAULT_CMD_COL_W,
+  );
+  const [descColWidth, setDescColWidth] = useState<number | null>(() =>
+    readStoredColW(LS_DESC_COL_W, MIN_DESC_COL_W),
+  );
+
+  useEffect(() => {
+    window.localStorage.setItem(LS_CMD_COL_W, String(cmdColWidth));
+  }, [cmdColWidth]);
+
+  useEffect(() => {
+    if (descColWidth === null) {
+      window.localStorage.removeItem(LS_DESC_COL_W);
+    } else {
+      window.localStorage.setItem(LS_DESC_COL_W, String(descColWidth));
+    }
+  }, [descColWidth]);
+
+  const beginColResize = (
+    col: "cmd" | "desc",
+    e: React.PointerEvent<HTMLDivElement>,
+  ) => {
+    e.stopPropagation();
+    e.preventDefault();
+    const startX = e.clientX;
+
+    // Snapshot the description width before a cmd drag starts so growing
+    // the command column triggers horizontal scroll instead of squeezing
+    // the auto-sized description column into an invalid state.
+    if (col === "cmd" && descColWidth === null) {
+      const measured = descThRef.current?.offsetWidth;
+      if (measured && measured >= MIN_DESC_COL_W) {
+        setDescColWidth(measured);
+      }
+    }
+
+    const startW =
+      col === "cmd"
+        ? cmdColWidth
+        : descColWidth ?? descThRef.current?.offsetWidth ?? 400;
+    const min = col === "cmd" ? MIN_CMD_COL_W : MIN_DESC_COL_W;
+
+    const handleMove = (ev: PointerEvent) => {
+      const next = Math.max(min, Math.round(startW + (ev.clientX - startX)));
+      if (col === "cmd") setCmdColWidth(next);
+      else setDescColWidth(next);
+    };
+    const handleUp = () => {
+      window.removeEventListener("pointermove", handleMove);
+      window.removeEventListener("pointerup", handleUp);
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+    };
+    window.addEventListener("pointermove", handleMove);
+    window.addEventListener("pointerup", handleUp);
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
+  };
 
   const toggleExpand = (id: string) => {
     setExpandedIds((prev) => {
@@ -248,18 +324,45 @@ export function CommandTable({ tool, onEdit, onAdd, onOpenDocs }: CommandTablePr
                   items={commands.map((c) => c.id)}
                   strategy={verticalListSortingStrategy}
                 >
-                  <table className="w-full table-fixed border-separate border-spacing-y-1">
+                  <div className="overflow-x-auto">
+                  <table
+                    className={clsx(
+                      "table-fixed border-separate border-spacing-y-1",
+                      descColWidth === null && "w-full",
+                    )}
+                    style={
+                      descColWidth !== null
+                        ? { width: `${380 + cmdColWidth + descColWidth}px` }
+                        : undefined
+                    }
+                  >
+                    <colgroup>
+                      <col style={{ width: "24px" }} />
+                      <col style={{ width: "32px" }} />
+                      <col style={{ width: "36px" }} />
+                      <col style={{ width: `${cmdColWidth}px` }} />
+                      <col
+                        style={
+                          descColWidth !== null
+                            ? { width: `${descColWidth}px` }
+                            : undefined
+                        }
+                      />
+                      <col style={{ width: "96px" }} />
+                      <col style={{ width: "96px" }} />
+                      <col style={{ width: "96px" }} />
+                    </colgroup>
                     <thead>
                       <tr>
-                        <th className="w-6 pl-1" />
-                        <th className="w-8" />
-                        <th className="w-9" />
+                        <th className="pl-1" />
+                        <th />
+                        <th />
                         <th
                           scope="col"
                           aria-sort={ariaSortFor("name")}
                           tabIndex={0}
                           role="columnheader"
-                          className="w-56 cursor-pointer px-3 py-1.5 text-left transition hover:text-[color:var(--color-text-bright)]"
+                          className="relative cursor-pointer px-3 py-1.5 text-left transition hover:text-[color:var(--color-text-bright)]"
                           onClick={() => setSort("name")}
                           onKeyDown={(e) => {
                             if (e.key === "Enter" || e.key === " ") {
@@ -269,11 +372,33 @@ export function CommandTable({ tool, onEdit, onAdd, onOpenDocs }: CommandTablePr
                           }}
                         >
                           <SortHeader label="Comando" keyName="name" />
+                          <div
+                            role="separator"
+                            aria-orientation="vertical"
+                            aria-label="Redimensionar columna Comando"
+                            onPointerDown={(e) => beginColResize("cmd", e)}
+                            onClick={(e) => e.stopPropagation()}
+                            onKeyDown={(e) => e.stopPropagation()}
+                            className="absolute right-0 top-0 z-10 h-full w-1.5 cursor-col-resize select-none bg-transparent transition-colors hover:bg-[color:var(--color-accent-cyan)]/40"
+                          />
                         </th>
-                        <th scope="col" className="px-3 py-1.5 text-left">
+                        <th
+                          ref={descThRef}
+                          scope="col"
+                          className="relative px-3 py-1.5 text-left"
+                        >
                           <span className="font-mono text-[0.7rem] font-semibold uppercase tracking-wider text-[color:var(--color-text-muted)]">
                             Descripción
                           </span>
+                          <div
+                            role="separator"
+                            aria-orientation="vertical"
+                            aria-label="Redimensionar columna Descripción"
+                            onPointerDown={(e) => beginColResize("desc", e)}
+                            onClick={(e) => e.stopPropagation()}
+                            onKeyDown={(e) => e.stopPropagation()}
+                            className="absolute right-0 top-0 z-10 h-full w-1.5 cursor-col-resize select-none bg-transparent transition-colors hover:bg-[color:var(--color-accent-cyan)]/40"
+                          />
                         </th>
                         <th
                           scope="col"
@@ -373,6 +498,7 @@ export function CommandTable({ tool, onEdit, onAdd, onOpenDocs }: CommandTablePr
                       })}
                     </tbody>
                   </table>
+                  </div>
                 </SortableContext>
               </DndContext>
             </section>
