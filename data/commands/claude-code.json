@@ -9,18 +9,39 @@
       "hint": "Ejecutar sin argumentos para entrar en modo conversacional",
       "importance": "critical",
       "frequency": 5,
-      "tags": ["cli", "session"],
+      "tags": [
+        "cli",
+        "session"
+      ],
       "notes": "",
       "favorite": false,
       "order": 0,
       "docUrl": "https://code.claude.com/docs/en/cli-reference",
       "modifiers": [
-        { "flag": "--model <model>", "description": "Fija el modelo: sonnet, opus, haiku" },
-        { "flag": "--effort <level>", "description": "Nivel de esfuerzo: low, medium, high, max" },
-        { "flag": "--permission-mode <mode>", "description": "Modo de permisos inicial: plan, accept-edits, auto, bypass" },
-        { "flag": "--add-dir <path>", "description": "Incluye directorio adicional en el workspace" },
-        { "flag": "--bare", "description": "Modo mínimo sin hooks/skills/MCP" },
-        { "flag": "--debug", "description": "Activa logging de debug desde el arranque" }
+        {
+          "flag": "--model <model>",
+          "description": "Fija el modelo: sonnet, opus, haiku"
+        },
+        {
+          "flag": "--effort <level>",
+          "description": "Nivel de esfuerzo: low, medium, high, max"
+        },
+        {
+          "flag": "--permission-mode <mode>",
+          "description": "Modo de permisos inicial: plan, accept-edits, auto, bypass"
+        },
+        {
+          "flag": "--add-dir <path>",
+          "description": "Incluye directorio adicional en el workspace"
+        },
+        {
+          "flag": "--bare",
+          "description": "Modo mínimo sin hooks/skills/MCP"
+        },
+        {
+          "flag": "--debug",
+          "description": "Activa logging de debug desde el arranque"
+        }
       ]
     },
     {
@@ -32,7 +53,10 @@
       "hint": "claude \"explica la arquitectura del proyecto\"",
       "importance": "critical",
       "frequency": 5,
-      "tags": ["cli", "session"],
+      "tags": [
+        "cli",
+        "session"
+      ],
       "notes": "",
       "favorite": false,
       "order": 1,
@@ -48,16 +72,33 @@
       "hint": "claude -p \"¿qué hace main()?\" --output-format json",
       "importance": "critical",
       "frequency": 4,
-      "tags": ["cli", "ci", "scripting", "non-interactive"],
+      "tags": [
+        "cli",
+        "ci",
+        "scripting",
+        "non-interactive"
+      ],
       "notes": "Con --output-format json devuelve la respuesta como JSON estructurado",
       "favorite": false,
       "order": 2,
       "docUrl": "https://code.claude.com/docs/en/cli-reference",
       "modifiers": [
-        { "flag": "--output-format text", "description": "Salida en texto plano (default)" },
-        { "flag": "--output-format json", "description": "Salida en JSON estructurado" },
-        { "flag": "--output-format stream-json", "description": "Streaming JSON por línea" },
-        { "flag": "--no-cache", "description": "Desactiva caché de prompt" }
+        {
+          "flag": "--output-format text",
+          "description": "Salida en texto plano (default)"
+        },
+        {
+          "flag": "--output-format json",
+          "description": "Salida en JSON estructurado"
+        },
+        {
+          "flag": "--output-format stream-json",
+          "description": "Streaming JSON por línea"
+        },
+        {
+          "flag": "--no-cache",
+          "description": "Desactiva caché de prompt"
+        }
       ]
     },
     {
@@ -69,13 +110,20 @@
       "hint": "claude -c  → retoma donde lo dejaste",
       "importance": "high",
       "frequency": 4,
-      "tags": ["cli", "session", "resume"],
+      "tags": [
+        "cli",
+        "session",
+        "resume"
+      ],
       "notes": "",
       "favorite": false,
       "order": 3,
       "docUrl": "https://code.claude.com/docs/en/cli-reference",
       "modifiers": [
-        { "flag": "--resume <id>", "description": "Retoma sesión específica por ID o nombre" }
+        {
+          "flag": "--resume <id>",
+          "description": "Retoma sesión específica por ID o nombre"
+        }
       ]
     },
     {
@@ -87,7 +135,10 @@
       "hint": "/clear — útil cuando el contexto está lleno o quieres empezar fresco",
       "importance": "critical",
       "frequency": 5,
-      "tags": ["session", "context"],
+      "tags": [
+        "session",
+        "context"
+      ],
       "notes": "Libera tokens del contexto manteniendo la sesión abierta. No cierra Claude Code.",
       "favorite": false,
       "order": 10,
@@ -103,7 +154,10 @@
       "hint": "/compact focus on the authentication changes",
       "importance": "critical",
       "frequency": 5,
-      "tags": ["session", "context"],
+      "tags": [
+        "session",
+        "context"
+      ],
       "notes": "Con instrucciones, le indica a Claude en qué partes del historial poner más énfasis al resumir.",
       "favorite": false,
       "order": 11,
@@ -119,7 +173,9 @@
       "hint": "/rename fix-auth-bug",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["session"],
+      "tags": [
+        "session"
+      ],
       "notes": "",
       "favorite": false,
       "order": 12,
@@ -135,7 +191,9 @@
       "hint": "/resume → selector interactivo de sesiones anteriores",
       "importance": "high",
       "frequency": 4,
-      "tags": ["session"],
+      "tags": [
+        "session"
+      ],
       "notes": "",
       "favorite": false,
       "order": 13,
@@ -151,7 +209,10 @@
       "hint": "/rewind → selector de puntos de restauración",
       "importance": "high",
       "frequency": 3,
-      "tags": ["session", "undo"],
+      "tags": [
+        "session",
+        "undo"
+      ],
       "notes": "Muy útil para deshacer cambios de código y volver a un estado previo sin perder el historial.",
       "favorite": false,
       "order": 14,
@@ -167,7 +228,9 @@
       "hint": "/branch → permite explorar alternativas sin afectar la rama principal",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["session"],
+      "tags": [
+        "session"
+      ],
       "notes": "",
       "favorite": false,
       "order": 15,
@@ -183,7 +246,10 @@
       "hint": "/export chat-$(date +%Y%m%d).txt",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["session", "export"],
+      "tags": [
+        "session",
+        "export"
+      ],
       "notes": "",
       "favorite": false,
       "order": 16,
@@ -199,7 +265,10 @@
       "hint": "/copy 2 → copia la penúltima respuesta",
       "importance": "high",
       "frequency": 4,
-      "tags": ["clipboard", "productivity"],
+      "tags": [
+        "clipboard",
+        "productivity"
+      ],
       "notes": "Útil sobre SSH donde el portapapeles del sistema puede no estar disponible (usa W para escribir a archivo).",
       "favorite": false,
       "order": 17,
@@ -215,7 +284,10 @@
       "hint": "/model → selector interactivo de modelos disponibles",
       "importance": "critical",
       "frequency": 5,
-      "tags": ["model", "config"],
+      "tags": [
+        "model",
+        "config"
+      ],
       "notes": "Los modelos disponibles dependen de tu plan. Opus 4.6 es el más capaz; Haiku 4.5 el más rápido.",
       "favorite": false,
       "order": 20,
@@ -231,7 +303,11 @@
       "hint": "/effort high → más razonamiento, más tokens",
       "importance": "high",
       "frequency": 4,
-      "tags": ["model", "config", "performance"],
+      "tags": [
+        "model",
+        "config",
+        "performance"
+      ],
       "notes": "El nivel de esfuerzo afecta la profundidad del razonamiento interno (thinking tokens). max solo está disponible con Opus 4.6.",
       "favorite": false,
       "order": 21,
@@ -247,7 +323,10 @@
       "hint": "/fast on → respuestas más rápidas con el mismo modelo",
       "importance": "high",
       "frequency": 4,
-      "tags": ["model", "performance"],
+      "tags": [
+        "model",
+        "performance"
+      ],
       "notes": "Fast mode y effort level son independientes. Puedes tener /fast on con /effort high.",
       "favorite": false,
       "order": 22,
@@ -263,7 +342,10 @@
       "hint": "/color cyan → identifica visualmente la sesión",
       "importance": "low",
       "frequency": 2,
-      "tags": ["ui", "session"],
+      "tags": [
+        "ui",
+        "session"
+      ],
       "notes": "Útil para diferenciar visualmente múltiples terminales con Claude Code abiertas simultáneamente.",
       "favorite": false,
       "order": 23,
@@ -279,7 +361,10 @@
       "hint": "/theme → selector visual de temas",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["ui", "config"],
+      "tags": [
+        "ui",
+        "config"
+      ],
       "notes": "",
       "favorite": false,
       "order": 24,
@@ -295,7 +380,11 @@
       "hint": "/debug my tool calls are hanging",
       "importance": "high",
       "frequency": 3,
-      "tags": ["debug", "troubleshooting", "skill"],
+      "tags": [
+        "debug",
+        "troubleshooting",
+        "skill"
+      ],
       "notes": "Es un Skill (prompt) que Claude ejecuta. Activa logs desde ese momento y los analiza para encontrar el origen del problema.",
       "favorite": false,
       "order": 30,
@@ -311,7 +400,11 @@
       "hint": "/diff → revisión visual de todos los cambios de la sesión",
       "importance": "high",
       "frequency": 4,
-      "tags": ["git", "diff", "review"],
+      "tags": [
+        "git",
+        "diff",
+        "review"
+      ],
       "notes": "",
       "favorite": false,
       "order": 31,
@@ -327,7 +420,11 @@
       "hint": "/security-review → antes de hacer PR en código crítico",
       "importance": "high",
       "frequency": 3,
-      "tags": ["security", "review", "git"],
+      "tags": [
+        "security",
+        "review",
+        "git"
+      ],
       "notes": "",
       "favorite": false,
       "order": 32,
@@ -343,7 +440,10 @@
       "hint": "/plan refactor the database layer",
       "importance": "critical",
       "frequency": 5,
-      "tags": ["planning", "workflow"],
+      "tags": [
+        "planning",
+        "workflow"
+      ],
       "notes": "En modo plan Claude no hace cambios hasta que apruebes el plan. Ideal para tareas grandes o destructivas.",
       "favorite": false,
       "order": 33,
@@ -359,7 +459,11 @@
       "hint": "/simplify focus on memory efficiency",
       "importance": "medium",
       "frequency": 3,
-      "tags": ["refactoring", "quality", "skill"],
+      "tags": [
+        "refactoring",
+        "quality",
+        "skill"
+      ],
       "notes": "Es un Skill que usa subagentes en paralelo para revisar el código desde múltiples ángulos simultáneamente.",
       "favorite": false,
       "order": 34,
@@ -375,7 +479,12 @@
       "hint": "/batch migrate src/ from Solid to React",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["automation", "parallel", "skill", "agents"],
+      "tags": [
+        "automation",
+        "parallel",
+        "skill",
+        "agents"
+      ],
       "notes": "Es un Skill de alto impacto. Cada unidad se ejecuta en su propio worktree de git para evitar conflictos. Requiere gh CLI para abrir PRs.",
       "favorite": false,
       "order": 35,
@@ -391,7 +500,11 @@
       "hint": "/autofix-pr only fix lint and type errors",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["ci", "pr", "automation"],
+      "tags": [
+        "ci",
+        "pr",
+        "automation"
+      ],
       "notes": "Requiere gh CLI y acceso a Claude Code en la web. La sesión web trabaja de forma autónoma en background.",
       "favorite": false,
       "order": 36,
@@ -407,7 +520,10 @@
       "hint": "/ultraplan design a new user authentication system",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["planning", "web"],
+      "tags": [
+        "planning",
+        "web"
+      ],
       "notes": "Combina planificación visual en navegador con ejecución remota o local. Útil para proyectos complejos.",
       "favorite": false,
       "order": 37,
@@ -423,7 +539,10 @@
       "hint": "/context → ver cuánto contexto queda antes de necesitar /compact",
       "importance": "high",
       "frequency": 4,
-      "tags": ["context", "monitoring"],
+      "tags": [
+        "context",
+        "monitoring"
+      ],
       "notes": "",
       "favorite": false,
       "order": 40,
@@ -439,7 +558,10 @@
       "hint": "/memory → gestión completa de la memoria persistente de Claude",
       "importance": "high",
       "frequency": 4,
-      "tags": ["memory", "config"],
+      "tags": [
+        "memory",
+        "config"
+      ],
       "notes": "Auto-memoria guarda automáticamente contexto relevante entre sesiones. Los archivos CLAUDE.md definen instrucciones persistentes.",
       "favorite": false,
       "order": 41,
@@ -455,7 +577,10 @@
       "hint": "/add-dir ../shared-lib",
       "importance": "high",
       "frequency": 3,
-      "tags": ["workspace", "files"],
+      "tags": [
+        "workspace",
+        "files"
+      ],
       "notes": "Útil para monorepos o cuando necesitas acceder a archivos fuera del directorio de trabajo principal.",
       "favorite": false,
       "order": 42,
@@ -471,7 +596,11 @@
       "hint": "/init → configura Claude Code para este proyecto",
       "importance": "high",
       "frequency": 3,
-      "tags": ["setup", "memory", "config"],
+      "tags": [
+        "setup",
+        "memory",
+        "config"
+      ],
       "notes": "Genera un CLAUDE.md con la arquitectura del proyecto, convenciones y notas para el equipo. Con CLAUDE_CODE_NEW_INIT=1 es más completo.",
       "favorite": false,
       "order": 43,
@@ -487,7 +616,11 @@
       "hint": "/permissions → configurar qué puede hacer Claude automáticamente",
       "importance": "critical",
       "frequency": 5,
-      "tags": ["permissions", "security", "config"],
+      "tags": [
+        "permissions",
+        "security",
+        "config"
+      ],
       "notes": "Fundamental para controlar el nivel de autonomía de Claude. Permite modo auto sin confirmación para acciones específicas.",
       "favorite": false,
       "order": 50,
@@ -503,7 +636,11 @@
       "hint": "/hooks → ver hooks configurados actualmente",
       "importance": "medium",
       "frequency": 3,
-      "tags": ["hooks", "automation", "config"],
+      "tags": [
+        "hooks",
+        "automation",
+        "config"
+      ],
       "notes": "Los hooks permiten ejecutar lógica personalizada cuando Claude usa herramientas (pre/post hooks).",
       "favorite": false,
       "order": 51,
@@ -519,7 +656,10 @@
       "hint": "/sandbox → ejecutar en entorno aislado",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["security", "sandbox"],
+      "tags": [
+        "security",
+        "sandbox"
+      ],
       "notes": "El sandbox limita el acceso de Claude al sistema. Disponible en macOS con soporte nativo de sandbox.",
       "favorite": false,
       "order": 52,
@@ -535,7 +675,10 @@
       "hint": "/agents → ver agentes disponibles",
       "importance": "medium",
       "frequency": 3,
-      "tags": ["agents", "config"],
+      "tags": [
+        "agents",
+        "config"
+      ],
       "notes": "",
       "favorite": false,
       "order": 60,
@@ -551,7 +694,11 @@
       "hint": "/mcp → ver servidores MCP conectados",
       "importance": "high",
       "frequency": 3,
-      "tags": ["mcp", "integrations", "config"],
+      "tags": [
+        "mcp",
+        "integrations",
+        "config"
+      ],
       "notes": "MCP permite a Claude acceder a herramientas externas: bases de datos, APIs, sistemas de archivos remotos, etc.",
       "favorite": false,
       "order": 61,
@@ -567,7 +714,11 @@
       "hint": "/loop 2m run the test suite and report failures",
       "importance": "medium",
       "frequency": 3,
-      "tags": ["automation", "monitoring", "skill"],
+      "tags": [
+        "automation",
+        "monitoring",
+        "skill"
+      ],
       "notes": "Es un Skill. Útil para monitoreo continuo, polling de builds/deploys, o tareas repetitivas.",
       "favorite": false,
       "order": 62,
@@ -583,7 +734,11 @@
       "hint": "/schedule → crear tarea programada en claude.ai",
       "importance": "low",
       "frequency": 2,
-      "tags": ["automation", "cloud", "scheduling"],
+      "tags": [
+        "automation",
+        "cloud",
+        "scheduling"
+      ],
       "notes": "Requiere cuenta claude.ai y conexión a GitHub. Las tareas programadas se ejecutan en la nube.",
       "favorite": false,
       "order": 63,
@@ -599,7 +754,10 @@
       "hint": "/tasks → ver agentes o procesos en segundo plano",
       "importance": "medium",
       "frequency": 3,
-      "tags": ["agents", "monitoring"],
+      "tags": [
+        "agents",
+        "monitoring"
+      ],
       "notes": "",
       "favorite": false,
       "order": 64,
@@ -615,7 +773,10 @@
       "hint": "/desktop → mover sesión de terminal a la app de escritorio",
       "importance": "medium",
       "frequency": 3,
-      "tags": ["desktop", "ui"],
+      "tags": [
+        "desktop",
+        "ui"
+      ],
       "notes": "",
       "favorite": false,
       "order": 70,
@@ -631,7 +792,10 @@
       "hint": "/ide → ver estado de integración con VS Code / JetBrains",
       "importance": "medium",
       "frequency": 3,
-      "tags": ["ide", "integrations"],
+      "tags": [
+        "ide",
+        "integrations"
+      ],
       "notes": "",
       "favorite": false,
       "order": 71,
@@ -647,7 +811,11 @@
       "hint": "/terminal-setup → configurar Shift+Enter para nueva línea",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["terminal", "setup", "keybindings"],
+      "tags": [
+        "terminal",
+        "setup",
+        "keybindings"
+      ],
       "notes": "",
       "favorite": false,
       "order": 72,
@@ -663,7 +831,11 @@
       "hint": "/install-github-app → activar Claude en GitHub Actions",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["github", "ci", "integrations"],
+      "tags": [
+        "github",
+        "ci",
+        "integrations"
+      ],
       "notes": "",
       "favorite": false,
       "order": 73,
@@ -679,7 +851,10 @@
       "hint": "/install-slack-app → añadir Claude a tu workspace de Slack",
       "importance": "low",
       "frequency": 1,
-      "tags": ["slack", "integrations"],
+      "tags": [
+        "slack",
+        "integrations"
+      ],
       "notes": "",
       "favorite": false,
       "order": 74,
@@ -695,7 +870,10 @@
       "hint": "/chrome → gestionar integración con navegador Chrome",
       "importance": "low",
       "frequency": 2,
-      "tags": ["browser", "integrations"],
+      "tags": [
+        "browser",
+        "integrations"
+      ],
       "notes": "",
       "favorite": false,
       "order": 75,
@@ -711,7 +889,11 @@
       "hint": "/web-setup → vincular GitHub para usar Claude Code on the web",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["github", "web", "setup"],
+      "tags": [
+        "github",
+        "web",
+        "setup"
+      ],
       "notes": "",
       "favorite": false,
       "order": 76,
@@ -727,7 +909,10 @@
       "hint": "/remote-control → controlar sesión terminal desde el navegador",
       "importance": "low",
       "frequency": 2,
-      "tags": ["remote", "web"],
+      "tags": [
+        "remote",
+        "web"
+      ],
       "notes": "",
       "favorite": false,
       "order": 77,
@@ -743,7 +928,11 @@
       "hint": "/remote-env → definir entorno para sesiones en la nube",
       "importance": "low",
       "frequency": 1,
-      "tags": ["remote", "cloud", "config"],
+      "tags": [
+        "remote",
+        "cloud",
+        "config"
+      ],
       "notes": "",
       "favorite": false,
       "order": 78,
@@ -759,7 +948,10 @@
       "hint": "/teleport → importar sesión web al terminal local",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["web", "session"],
+      "tags": [
+        "web",
+        "session"
+      ],
       "notes": "",
       "favorite": false,
       "order": 79,
@@ -775,7 +967,11 @@
       "hint": "/statusline → personalizar la línea de estado en el prompt del shell",
       "importance": "medium",
       "frequency": 3,
-      "tags": ["ui", "shell", "config"],
+      "tags": [
+        "ui",
+        "shell",
+        "config"
+      ],
       "notes": "",
       "favorite": false,
       "order": 80,
@@ -791,7 +987,10 @@
       "hint": "/plugin install code-review@claude-plugins-official",
       "importance": "medium",
       "frequency": 3,
-      "tags": ["plugins", "config"],
+      "tags": [
+        "plugins",
+        "config"
+      ],
       "notes": "",
       "favorite": false,
       "order": 90,
@@ -807,7 +1006,9 @@
       "hint": "/reload-plugins → aplicar cambios en plugins sin reiniciar",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["plugins"],
+      "tags": [
+        "plugins"
+      ],
       "notes": "",
       "favorite": false,
       "order": 91,
@@ -823,7 +1024,10 @@
       "hint": "/skills → ver todos los skills instalados",
       "importance": "medium",
       "frequency": 3,
-      "tags": ["skills", "config"],
+      "tags": [
+        "skills",
+        "config"
+      ],
       "notes": "",
       "favorite": false,
       "order": 92,
@@ -839,7 +1043,11 @@
       "hint": "/claude-api → cargar docs de la API de Claude en contexto",
       "importance": "high",
       "frequency": 4,
-      "tags": ["api", "skill", "reference"],
+      "tags": [
+        "api",
+        "skill",
+        "reference"
+      ],
       "notes": "Es un Skill. Se activa automáticamente al detectar imports de la SDK de Anthropic en el código.",
       "favorite": false,
       "order": 93,
@@ -855,7 +1063,10 @@
       "hint": "/help → referencia rápida de todos los comandos",
       "importance": "critical",
       "frequency": 5,
-      "tags": ["help", "reference"],
+      "tags": [
+        "help",
+        "reference"
+      ],
       "notes": "Escribe / para ver los comandos disponibles filtrados en tiempo real.",
       "favorite": false,
       "order": 100,
@@ -871,7 +1082,10 @@
       "hint": "/status → ver modelo activo, plan y estado de conexión",
       "importance": "high",
       "frequency": 4,
-      "tags": ["info", "config"],
+      "tags": [
+        "info",
+        "config"
+      ],
       "notes": "",
       "favorite": false,
       "order": 101,
@@ -887,7 +1101,10 @@
       "hint": "/config → configurar Claude Code de forma interactiva",
       "importance": "high",
       "frequency": 4,
-      "tags": ["config", "settings"],
+      "tags": [
+        "config",
+        "settings"
+      ],
       "notes": "",
       "favorite": false,
       "order": 102,
@@ -903,7 +1120,11 @@
       "hint": "/cost → ver tokens usados en la sesión actual",
       "importance": "high",
       "frequency": 4,
-      "tags": ["billing", "tokens", "monitoring"],
+      "tags": [
+        "billing",
+        "tokens",
+        "monitoring"
+      ],
       "notes": "",
       "favorite": false,
       "order": 103,
@@ -919,7 +1140,10 @@
       "hint": "/usage → ver cuánto queda del plan",
       "importance": "medium",
       "frequency": 3,
-      "tags": ["billing", "limits"],
+      "tags": [
+        "billing",
+        "limits"
+      ],
       "notes": "",
       "favorite": false,
       "order": 104,
@@ -935,7 +1159,10 @@
       "hint": "/stats → estadísticas de uso personal",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["stats", "monitoring"],
+      "tags": [
+        "stats",
+        "monitoring"
+      ],
       "notes": "",
       "favorite": false,
       "order": 105,
@@ -951,7 +1178,10 @@
       "hint": "/insights → análisis profundo de tu uso de Claude Code",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["analytics", "monitoring"],
+      "tags": [
+        "analytics",
+        "monitoring"
+      ],
       "notes": "",
       "favorite": false,
       "order": 106,
@@ -967,7 +1197,10 @@
       "hint": "/release-notes → ver qué hay de nuevo en cada versión",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["changelog", "info"],
+      "tags": [
+        "changelog",
+        "info"
+      ],
       "notes": "",
       "favorite": false,
       "order": 107,
@@ -983,7 +1216,10 @@
       "hint": "/doctor → resolver problemas de instalación o configuración",
       "importance": "medium",
       "frequency": 3,
-      "tags": ["troubleshooting", "setup"],
+      "tags": [
+        "troubleshooting",
+        "setup"
+      ],
       "notes": "",
       "favorite": false,
       "order": 108,
@@ -999,7 +1235,10 @@
       "hint": "/btw what's the difference between --model and /model?",
       "importance": "high",
       "frequency": 4,
-      "tags": ["info", "productivity"],
+      "tags": [
+        "info",
+        "productivity"
+      ],
       "notes": "Muy útil para consultas rápidas sin contaminar el contexto de la tarea principal.",
       "favorite": false,
       "order": 109,
@@ -1015,7 +1254,10 @@
       "hint": "/powerup → tour interactivo de características",
       "importance": "low",
       "frequency": 2,
-      "tags": ["onboarding", "tutorial"],
+      "tags": [
+        "onboarding",
+        "tutorial"
+      ],
       "notes": "",
       "favorite": false,
       "order": 110,
@@ -1031,7 +1273,10 @@
       "hint": "/keybindings → personalizar atajos de teclado",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["keybindings", "config"],
+      "tags": [
+        "keybindings",
+        "config"
+      ],
       "notes": "",
       "favorite": false,
       "order": 111,
@@ -1047,7 +1292,10 @@
       "hint": "/login → autenticar con Anthropic",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["auth", "account"],
+      "tags": [
+        "auth",
+        "account"
+      ],
       "notes": "",
       "favorite": false,
       "order": 120,
@@ -1063,7 +1311,10 @@
       "hint": "/logout → cerrar sesión de Anthropic",
       "importance": "medium",
       "frequency": 1,
-      "tags": ["auth", "account"],
+      "tags": [
+        "auth",
+        "account"
+      ],
       "notes": "",
       "favorite": false,
       "order": 121,
@@ -1079,7 +1330,10 @@
       "hint": "/upgrade → ver planes Pro y Max",
       "importance": "low",
       "frequency": 1,
-      "tags": ["account", "billing"],
+      "tags": [
+        "account",
+        "billing"
+      ],
       "notes": "",
       "favorite": false,
       "order": 122,
@@ -1095,7 +1349,9 @@
       "hint": "/passes → invitar a otros a probar Claude Code",
       "importance": "low",
       "frequency": 1,
-      "tags": ["account"],
+      "tags": [
+        "account"
+      ],
       "notes": "",
       "favorite": false,
       "order": 123,
@@ -1111,7 +1367,10 @@
       "hint": "/extra-usage → habilitar uso adicional de pago por uso al llegar al límite",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["billing", "rate-limits"],
+      "tags": [
+        "billing",
+        "rate-limits"
+      ],
       "notes": "",
       "favorite": false,
       "order": 124,
@@ -1127,7 +1386,10 @@
       "hint": "/privacy-settings → gestionar privacidad de datos",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["privacy", "account"],
+      "tags": [
+        "privacy",
+        "account"
+      ],
       "notes": "",
       "favorite": false,
       "order": 125,
@@ -1143,7 +1405,9 @@
       "hint": "/feedback → reportar un problema o sugerencia",
       "importance": "medium",
       "frequency": 2,
-      "tags": ["feedback"],
+      "tags": [
+        "feedback"
+      ],
       "notes": "",
       "favorite": false,
       "order": 126,
@@ -1159,7 +1423,10 @@
       "hint": "/voice → dictar prompts por micrófono",
       "importance": "low",
       "frequency": 2,
-      "tags": ["voice", "input"],
+      "tags": [
+        "voice",
+        "input"
+      ],
       "notes": "",
       "favorite": false,
       "order": 127,
@@ -1175,7 +1442,9 @@
       "hint": "/mobile → obtener código QR para la app móvil",
       "importance": "low",
       "frequency": 1,
-      "tags": ["mobile"],
+      "tags": [
+        "mobile"
+      ],
       "notes": "",
       "favorite": false,
       "order": 128,
@@ -1191,7 +1460,9 @@
       "hint": "/stickers → conseguir merchandising de Claude Code",
       "importance": "low",
       "frequency": 1,
-      "tags": ["fun"],
+      "tags": [
+        "fun"
+      ],
       "notes": "",
       "favorite": false,
       "order": 129,
@@ -1207,7 +1478,9 @@
       "hint": "/exit o /quit → salir de Claude Code",
       "importance": "medium",
       "frequency": 3,
-      "tags": ["session"],
+      "tags": [
+        "session"
+      ],
       "notes": "",
       "favorite": false,
       "order": 130,
@@ -1223,7 +1496,12 @@
       "hint": "/setup-bedrock → configurar Claude en Amazon Bedrock",
       "importance": "low",
       "frequency": 2,
-      "tags": ["aws", "bedrock", "enterprise", "setup"],
+      "tags": [
+        "aws",
+        "bedrock",
+        "enterprise",
+        "setup"
+      ],
       "notes": "Requiere CLAUDE_CODE_USE_BEDROCK=1 en el entorno. Para uso enterprise con AWS.",
       "favorite": false,
       "order": 140,
@@ -1239,12 +1517,905 @@
       "hint": "/setup-vertex → configurar Claude en Google Vertex AI",
       "importance": "low",
       "frequency": 2,
-      "tags": ["gcp", "vertex", "enterprise", "setup"],
+      "tags": [
+        "gcp",
+        "vertex",
+        "enterprise",
+        "setup"
+      ],
       "notes": "Requiere CLAUDE_CODE_USE_VERTEX=1 en el entorno. Para uso enterprise con Google Cloud.",
       "favorite": false,
       "order": 141,
       "docUrl": "https://code.claude.com/docs/en/commands",
       "modifiers": []
+    }
+  ],
+  "resources": [
+    {
+      "id": "res-cc-001",
+      "toolId": "claude-code",
+      "type": "plugin",
+      "name": "superpowers",
+      "identifier": "superpowers",
+      "publisher": "obra",
+      "active": false,
+      "utility": "Colección oficial de skills de disciplina (brainstorming, TDD, debugging sistemático, writing/executing plans, code review, git worktrees, verification-before-completion).",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-002",
+      "toolId": "claude-code",
+      "type": "plugin",
+      "name": "claude-md-management",
+      "identifier": "claude-md-management",
+      "publisher": "Anthropic",
+      "active": false,
+      "utility": "Audita, mejora y mantiene los ficheros CLAUDE.md globales y de proyecto frente a plantillas de calidad.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-003",
+      "toolId": "claude-code",
+      "type": "plugin",
+      "name": "code-review",
+      "identifier": "code-review",
+      "publisher": "Anthropic",
+      "active": false,
+      "utility": "Plugin de revisión estructurada de pull requests frente al plan y los estándares del proyecto.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-004",
+      "toolId": "claude-code",
+      "type": "plugin",
+      "name": "frontend-design",
+      "identifier": "frontend-design",
+      "publisher": "Anthropic",
+      "active": false,
+      "utility": "Genera interfaces frontend distintivas y production-grade evitando la estética genérica de AI.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-005",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "brainstorming",
+      "identifier": "superpowers:brainstorming",
+      "publisher": "obra",
+      "active": false,
+      "utility": "Transforma ideas en diseños/specs mediante diálogo guiado (contexto, preguntas, approaches, diseño) antes de tocar código.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-006",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "writing-plans",
+      "identifier": "superpowers:writing-plans",
+      "publisher": "obra",
+      "active": false,
+      "utility": "Convierte un spec en un plan de implementación detallado paso a paso, listo para ejecutar.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-007",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "executing-plans",
+      "identifier": "superpowers:executing-plans",
+      "publisher": "obra",
+      "active": false,
+      "utility": "Ejecuta un plan escrito en sesiones aisladas con checkpoints de revisión entre fases.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-008",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "systematic-debugging",
+      "identifier": "superpowers:systematic-debugging",
+      "publisher": "obra",
+      "active": false,
+      "utility": "Debugging disciplinado basado en hipótesis: reproducir, aislar y verificar antes de proponer cualquier fix.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-009",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "test-driven-development",
+      "identifier": "superpowers:test-driven-development",
+      "publisher": "obra",
+      "active": false,
+      "utility": "Ciclo TDD estricto: test rojo primero, implementación mínima, test verde, refactor.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-010",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "verification-before-completion",
+      "identifier": "superpowers:verification-before-completion",
+      "publisher": "obra",
+      "active": false,
+      "utility": "Exige ejecutar comandos de verificación con evidencia antes de declarar una tarea completa, arreglada o mergeable.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-011",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "using-git-worktrees",
+      "identifier": "superpowers:using-git-worktrees",
+      "publisher": "obra",
+      "active": false,
+      "utility": "Aísla trabajo de feature en git worktrees con selección inteligente de carpeta y verificación de seguridad.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-012",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "subagent-driven-development",
+      "identifier": "superpowers:subagent-driven-development",
+      "publisher": "obra",
+      "active": false,
+      "utility": "Ejecuta planes con tareas independientes delegando en subagentes dentro de la sesión actual.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-013",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "dispatching-parallel-agents",
+      "identifier": "superpowers:dispatching-parallel-agents",
+      "publisher": "obra",
+      "active": false,
+      "utility": "Dispatcha 2+ tareas independientes en paralelo a agentes distintos cuando no hay estado compartido ni orden secuencial.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-014",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "requesting-code-review",
+      "identifier": "superpowers:requesting-code-review",
+      "publisher": "obra",
+      "active": false,
+      "utility": "Solicita revisión de código estructurada al terminar tareas o antes de merge para verificar que cumple requisitos.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-015",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "receiving-code-review",
+      "identifier": "superpowers:receiving-code-review",
+      "publisher": "obra",
+      "active": false,
+      "utility": "Maneja feedback de revisión con rigor técnico y verificación, sin agreement performativo ni implementación ciega.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-016",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "writing-skills",
+      "identifier": "superpowers:writing-skills",
+      "publisher": "obra",
+      "active": false,
+      "utility": "Crea, edita y verifica skills (frontmatter, contenido, invocación) antes de desplegarlos.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-017",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "finishing-a-development-branch",
+      "identifier": "superpowers:finishing-a-development-branch",
+      "publisher": "obra",
+      "active": false,
+      "utility": "Guía el cierre de una rama terminada: merge, PR o limpieza según el contexto del proyecto.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-018",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "using-superpowers",
+      "identifier": "superpowers:using-superpowers",
+      "publisher": "obra",
+      "active": false,
+      "utility": "Punto de entrada de cada conversación: establece cómo descubrir, invocar y priorizar skills.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-019",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "claude-api",
+      "identifier": "claude-api",
+      "publisher": "Anthropic",
+      "active": false,
+      "utility": "Construye, depura y optimiza apps con la Anthropic SDK (prompt caching, tool use, citations, migraciones entre modelos).",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-020",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "update-config",
+      "identifier": "update-config",
+      "publisher": "Anthropic",
+      "active": false,
+      "utility": "Configura el harness de Claude Code editando settings.json: hooks, permisos, env vars y comportamientos automáticos.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-021",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "keybindings-help",
+      "identifier": "keybindings-help",
+      "publisher": "Anthropic",
+      "active": false,
+      "utility": "Personaliza atajos de teclado y chords en ~/.claude/keybindings.json.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-022",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "fewer-permission-prompts",
+      "identifier": "fewer-permission-prompts",
+      "publisher": "Anthropic",
+      "active": false,
+      "utility": "Escanea transcripciones previas y añade una allowlist priorizada de Bash/MCP a .claude/settings.json para reducir prompts de permiso.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-023",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "simplify",
+      "identifier": "simplify",
+      "publisher": "Anthropic",
+      "active": false,
+      "utility": "Revisa código modificado buscando reuso, calidad y eficiencia, y corrige los problemas detectados.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-024",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "loop",
+      "identifier": "loop",
+      "publisher": "Anthropic",
+      "active": false,
+      "utility": "Ejecuta un prompt o comando slash en un intervalo recurrente (self-paced o cron fijo) para polling y tareas periódicas.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-025",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "schedule",
+      "identifier": "schedule",
+      "publisher": "Anthropic",
+      "active": false,
+      "utility": "Crea, actualiza, lista y ejecuta agentes remotos programados con cron (triggers).",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-026",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "init",
+      "identifier": "init",
+      "publisher": "Anthropic",
+      "active": false,
+      "utility": "Inicializa un CLAUDE.md nuevo con documentación generada del codebase actual.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-027",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "review",
+      "identifier": "review",
+      "publisher": "Anthropic",
+      "active": false,
+      "utility": "Revisión de un pull request concreto contra estándares del repo.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-028",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "security-review",
+      "identifier": "security-review",
+      "publisher": "Anthropic",
+      "active": false,
+      "utility": "Revisión de seguridad completa de los cambios pendientes en la rama actual.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-029",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "claude-md-improver",
+      "identifier": "claude-md-management:claude-md-improver",
+      "publisher": "Anthropic",
+      "active": false,
+      "utility": "Audita y mejora CLAUDE.md de repositorios: escanea, evalúa contra plantillas y aplica updates específicos.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-030",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "revise-claude-md",
+      "identifier": "claude-md-management:revise-claude-md",
+      "publisher": "Anthropic",
+      "active": false,
+      "utility": "Actualiza CLAUDE.md del proyecto con aprendizajes recogidos durante la sesión actual.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-031",
+      "toolId": "claude-code",
+      "type": "agent",
+      "name": "general-purpose",
+      "identifier": "general-purpose",
+      "publisher": "Anthropic",
+      "active": false,
+      "utility": "Agente general para investigación multi-paso, búsqueda de código y tareas complejas que no encajan en un agente especializado.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-032",
+      "toolId": "claude-code",
+      "type": "agent",
+      "name": "Explore",
+      "identifier": "Explore",
+      "publisher": "Anthropic",
+      "active": false,
+      "utility": "Agente especializado en explorar codebases con glob/grep y responder preguntas sobre estructura rápidamente.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-033",
+      "toolId": "claude-code",
+      "type": "agent",
+      "name": "Plan",
+      "identifier": "Plan",
+      "publisher": "Anthropic",
+      "active": false,
+      "utility": "Arquitecto de software: diseña planes de implementación, identifica ficheros críticos y analiza trade-offs arquitectónicos.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-034",
+      "toolId": "claude-code",
+      "type": "agent",
+      "name": "statusline-setup",
+      "identifier": "statusline-setup",
+      "publisher": "Anthropic",
+      "active": false,
+      "utility": "Configura la status line de Claude Code (git, tokens, modelo, coste) editando settings.json.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-035",
+      "toolId": "claude-code",
+      "type": "plugin",
+      "name": "claude-code-router",
+      "identifier": "musistudio/claude-code-router",
+      "publisher": "musistudio",
+      "active": false,
+      "utility": "Enruta peticiones de Claude Code entre múltiples modelos y proveedores (Claude, DeepSeek, Qwen, OpenRouter...) según coste, contexto y tarea.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-036",
+      "toolId": "claude-code",
+      "type": "plugin",
+      "name": "ccusage",
+      "identifier": "ryoppippi/ccusage",
+      "publisher": "ryoppippi",
+      "active": false,
+      "utility": "Tracker CLI para monitorizar uso, coste y distribución diaria/mensual de Claude Code por modelo y sesión.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-037",
+      "toolId": "claude-code",
+      "type": "plugin",
+      "name": "BMAD-METHOD",
+      "identifier": "bmad-code-org/BMAD-METHOD",
+      "publisher": "BMad Code",
+      "active": false,
+      "utility": "Framework ágil multi-agente (Analyst, PM, Architect, SM, Dev) que estructura todo el ciclo de desarrollo AI-driven.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-038",
+      "toolId": "claude-code",
+      "type": "plugin",
+      "name": "SuperClaude Framework",
+      "identifier": "SuperClaude-Org/SuperClaude_Framework",
+      "publisher": "SuperClaude Org",
+      "active": false,
+      "utility": "Framework de prompt engineering con personas, comandos y flujos especializados sobre Claude Code.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-039",
+      "toolId": "claude-code",
+      "type": "plugin",
+      "name": "CCPlugins",
+      "identifier": "brennercruvinel/CCPlugins",
+      "publisher": "Brenner Cruvinel",
+      "active": false,
+      "utility": "Colección de comandos profesionales para Claude Code (commit, cleanup, test, scaffold, refactor) orientada a trabajo real.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-040",
+      "toolId": "claude-code",
+      "type": "plugin",
+      "name": "claude-code-spec-workflow",
+      "identifier": "Pimzino/claude-code-spec-workflow",
+      "publisher": "Pimzino",
+      "active": false,
+      "utility": "Workflow de desarrollo spec-driven: requirements → design → tasks → implementation con plantillas y control de progreso.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-041",
+      "toolId": "claude-code",
+      "type": "plugin",
+      "name": "claude-code-requirements-builder",
+      "identifier": "rizethereum/claude-code-requirements-builder",
+      "publisher": "rizethereum",
+      "active": false,
+      "utility": "Agente de captura de requisitos mediante preguntas guiadas que genera specs estructuradas para el proyecto.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-042",
+      "toolId": "claude-code",
+      "type": "hook",
+      "name": "claude-code-hooks-mastery",
+      "identifier": "disler/claude-code-hooks-mastery",
+      "publisher": "disler",
+      "active": false,
+      "utility": "Colección de ejemplos y patrones para dominar los hooks de Claude Code (PreToolUse, PostToolUse, SessionStart, UserPromptSubmit).",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-043",
+      "toolId": "claude-code",
+      "type": "agent",
+      "name": "awesome-claude-code-subagents",
+      "identifier": "VoltAgent/awesome-claude-code-subagents",
+      "publisher": "VoltAgent",
+      "active": false,
+      "utility": "Colección curada de subagents especializados por dominio (backend, frontend, data, devops, security) lista para instalar.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-044",
+      "toolId": "claude-code",
+      "type": "plugin",
+      "name": "claude-squad",
+      "identifier": "smtg-ai/claude-squad",
+      "publisher": "smtg-ai",
+      "active": false,
+      "utility": "Gestiona múltiples instancias de Claude Code en paralelo sobre tmux + git worktrees para trabajar en varias tareas a la vez.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-045",
+      "toolId": "claude-code",
+      "type": "plugin",
+      "name": "claudia",
+      "identifier": "getAsterisk/claudia",
+      "publisher": "Asterisk",
+      "active": false,
+      "utility": "GUI Tauri para Claude Code: gestión de sesiones, historial, plantillas, agents y analytics en escritorio.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-046",
+      "toolId": "claude-code",
+      "type": "plugin",
+      "name": "happy",
+      "identifier": "slopus/happy",
+      "publisher": "slopus",
+      "active": false,
+      "utility": "Cliente móvil/web cifrado E2E para continuar sesiones de Claude Code desde iOS, Android o navegador.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-047",
+      "toolId": "claude-code",
+      "type": "plugin",
+      "name": "vibe-kanban",
+      "identifier": "BloopAI/vibe-kanban",
+      "publisher": "BloopAI",
+      "active": false,
+      "utility": "Tablero Kanban para orquestar tareas de agentes de codificación (Claude Code, Gemini, Cursor) con estados y colas.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-048",
+      "toolId": "claude-code",
+      "type": "plugin",
+      "name": "cchistory",
+      "identifier": "eckdlu/cchistory",
+      "publisher": "eckdlu",
+      "active": false,
+      "utility": "Navega, busca y exporta el historial local de conversaciones de Claude Code (transcripciones JSONL).",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-049",
+      "toolId": "claude-code",
+      "type": "plugin",
+      "name": "ruler",
+      "identifier": "eliddle/ruler",
+      "publisher": "eliddle",
+      "active": false,
+      "utility": "Configuración unificada de reglas y contexto para múltiples agentes de código (Claude Code, Cursor, Aider, Copilot).",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-050",
+      "toolId": "claude-code",
+      "type": "plugin",
+      "name": "claude-code-templates",
+      "identifier": "davila7/claude-code-templates",
+      "publisher": "davila7",
+      "active": false,
+      "utility": "CLI interactiva para configurar Claude Code con plantillas por lenguaje/framework (Python, Node, Rust, Go, etc.).",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-051",
+      "toolId": "claude-code",
+      "type": "plugin",
+      "name": "context-forge",
+      "identifier": "aug-code/context-forge",
+      "publisher": "aug-code",
+      "active": false,
+      "utility": "Context engineering guiado: genera CLAUDE.md, PRPs y PRDs iniciales para arrancar proyectos con Claude Code.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-052",
+      "toolId": "claude-code",
+      "type": "plugin",
+      "name": "cc-statusline",
+      "identifier": "sirmalloc/ccstatusline",
+      "publisher": "sirmalloc",
+      "active": false,
+      "utility": "Generador interactivo de status line para Claude Code con git status, tokens usados, coste y modelo activo.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": ""
+    },
+    {
+      "id": "res-cc-053",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "condition-based-waiting",
+      "identifier": "superpowers:condition-based-waiting",
+      "publisher": "obra",
+      "active": false,
+      "utility": "Espera basándose en condiciones reales observables en vez de hacer polling con sleeps arbitrarios.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-054",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "defense-in-depth",
+      "identifier": "superpowers:defense-in-depth",
+      "publisher": "obra",
+      "active": false,
+      "utility": "Añade múltiples capas de validación/tests para robustecer código frente a edge cases y fallos parciales.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-055",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "root-cause-tracing",
+      "identifier": "superpowers:root-cause-tracing",
+      "publisher": "obra",
+      "active": false,
+      "utility": "Traza bugs hasta su causa raíz en lugar de parchear síntomas; impone validación por evidencia.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-056",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "flaky-tests",
+      "identifier": "superpowers:flaky-tests",
+      "publisher": "obra",
+      "active": false,
+      "utility": "Diagnostica y repara tests flaky tratando la intermitencia como síntoma de un bug real, no como ruido.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
+    },
+    {
+      "id": "res-cc-057",
+      "toolId": "claude-code",
+      "type": "skill",
+      "name": "writing-clearly-and-concisely",
+      "identifier": "elements-of-style:writing-clearly-and-concisely",
+      "publisher": "obra",
+      "active": false,
+      "utility": "Escritura técnica clara y concisa siguiendo principios tipo Strunk & White para docs, specs y commits.",
+      "scope": "global",
+      "projectName": "",
+      "installedAt": "",
+      "securityAudited": false,
+      "path": "",
+      "source": "bundled-slash-skill"
     }
   ]
 }

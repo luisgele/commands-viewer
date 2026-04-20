@@ -17,9 +17,16 @@ interface ImportedCommand {
   name: string;
 }
 
+interface ImportedResource {
+  id?: string;
+  toolId: string;
+  name: string;
+}
+
 interface ImportedData {
   tools: ImportedTool[];
   commands: ImportedCommand[];
+  resources?: ImportedResource[];
 }
 
 interface ImportPreviewModalProps {
@@ -49,7 +56,10 @@ export function ImportPreviewModal({
     let newTools = 0;
     let reusedTools = 0;
     let duplicateSlugs = 0;
-    const byToolId = new Map<string, { name: string; count: number; isNew: boolean }>();
+    const byToolId = new Map<
+      string,
+      { name: string; commands: number; resources: number; isNew: boolean }
+    >();
     for (const tool of data.tools) {
       if (seenSlugs.has(tool.slug)) {
         duplicateSlugs++;
@@ -59,32 +69,42 @@ export function ImportPreviewModal({
       const isNew = !existingSlugs.has(tool.slug);
       if (isNew) newTools++;
       else reusedTools++;
-      byToolId.set(tool.id, { name: tool.name, count: 0, isNew });
+      byToolId.set(tool.id, { name: tool.name, commands: 0, resources: 0, isNew });
     }
     let orphanCommands = 0;
     for (const cmd of data.commands) {
       const entry = byToolId.get(cmd.toolId);
-      if (entry) entry.count++;
+      if (entry) entry.commands++;
       else orphanCommands++;
+    }
+    let orphanResources = 0;
+    for (const resource of data.resources ?? []) {
+      const entry = byToolId.get(resource.toolId);
+      if (entry) entry.resources++;
+      else orphanResources++;
     }
     return {
       newTools,
       reusedTools,
       duplicateSlugs,
       orphanCommands,
+      orphanResources,
       totalCommands: data.commands.length,
       importedCommands: data.commands.length - orphanCommands,
+      totalResources: (data.resources ?? []).length,
+      importedResources: (data.resources ?? []).length - orphanResources,
       toolBreakdown: [...byToolId.values()],
     };
   }, [data, existingTools]);
 
-  const hasWarnings = analysis.duplicateSlugs > 0 || analysis.orphanCommands > 0;
+  const hasWarnings =
+    analysis.duplicateSlugs > 0 || analysis.orphanCommands > 0 || analysis.orphanResources > 0;
 
   const trapRef = useFocusTrap<HTMLDivElement>();
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[color:var(--color-overlay)] p-4 backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
       aria-label="Previsualización de importación"
@@ -134,8 +154,21 @@ export function ImportPreviewModal({
               accent="green"
             />
             <StatCard
-              label="Total en archivo"
+              label="Recursos a importar"
+              value={analysis.importedResources}
+              accent="cyan"
+            />
+          </div>
+
+          <div className="mt-3 grid grid-cols-2 gap-3">
+            <StatCard
+              label="Total comandos"
               value={analysis.totalCommands}
+              accent="muted"
+            />
+            <StatCard
+              label="Total recursos"
+              value={analysis.totalResources}
               accent="muted"
             />
           </div>
@@ -161,6 +194,12 @@ export function ImportPreviewModal({
                 {analysis.orphanCommands > 0 && (
                   <li>
                     · <strong>{analysis.orphanCommands}</strong> comando(s) apuntan a herramientas
+                    inexistentes y serán omitidos
+                  </li>
+                )}
+                {analysis.orphanResources > 0 && (
+                  <li>
+                    · <strong>{analysis.orphanResources}</strong> recurso(s) apuntan a herramientas
                     inexistentes y serán omitidos
                   </li>
                 )}
@@ -191,8 +230,8 @@ export function ImportPreviewModal({
                         {t.isNew ? "NUEVA" : "EXISTENTE"}
                       </span>
                     </div>
-                    <span className="text-[color:var(--color-text-muted)]">
-                      {t.count} comando{t.count === 1 ? "" : "s"}
+                      <span className="text-[color:var(--color-text-muted)]">
+                      {t.commands} cmd · {t.resources} recurso{t.resources === 1 ? "" : "s"}
                     </span>
                   </div>
                 ))}

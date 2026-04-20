@@ -1,4 +1,8 @@
 export type Importance = "critical" | "high" | "medium" | "low";
+export type Theme = "dark" | "light";
+export type ToolResourceType = "skill" | "agent" | "plugin" | "hook";
+export type ToolResourceScope = "global" | "project";
+export type SkillSource = "bundled-slash-skill" | "markdown-file";
 
 export interface Tool {
   id: string;
@@ -34,9 +38,27 @@ export interface Command {
   docUrl?: string; // URL to the official docs for this specific command
 }
 
+export interface ToolResource {
+  id: string;
+  toolId: string;
+  type: ToolResourceType;
+  name: string;
+  identifier: string;
+  publisher: string;
+  active: boolean;
+  utility: string;
+  scope: ToolResourceScope;
+  projectName: string;
+  installedAt: string;
+  securityAudited: boolean;
+  path: string;
+  source?: SkillSource;
+}
+
 export interface Database {
   tools: Tool[];
   commands: Command[];
+  resources: ToolResource[];
 }
 
 export type SortKey = "manual" | "name" | "importance" | "frequency";

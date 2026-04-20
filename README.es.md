@@ -7,7 +7,9 @@ buscable y editable.
 
 `Commands Viewer` es una app local para guardar cheatsheets de CLI con una
 interfaz cómoda: comandos, ejemplos, flags, tags, favoritos, notas y orden
-manual por herramienta. La idea no es coleccionar snippets sin contexto, sino
+manual por herramienta. También permite llevar un inventario paralelo en
+Claude Code para skills, agents, plugins y hooks. La idea no es coleccionar
+snippets sin contexto, sino
 tener una referencia viva que puedas consultar, depurar y mantener con el
 tiempo.
 
@@ -35,7 +37,8 @@ Piensa en esto como una mezcla entre:
 - y una UI local para no depender de notas sueltas o Markdown disperso.
 
 Todo corre en local. No hay cuentas, no hay sync externo, no hay telemetría.
-Tus datos viven en [`data/commands.json`](data/commands.json).
+Tus datos viven en [`data/index.json`](data/index.json) y en los ficheros
+partidos por herramienta dentro de [`data/commands/`](data/commands).
 
 ## Lo más útil
 
@@ -45,6 +48,10 @@ Tus datos viven en [`data/commands.json`](data/commands.json).
   comando.
 - **Edición completa** de herramientas, comandos, tags, notas, favoritos y
   ejemplos desde la propia interfaz.
+- **Tema claro y oscuro** seleccionable desde Settings, con preferencia
+  persistida.
+- **Vista dedicada en Claude Code** para skills, agents, plugins y hooks, con
+  scope, fecha de instalación, auditoría de seguridad y ruta local abrible.
 - **Subfilas expandibles** para modifiers, útiles cuando un comando tiene flags
   que merece la pena recordar bien.
 - **Orden manual con drag & drop** tanto en tabs de herramientas como en listas
@@ -52,8 +59,8 @@ Tus datos viven en [`data/commands.json`](data/commands.json).
 - **Filtros persistentes** para quedarte con lo importante: favoritos,
   frecuencia mínima, tags e importancia.
 - **Import / Export JSON** con previsualización y avisos antes de mezclar datos.
-- **Persistencia real en disco** mediante una API Express que guarda en
-  `commands.json` con escritura atómica.
+- **Persistencia real en disco** mediante una API Express que guarda ficheros
+  por herramienta con escritura atómica.
 
 ## Por qué existe
 
@@ -122,14 +129,15 @@ necesitas tocar nada más para empezar.
 - añadir comandos con descripción, hint, notas y tags,
 - marcar favoritos,
 - ajustar frecuencia e importancia,
-- reordenar listas a mano.
+- reordenar listas a mano,
+- documentar skills/agents/plugins/hooks de Claude Code con rutas locales.
 
 ### Mover datos sin miedo
 
 - exportar tu colección a JSON,
 - importar desde un fichero externo,
 - revisar una previsualización antes de aplicar cambios,
-- detectar avisos como slugs duplicados o comandos huérfanos.
+- detectar avisos como slugs duplicados o comandos/recursos huérfanos.
 
 ## Modelo de datos
 
@@ -164,6 +172,22 @@ interface Command {
   order: number;
   modifiers: Modifier[];
 }
+
+interface ToolResource {
+  id: string;
+  toolId: string;
+  type: "skill" | "agent" | "plugin" | "hook";
+  name: string;
+  identifier: string;
+  active: boolean;
+  utility: string;
+  scope: "global" | "project";
+  projectName: string;
+  installedAt: string;
+  securityAudited: boolean;
+  path: string;
+  source?: "bundled-slash-skill" | "markdown-file";
+}
 ```
 
 El formato completo del JSON importable está documentado dentro de la propia
@@ -174,7 +198,10 @@ app, en el botón **Formato** del header.
 ```text
 Commands-Viewer/
 ├── data/
-│   └── commands.json
+│   ├── index.json
+│   └── commands/
+│       ├── claude-code.json
+│       └── ...
 ├── server/
 │   └── index.ts
 ├── src/
@@ -197,7 +224,8 @@ Commands-Viewer/
 - focus trap en modales,
 - atributos `aria-*` en interacciones clave,
 - focus ring visible cuando toca,
-- densidad configurable entre modo compacto y confortable.
+- densidad configurable entre modo compacto y confortable,
+- tema claro y oscuro configurable.
 
 ## Filosofía
 

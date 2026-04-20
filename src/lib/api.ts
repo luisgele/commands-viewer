@@ -1,4 +1,4 @@
-import type { Command, Database, Tool } from "../types";
+import type { Command, Database, Tool, ToolResource } from "../types";
 
 const BASE = "/api";
 
@@ -36,6 +36,20 @@ export const api = {
     request<Command>(`/commands/${id}`, { method: "PUT", body: JSON.stringify(command) }),
   deleteCommand: (id: string) =>
     request<void>(`/commands/${id}`, { method: "DELETE" }),
+  createResource: (resource: Partial<ToolResource>) =>
+    request<ToolResource>("/resources", { method: "POST", body: JSON.stringify(resource) }),
+  updateResource: (id: string, resource: Partial<ToolResource>) =>
+    request<ToolResource>(`/resources/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(resource),
+    }),
+  deleteResource: (id: string) =>
+    request<void>(`/resources/${id}`, { method: "DELETE" }),
+  openLocalPath: (path: string) =>
+    request<void>("/open-path", {
+      method: "POST",
+      body: JSON.stringify({ path }),
+    }),
 
   reorderCommands: (updates: Array<{ id: string; order: number }>) =>
     request<void>("/commands/reorder", {

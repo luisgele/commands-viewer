@@ -43,6 +43,23 @@ const EXAMPLE_JSON = `{
         }
       ]
     }
+  ],
+  "resources": [
+    {
+      "id": "skill-1",
+      "toolId": "git",
+      "type": "skill",
+      "name": "review-diff",
+      "identifier": "review-diff",
+      "active": true,
+      "utility": "Skill local para revisar cambios antes de hacer commit.",
+      "scope": "project",
+      "projectName": "Commands-Viewer",
+      "installedAt": "2026-04-21",
+      "securityAudited": true,
+      "path": "C:\\\\repo\\\\.claude\\\\skills\\\\review-diff\\\\SKILL.md",
+      "source": "markdown-file"
+    }
   ]
 }`;
 
@@ -71,7 +88,7 @@ export function FormatInfoModal({ onClose }: FormatInfoModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[color:var(--color-overlay)] p-4 backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
       aria-label="Formato de importación JSON"
@@ -103,6 +120,12 @@ export function FormatInfoModal({ onClose }: FormatInfoModalProps) {
             <code className="rounded bg-[color:var(--color-bg)] px-1.5 py-0.5 font-mono text-xs text-[color:var(--color-accent-cyan)]">
               commands
             </code>
+            {" y "}
+            <code className="rounded bg-[color:var(--color-bg)] px-1.5 py-0.5 font-mono text-xs text-[color:var(--color-accent-cyan)]">
+              resources
+            </code>
+            {" "}
+            (opcional)
             .
           </p>
           <p className="mb-4 text-xs text-[color:var(--color-text-muted)]">
@@ -153,6 +176,14 @@ export function FormatInfoModal({ onClose }: FormatInfoModalProps) {
             />
             <FieldRow name="tags" desc="Array de strings para filtrar transversalmente" />
             <FieldRow name="favorite" desc="boolean — marca con estrella" />
+            <FieldRow
+              name="resources"
+              desc="Array opcional con skills, agents, plugins y hooks documentados"
+            />
+            <FieldRow
+              name="source"
+              desc='"bundled-slash-skill" | "markdown-file" (solo para type="skill")'
+            />
           </div>
         </div>
 

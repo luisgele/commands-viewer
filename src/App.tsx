@@ -3,6 +3,7 @@ import { Header } from "./components/Header";
 import { Tabs } from "./components/Tabs";
 import { FilterBar } from "./components/FilterBar";
 import { CommandTable } from "./components/CommandTable";
+import { ToolResourcePanel } from "./components/ToolResourcePanel";
 import { CommandModal, type CommandFormValues } from "./components/CommandModal";
 import { DocModal } from "./components/DocModal";
 import { ToolModal } from "./components/ToolModal";
@@ -10,11 +11,12 @@ import { FormatInfoModal } from "./components/FormatInfoModal";
 import { SettingsModal } from "./components/SettingsModal";
 import { ImportPreviewModal } from "./components/ImportPreviewModal";
 import { useStore } from "./store/useStore";
-import type { Command } from "./types";
+import type { Command, ToolResource } from "./types";
 
 interface PendingImport {
   tools: Array<{ id: string; name: string; slug: string; icon?: string; color?: string }>;
   commands: Array<Partial<Command> & { toolId: string; name: string }>;
+  resources: Array<Partial<ToolResource> & { toolId: string; name: string; identifier: string; path: string }>;
 }
 
 function App() {
@@ -23,9 +25,12 @@ function App() {
   const tools = useStore((s) => s.tools);
   const activeToolId = useStore((s) => s.activeToolId);
   const commands = useStore((s) => s.commands);
+  const resources = useStore((s) => s.resources);
   const addCommand = useStore((s) => s.addCommand);
   const updateCommand = useStore((s) => s.updateCommand);
   const addTool = useStore((s) => s.addTool);
+  const addResource = useStore((s) => s.addResource);
+  const theme = useStore((s) => s.settings.theme);
 
   const [editingCommand, setEditingCommand] = useState<Command | null>(null);
   const [docModalCommand, setDocModalCommand] = useState<Command | null>(null);
@@ -34,16 +39,24 @@ function App() {
   const [showFormatModal, setShowFormatModal] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [pendingImport, setPendingImport] = useState<PendingImport | null>(null);
+  const [claudeCodeTab, setClaudeCodeTab] = useState<"commands" | "resources">("commands");
   const importInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     load();
   }, [load]);
 
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+  }, [theme]);
+
   const activeTool = useMemo(
     () => tools.find((t) => t.id === activeToolId) ?? null,
     [tools, activeToolId],
   );
+
+  const isClaudeCodeTool = activeTool?.slug === "claude-code";
+  const isClaudeResourcesView = isClaudeCodeTool && claudeCodeTab === "resources";
 
   const existingSections = useMemo(() => {
     if (!activeTool) return [];
@@ -76,7 +89,7 @@ function App() {
   };
 
   const handleExport = () => {
-    const data = JSON.stringify({ tools, commands }, null, 2);
+    const data = JSON.stringify({ tools, commands, resources }, null, 2);
     const blob = new Blob([data], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -93,15 +106,25 @@ function App() {
     if (!file) return;
     try {
       const text = await file.text();
-      const parsed = JSON.parse(text);
-      if (!Array.isArray(parsed?.tools) || !Array.isArray(parsed?.commands)) {
+      const parsed = JSON.parse(text) as Record<string, unknown> | null;
+      if (
+        !parsed ||
+        typeof parsed !== "object" ||
+        !Array.isArray(parsed?.tools) ||
+        !Array.isArray(parsed?.commands) ||
+        ("resources" in parsed && !Array.isArray(parsed?.resources))
+      ) {
         setPendingImport(null);
         window.alert(
-          "Formato inválido: el JSON debe tener arrays `tools` y `commands`.",
+          "Formato inválido: el JSON debe tener arrays `tools`, `commands` y opcionalmente `resources`.",
         );
         return;
       }
-      setPendingImport({ tools: parsed.tools, commands: parsed.commands });
+      setPendingImport({
+        tools: parsed.tools as PendingImport["tools"],
+        commands: parsed.commands as PendingImport["commands"],
+        resources: (parsed.resources ?? []) as PendingImport["resources"],
+      });
     } catch (err) {
       window.alert("Error al leer el archivo: " + (err as Error).message);
     } finally {
@@ -144,6 +167,11 @@ function App() {
         if (!newToolId) continue;
         await addCommand({ ...cmd, id: undefined, toolId: newToolId });
       }
+      for (const resource of pendingImport.resources) {
+        const newToolId = toolIdMap.get(resource.toolId);
+        if (!newToolId) continue;
+        await addResource({ ...resource, id: undefined, toolId: newToolId });
+      }
     } finally {
       setPendingImport(null);
     }
@@ -165,14 +193,26 @@ function App() {
         className="hidden"
       />
       <Tabs onAddTool={() => setShowToolModal(true)} />
-      {activeTool && <FilterBar />}
+      {isClaudeCodeTool && (
+        <ClaudeCodeTabs active={claudeCodeTab} onChange={setClaudeCodeTab} />
+      )}
+      {activeTool && !isClaudeResourcesView && <FilterBar />}
       <main className="flex-1">
         {loading && tools.length === 0 ? (
           <div className="mx-auto max-w-[1400px] px-6 py-16 text-center font-mono text-sm text-[color:var(--color-text-muted)]">
             Cargando...
           </div>
         ) : activeTool ? (
-          <CommandTable tool={activeTool} onEdit={handleOpenEdit} onAdd={handleOpenCreate} onOpenDocs={handleOpenDocs} />
+          isClaudeResourcesView ? (
+            <ToolResourcePanel tool={activeTool} />
+          ) : (
+            <CommandTable
+              tool={activeTool}
+              onEdit={handleOpenEdit}
+              onAdd={handleOpenCreate}
+              onOpenDocs={handleOpenDocs}
+            />
+          )
         ) : (
           <NoTools onAddTool={() => setShowToolModal(true)} />
         )}
@@ -180,7 +220,9 @@ function App() {
       <footer className="mt-8 border-t border-[color:var(--color-border)] py-4">
         <p className="text-center font-mono text-[0.65rem] text-[color:var(--color-text-muted)]">
           commands-viewer · Vite + React + Tailwind v4 · persistencia local en{" "}
-          <span className="text-[color:var(--color-accent-cyan)]">data/commands.json</span>
+          <span className="text-[color:var(--color-accent-cyan)]">data/index.json</span>
+          {" + "}
+          <span className="text-[color:var(--color-accent-cyan)]">data/commands/*.json</span>
         </p>
       </footer>
 
@@ -251,6 +293,43 @@ function NoTools({ onAddTool }: { onAddTool: () => void }) {
       >
         + Crear primera herramienta
       </button>
+    </div>
+  );
+}
+
+function ClaudeCodeTabs({
+  active,
+  onChange,
+}: {
+  active: "commands" | "resources";
+  onChange: (next: "commands" | "resources") => void;
+}) {
+  return (
+    <div className="border-b border-[color:var(--color-border)] bg-[color:var(--color-bg-card)]/40">
+      <div className="mx-auto flex max-w-[1400px] items-center gap-2 px-6 py-3">
+        <button
+          type="button"
+          onClick={() => onChange("commands")}
+          className={
+            active === "commands"
+              ? "rounded-lg border border-[color:var(--color-accent-cyan)]/40 bg-[color:var(--color-accent-cyan)]/10 px-3 py-2 font-mono text-xs text-[color:var(--color-accent-cyan)]"
+              : "rounded-lg border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 py-2 font-mono text-xs text-[color:var(--color-text-muted)] hover:text-[color:var(--color-text)]"
+          }
+        >
+          Comandos
+        </button>
+        <button
+          type="button"
+          onClick={() => onChange("resources")}
+          className={
+            active === "resources"
+              ? "rounded-lg border border-[color:var(--color-accent-cyan)]/40 bg-[color:var(--color-accent-cyan)]/10 px-3 py-2 font-mono text-xs text-[color:var(--color-accent-cyan)]"
+              : "rounded-lg border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 py-2 font-mono text-xs text-[color:var(--color-text-muted)] hover:text-[color:var(--color-text)]"
+          }
+        >
+          Skills / Agents / Plugins / Hooks
+        </button>
+      </div>
     </div>
   );
 }

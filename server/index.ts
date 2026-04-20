@@ -1,8 +1,17 @@
 import express from "express";
 import cors from "cors";
-import { readFile, writeFile, mkdir, rename, copyFile, unlink } from "node:fs/promises";
+import {
+  readFile,
+  writeFile,
+  mkdir,
+  rename,
+  copyFile,
+  unlink,
+  access,
+} from "node:fs/promises";
 import { existsSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { spawn } from "node:child_process";
+import { dirname, isAbsolute, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -15,6 +24,9 @@ const LEGACY_DATA_FILE = resolve(ROOT, "data", "commands.json");
 const PORT = Number(process.env.PORT) || 3001;
 
 type Importance = "critical" | "high" | "medium" | "low";
+type ToolResourceType = "skill" | "agent" | "plugin" | "hook";
+type ToolResourceScope = "global" | "project";
+type SkillSource = "bundled-slash-skill" | "markdown-file";
 
 interface Tool {
   id: string;
@@ -50,22 +62,50 @@ interface Command {
   docUrl?: string;
 }
 
+interface ToolResource {
+  id: string;
+  toolId: string;
+  type: ToolResourceType;
+  name: string;
+  identifier: string;
+  publisher: string;
+  active: boolean;
+  utility: string;
+  scope: ToolResourceScope;
+  projectName: string;
+  installedAt: string;
+  securityAudited: boolean;
+  path: string;
+  source?: SkillSource;
+}
+
 interface Database {
   tools: Tool[];
   commands: Command[];
+  resources: ToolResource[];
+}
+
+interface ToolDataFile {
+  commands: Command[];
+  resources: ToolResource[];
 }
 
 // --- Persistence helpers ------------------------------------------------
 
 /** Strips the internal dataFile field before sending a tool to the client. */
 function stripInternal(tool: Tool): Omit<Tool, "dataFile"> {
-  const { dataFile: _, ...rest } = tool;
+  const rest = { ...tool };
+  delete rest.dataFile;
   return rest;
 }
 
 /** Returns the absolute path to a tool's commands file given its dataFile field. */
 function getToolCommandsFile(tool: Tool): string {
   return resolve(ROOT, "data", tool.dataFile!);
+}
+
+function emptyToolData(): ToolDataFile {
+  return { commands: [], resources: [] };
 }
 
 /** Migrates from the old monolithic commands.json to the new split-file format. */
@@ -80,6 +120,7 @@ async function migrateFromMonolith(): Promise<void> {
     dataFile: `commands/${t.slug}.json`,
   }));
   const allCommands: Command[] = parsed.commands ?? [];
+  const allResources: ToolResource[] = parsed.resources ?? [];
 
   // Write index.json
   await writeFile(INDEX_FILE, JSON.stringify({ tools }, null, 2), "utf8");
@@ -87,8 +128,13 @@ async function migrateFromMonolith(): Promise<void> {
   // Write each tool's commands file
   for (const tool of tools) {
     const toolCommands = allCommands.filter((c) => c.toolId === tool.id);
+    const toolResources = allResources.filter((resource) => resource.toolId === tool.id);
     const cmdFile = getToolCommandsFile(tool);
-    await writeFile(cmdFile, JSON.stringify({ commands: toolCommands }, null, 2), "utf8");
+    await writeFile(
+      cmdFile,
+      JSON.stringify({ commands: toolCommands, resources: toolResources }, null, 2),
+      "utf8",
+    );
   }
 
   // Rename the old commands.json to commands.json.bak
@@ -136,29 +182,52 @@ async function writeIndex(data: { tools: Tool[] }): Promise<void> {
 }
 
 /**
- * Reads commands from a tool's commands file.
+ * Reads the full data payload from a tool's data file.
  * @param dataFile - relative path like "commands/claude-code.json"
- * Returns [] if file doesn't exist.
+ * Returns empty arrays if the file doesn't exist.
  */
-async function readCommandsFile(dataFile: string): Promise<Command[]> {
+async function readToolDataFile(dataFile: string): Promise<ToolDataFile> {
   const filePath = resolve(ROOT, "data", dataFile);
-  if (!existsSync(filePath)) return [];
+  if (!existsSync(filePath)) return emptyToolData();
   const raw = await readFile(filePath, "utf8");
-  const parsed = JSON.parse(raw) as { commands: Command[] };
-  return parsed.commands ?? [];
+  const parsed = JSON.parse(raw) as Partial<ToolDataFile>;
+  return {
+    commands: parsed.commands ?? [],
+    resources: parsed.resources ?? [],
+  };
 }
 
-/** Atomic write to the given commands file. */
-async function writeCommandsFile(dataFile: string, commands: Command[]): Promise<void> {
+/** Atomic write to the given tool data file. */
+async function writeToolDataFile(dataFile: string, data: ToolDataFile): Promise<void> {
   const filePath = resolve(ROOT, "data", dataFile);
   const tmp = `${filePath}.tmp`;
-  await writeFile(tmp, JSON.stringify({ commands }, null, 2), "utf8");
+  await writeFile(tmp, JSON.stringify(data, null, 2), "utf8");
   try {
     await rename(tmp, filePath);
   } catch {
     await copyFile(tmp, filePath);
     await unlink(tmp).catch(() => undefined);
   }
+}
+
+async function readCommandsFile(dataFile: string): Promise<Command[]> {
+  return (await readToolDataFile(dataFile)).commands;
+}
+
+async function writeCommandsFile(dataFile: string, commands: Command[]): Promise<void> {
+  const data = await readToolDataFile(dataFile);
+  data.commands = commands;
+  await writeToolDataFile(dataFile, data);
+}
+
+async function readResourcesFile(dataFile: string): Promise<ToolResource[]> {
+  return (await readToolDataFile(dataFile)).resources;
+}
+
+async function writeResourcesFile(dataFile: string, resources: ToolResource[]): Promise<void> {
+  const data = await readToolDataFile(dataFile);
+  data.resources = resources;
+  await writeToolDataFile(dataFile, data);
 }
 
 /**
@@ -169,15 +238,18 @@ async function readDb(): Promise<Database> {
   await ensureDataDirs();
   const { tools } = await readIndex();
   const allCommands: Command[] = [];
+  const allResources: ToolResource[] = [];
   for (const tool of tools) {
     if (tool.dataFile) {
-      const cmds = await readCommandsFile(tool.dataFile);
-      allCommands.push(...cmds);
+      const data = await readToolDataFile(tool.dataFile);
+      allCommands.push(...data.commands);
+      allResources.push(...data.resources);
     }
   }
   return {
     tools: tools.map(stripInternal) as Tool[],
     commands: allCommands,
+    resources: allResources,
   };
 }
 
@@ -195,6 +267,19 @@ async function findCommandInDb(
   return null;
 }
 
+async function findResourceInDb(
+  id: string,
+): Promise<{ resource: ToolResource; tool: Tool } | null> {
+  const { tools } = await readIndex();
+  for (const tool of tools) {
+    if (!tool.dataFile) continue;
+    const resources = await readResourcesFile(tool.dataFile);
+    const resource = resources.find((entry) => entry.id === id);
+    if (resource) return { resource, tool };
+  }
+  return null;
+}
+
 // Serialize writes so concurrent requests don't clobber each other.
 let writeQueue: Promise<unknown> = Promise.resolve();
 function withWriteLock<T>(fn: () => Promise<T>): Promise<T> {
@@ -206,6 +291,9 @@ function withWriteLock<T>(fn: () => Promise<T>): Promise<T> {
 // --- Validation ---------------------------------------------------------
 
 const VALID_IMPORTANCE: Importance[] = ["critical", "high", "medium", "low"];
+const VALID_RESOURCE_TYPES: ToolResourceType[] = ["skill", "agent", "plugin", "hook"];
+const VALID_RESOURCE_SCOPES: ToolResourceScope[] = ["global", "project"];
+const VALID_SKILL_SOURCES: SkillSource[] = ["bundled-slash-skill", "markdown-file"];
 
 function asString(v: unknown, fallback = ""): string {
   return typeof v === "string" ? v : fallback;
@@ -268,8 +356,64 @@ function normalizeCommand(input: unknown, existing?: Command): Command {
   };
 }
 
+function normalizeResource(input: unknown, existing?: ToolResource): ToolResource {
+  const o = (input ?? {}) as Record<string, unknown>;
+  const type = VALID_RESOURCE_TYPES.includes(o.type as ToolResourceType)
+    ? (o.type as ToolResourceType)
+    : (existing?.type ?? "skill");
+  const scope = VALID_RESOURCE_SCOPES.includes(o.scope as ToolResourceScope)
+    ? (o.scope as ToolResourceScope)
+    : (existing?.scope ?? "global");
+  const source = type === "skill" && VALID_SKILL_SOURCES.includes(o.source as SkillSource)
+    ? (o.source as SkillSource)
+    : (type === "skill" ? existing?.source ?? "markdown-file" : undefined);
+  return {
+    id: asString(o.id, existing?.id ?? ""),
+    toolId: asString(o.toolId, existing?.toolId ?? ""),
+    type,
+    name: asString(o.name, existing?.name ?? "Unnamed"),
+    identifier: asString(o.identifier, existing?.identifier ?? ""),
+    publisher: asString(o.publisher, existing?.publisher ?? ""),
+    active: typeof o.active === "boolean" ? o.active : (existing?.active ?? true),
+    utility: asString(o.utility, existing?.utility ?? ""),
+    scope,
+    projectName: scope === "project"
+      ? asString(o.projectName, existing?.projectName ?? "")
+      : "",
+    installedAt: asString(o.installedAt, existing?.installedAt ?? ""),
+    securityAudited:
+      typeof o.securityAudited === "boolean"
+        ? o.securityAudited
+        : (existing?.securityAudited ?? false),
+    path: asString(o.path, existing?.path ?? ""),
+    source,
+  };
+}
+
 function newId(prefix: string): string {
   return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function resolveLocalPath(inputPath: string): string {
+  return isAbsolute(inputPath) ? inputPath : resolve(ROOT, inputPath);
+}
+
+async function openLocalPath(targetPath: string): Promise<void> {
+  await new Promise<void>((resolveOpen, rejectOpen) => {
+    const child = process.platform === "win32"
+      ? spawn("cmd", ["/c", "start", "", targetPath], {
+          detached: true,
+          stdio: "ignore",
+          windowsHide: true,
+        })
+      : spawn(process.platform === "darwin" ? "open" : "xdg-open", [targetPath], {
+          detached: true,
+          stdio: "ignore",
+        });
+    child.once("error", rejectOpen);
+    child.unref();
+    resolveOpen();
+  });
 }
 
 // --- App ----------------------------------------------------------------
@@ -315,8 +459,8 @@ app.post("/api/tools", async (req, res) => {
         dataFile,
         order: tools.length,
       };
-      // Create the empty commands file first
-      await writeCommandsFile(dataFile, []);
+      // Create the empty tool data file first
+      await writeToolDataFile(dataFile, emptyToolData());
       // Then add tool to index
       tools.push(tool);
       await writeIndex({ tools });
@@ -530,6 +674,105 @@ app.patch("/api/commands/reorder", async (req, res) => {
     res.status(204).end();
   } catch (err) {
     res.status(500).json({ error: (err as Error).message });
+  }
+});
+
+// --- Routes: resources --------------------------------------------------
+
+app.post("/api/resources", async (req, res) => {
+  try {
+    const result = await withWriteLock(async () => {
+      const { tools } = await readIndex();
+      const base = normalizeResource(req.body);
+      if (!base.name.trim()) throw new Error("Name is required");
+      if (!base.identifier.trim()) throw new Error("Identifier is required");
+      if (!base.path.trim()) throw new Error("Path is required");
+      if (base.scope === "project" && !base.projectName.trim()) {
+        throw new Error("Project name is required for project-scoped resources");
+      }
+      const tool = tools.find((t) => t.id === base.toolId);
+      if (!tool) throw new Error("Valid toolId is required");
+      if (!tool.dataFile) throw new Error("Tool has no dataFile");
+      const resources = await readResourcesFile(tool.dataFile);
+      const resource: ToolResource = {
+        ...base,
+        id: base.id || newId("resource"),
+      };
+      resources.push(resource);
+      await writeResourcesFile(tool.dataFile, resources);
+      return resource;
+    });
+    res.status(201).json(result);
+  } catch (err) {
+    res.status(400).json({ error: (err as Error).message });
+  }
+});
+
+app.put("/api/resources/:id", async (req, res) => {
+  try {
+    const result = await withWriteLock(async () => {
+      const found = await findResourceInDb(req.params.id);
+      if (!found) return null;
+      const { resource: existing, tool } = found;
+      const updated = normalizeResource(
+        { ...req.body, id: existing.id, toolId: existing.toolId },
+        existing,
+      );
+      if (!updated.name.trim()) throw new Error("Name is required");
+      if (!updated.identifier.trim()) throw new Error("Identifier is required");
+      if (!updated.path.trim()) throw new Error("Path is required");
+      if (updated.scope === "project" && !updated.projectName.trim()) {
+        throw new Error("Project name is required for project-scoped resources");
+      }
+      const resources = await readResourcesFile(tool.dataFile!);
+      const idx = resources.findIndex((resource) => resource.id === req.params.id);
+      if (idx === -1) return null;
+      resources[idx] = updated;
+      await writeResourcesFile(tool.dataFile!, resources);
+      return updated;
+    });
+    if (!result) return res.status(404).json({ error: "Resource not found" });
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ error: (err as Error).message });
+  }
+});
+
+app.delete("/api/resources/:id", async (req, res) => {
+  try {
+    const removed = await withWriteLock(async () => {
+      const found = await findResourceInDb(req.params.id);
+      if (!found) return false;
+      const { tool } = found;
+      const resources = await readResourcesFile(tool.dataFile!);
+      const idx = resources.findIndex((resource) => resource.id === req.params.id);
+      if (idx === -1) return false;
+      resources.splice(idx, 1);
+      await writeResourcesFile(tool.dataFile!, resources);
+      return true;
+    });
+    if (!removed) return res.status(404).json({ error: "Resource not found" });
+    res.status(204).end();
+  } catch (err) {
+    res.status(500).json({ error: (err as Error).message });
+  }
+});
+
+// --- Routes: local path opening ----------------------------------------
+
+app.post("/api/open-path", async (req, res) => {
+  try {
+    const pathInput = asString(req.body?.path).trim();
+    if (!pathInput) {
+      return res.status(400).json({ error: "Path is required" });
+    }
+    const resolvedPath = resolveLocalPath(pathInput);
+    await access(resolvedPath);
+    await openLocalPath(resolvedPath);
+    res.status(204).end();
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Failed to open path";
+    res.status(400).json({ error: message });
   }
 });
 

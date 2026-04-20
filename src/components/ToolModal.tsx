@@ -48,7 +48,7 @@ export function ToolModal({ tool, onClose, onSave, onDelete }: ToolModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[color:var(--color-overlay)] p-4 backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
       aria-label={isEdit ? "Editar herramienta" : "Nueva herramienta"}
@@ -106,7 +106,7 @@ export function ToolModal({ tool, onClose, onSave, onDelete }: ToolModalProps) {
                   className={clsx(
                     "h-10 w-10 rounded-lg border-2 transition",
                     color === c
-                      ? "border-white scale-110"
+                      ? "scale-110 border-[color:var(--color-text-bright)]"
                       : "border-transparent hover:scale-105",
                   )}
                   style={{ background: c }}

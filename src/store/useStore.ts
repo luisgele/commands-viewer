@@ -1,5 +1,13 @@
 import { create } from "zustand";
-import type { Command, Importance, SortDir, SortKey, Tool } from "../types";
+import type {
+  Command,
+  Importance,
+  SortDir,
+  SortKey,
+  Theme,
+  Tool,
+  ToolResource,
+} from "../types";
 import { api } from "../lib/api";
 
 interface Filters {
@@ -14,15 +22,16 @@ export type Density = "ultra" | "compact" | "comfortable";
 
 interface Settings {
   density: Density;
+  theme: Theme;
 }
 
 const SETTINGS_KEY = "commands-viewer.settings";
 
 function loadSettings(): Settings {
-  if (typeof window === "undefined") return { density: "compact" };
+  if (typeof window === "undefined") return { density: "compact", theme: "dark" };
   try {
     const raw = window.localStorage.getItem(SETTINGS_KEY);
-    if (!raw) return { density: "compact" };
+    if (!raw) return { density: "compact", theme: "dark" };
     const parsed = JSON.parse(raw) as Partial<Settings>;
     const density: Density =
       parsed.density === "ultra" ||
@@ -30,9 +39,13 @@ function loadSettings(): Settings {
       parsed.density === "compact"
         ? parsed.density
         : "compact";
-    return { density };
+    const theme: Theme =
+      parsed.theme === "light" || parsed.theme === "dark"
+        ? parsed.theme
+        : "dark";
+    return { density, theme };
   } catch {
-    return { density: "compact" };
+    return { density: "compact", theme: "dark" };
   }
 }
 
@@ -49,6 +62,7 @@ interface StoreState {
   // data
   tools: Tool[];
   commands: Command[];
+  resources: ToolResource[];
   loading: boolean;
   error: string | null;
 
@@ -70,6 +84,9 @@ interface StoreState {
   updateCommand: (id: string, patch: Partial<Command>) => Promise<void>;
   deleteCommand: (id: string) => Promise<void>;
   reorderCommands: (toolId: string, orderedIds: string[]) => Promise<void>;
+  addResource: (resource: Partial<ToolResource>) => Promise<void>;
+  updateResource: (id: string, patch: Partial<ToolResource>) => Promise<void>;
+  deleteResource: (id: string) => Promise<void>;
   toggleFavorite: (id: string) => Promise<void>;
   isCommandPending: (id: string) => boolean;
 
@@ -81,6 +98,7 @@ interface StoreState {
   activeFilterCount: () => number;
   setSort: (key: SortKey, dir?: SortDir) => void;
   setDensity: (density: Density) => void;
+  setTheme: (theme: Theme) => void;
 }
 
 const initialFilters: Filters = {
@@ -110,6 +128,7 @@ function markPending(set: SetFn, get: GetFn, id: string, pending: boolean) {
 export const useStore = create<StoreState>()((set, get) => ({
   tools: [],
   commands: [],
+  resources: [],
   loading: false,
   error: null,
 
@@ -128,6 +147,7 @@ export const useStore = create<StoreState>()((set, get) => ({
       set({
         tools: sortedTools,
         commands: data.commands,
+        resources: data.resources,
         loading: false,
         activeToolId: get().activeToolId ?? sortedTools[0]?.id ?? null,
       });
@@ -182,6 +202,11 @@ export const useStore = create<StoreState>()((set, get) => ({
     set({ commands: [...get().commands, created] });
   },
 
+  addResource: async (resource) => {
+    const created = await api.createResource(resource);
+    set({ resources: [...get().resources, created] });
+  },
+
   updateCommand: async (id, patch) => {
     markPending(set, get, id, true);
     try {
@@ -194,6 +219,15 @@ export const useStore = create<StoreState>()((set, get) => ({
     }
   },
 
+  updateResource: async (id, patch) => {
+    const updated = await api.updateResource(id, patch);
+    set({
+      resources: get().resources.map((resource) =>
+        resource.id === id ? updated : resource,
+      ),
+    });
+  },
+
   deleteCommand: async (id) => {
     markPending(set, get, id, true);
     try {
@@ -202,6 +236,11 @@ export const useStore = create<StoreState>()((set, get) => ({
     } finally {
       markPending(set, get, id, false);
     }
+  },
+
+  deleteResource: async (id) => {
+    await api.deleteResource(id);
+    set({ resources: get().resources.filter((resource) => resource.id !== id) });
   },
 
   reorderCommands: async (toolId, orderedIds) => {
@@ -260,6 +299,12 @@ export const useStore = create<StoreState>()((set, get) => ({
 
   setDensity: (density) => {
     const next = { ...get().settings, density };
+    set({ settings: next });
+    saveSettings(next);
+  },
+
+  setTheme: (theme) => {
+    const next = { ...get().settings, theme };
     set({ settings: next });
     saveSettings(next);
   },
