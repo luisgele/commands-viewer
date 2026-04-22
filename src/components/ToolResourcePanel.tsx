@@ -15,6 +15,7 @@ import clsx from "clsx";
 import { api } from "../lib/api";
 import {
   RESOURCE_SCOPE_LABELS,
+  RESOURCE_TYPE_ACCENT,
   RESOURCE_TYPE_LABELS,
   RESOURCE_TYPE_ORDER,
   SKILL_SOURCE_LABELS,
@@ -223,7 +224,7 @@ export function ToolResourcePanel({ tool }: ToolResourcePanelProps) {
             </div>
             <div>
               <h2 className="font-mono text-lg font-bold text-[color:var(--color-text-bright)]">
-                Skills / Agents / Plugins / Hooks
+                Herramientas Claude
               </h2>
               <p className="text-xs text-[color:var(--color-text-muted)]">
                 {toolResources.length} elemento{toolResources.length === 1 ? "" : "s"} documentado
@@ -370,7 +371,7 @@ export function ToolResourcePanel({ tool }: ToolResourcePanelProps) {
               {sortedFlat.length} elemento{sortedFlat.length === 1 ? "" : "s"}
             </span>
           </div>
-          <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
             {sortedFlat.map((resource) => (
               <ResourceCard
                 key={resource.id}
@@ -396,7 +397,7 @@ export function ToolResourcePanel({ tool }: ToolResourcePanelProps) {
                   {group.entries.length} elemento{group.entries.length === 1 ? "" : "s"}
                 </span>
               </div>
-              <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
                 {group.entries.map((resource) => (
                   <ResourceCard
                     key={resource.id}
@@ -499,8 +500,15 @@ function ResourceCard({
   onDelete: () => void;
   onFilterPublisher: (publisher: string) => void;
 }) {
+  const accent = RESOURCE_TYPE_ACCENT[resource.type];
   return (
-    <article className="rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-bg-card)] p-5 transition hover:border-[color:var(--color-border-glow)]">
+    <article
+      className="rounded-xl border p-5 transition"
+      style={{
+        backgroundColor: `color-mix(in srgb, ${accent} 10%, var(--color-bg-card))`,
+        borderColor: `color-mix(in srgb, ${accent} 35%, var(--color-border))`,
+      }}
+    >
       <div className="mb-3 flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <h4 className="truncate font-mono text-lg font-bold leading-tight tracking-tight text-[color:var(--color-text-bright)]">

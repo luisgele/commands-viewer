@@ -44,6 +44,13 @@ export const RESOURCE_TYPE_LABELS: Record<ToolResourceType, string> = {
   hook: "Hook",
 };
 
+export const RESOURCE_TYPE_ACCENT: Record<ToolResourceType, string> = {
+  skill: "var(--color-accent-cyan)",
+  agent: "var(--color-accent-purple)",
+  plugin: "var(--color-accent-green)",
+  hook: "var(--color-accent-orange)",
+};
+
 export const RESOURCE_SCOPE_LABELS: Record<ToolResourceScope, string> = {
   global: "Global",
   project: "Proyecto",

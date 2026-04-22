@@ -327,7 +327,7 @@ function ClaudeCodeTabs({
               : "rounded-lg border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 py-2 font-mono text-xs text-[color:var(--color-text-muted)] hover:text-[color:var(--color-text)]"
           }
         >
-          Skills / Agents / Plugins / Hooks
+          Herramientas Claude
         </button>
       </div>
     </div>
