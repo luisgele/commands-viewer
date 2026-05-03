@@ -1,0 +1,59 @@
+{
+  "domains": [
+    {
+      "id": "domain-moq12k42-gkt160",
+      "name": "lukalapps.studio",
+      "registrar": "Dondominio",
+      "registrationDate": "2026-04-24",
+      "expirationDate": "2027-04-24",
+      "renewalPrice": 20,
+      "autoRenew": false,
+      "hostingProvider": "",
+      "hostingPlan": "",
+      "status": "active",
+      "notes": "",
+      "tags": []
+    }
+  ],
+  "emails": [
+    {
+      "id": "email-moq2380g-dum6sd",
+      "domainId": "domain-moq12k42-gkt160",
+      "address": "luka@lukalapps.studio",
+      "type": "work",
+      "provider": "proton.me",
+      "createdAt": "2026-05-03",
+      "forwardingTo": "lukarelly@proton.me",
+      "storageLimit": "",
+      "passwordHint": "",
+      "active": true,
+      "notes": ""
+    },
+    {
+      "id": "email-moq23ggs-6evyqh",
+      "domainId": "domain-moq12k42-gkt160",
+      "address": "apple@lukalapps.studio",
+      "type": "other",
+      "provider": "",
+      "createdAt": "",
+      "forwardingTo": "",
+      "storageLimit": "",
+      "passwordHint": "",
+      "active": true,
+      "notes": ""
+    },
+    {
+      "id": "email-moqbvrhm-pj9ci4",
+      "domainId": "domain-moq12k42-gkt160",
+      "address": "projects@lukalapps.studio",
+      "type": "work",
+      "provider": "Proton.me",
+      "createdAt": "2026-05-03",
+      "forwardingTo": "",
+      "storageLimit": "",
+      "passwordHint": "",
+      "active": true,
+      "notes": "proyectos con clientes"
+    }
+  ]
+}

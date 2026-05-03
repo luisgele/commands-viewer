@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import clsx from "clsx";
 import { useFocusTrap } from "../lib/useFocusTrap";
 
@@ -31,7 +32,7 @@ export function ConfirmDialog({
 
   const trapRef = useFocusTrap<HTMLDivElement>();
 
-  return (
+  const dialog = (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-[color:var(--color-overlay)] p-4 backdrop-blur-sm"
       role="dialog"
@@ -72,4 +73,6 @@ export function ConfirmDialog({
       </div>
     </div>
   );
+
+  return createPortal(dialog, document.body);
 }

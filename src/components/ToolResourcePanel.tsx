@@ -224,7 +224,7 @@ export function ToolResourcePanel({ tool }: ToolResourcePanelProps) {
             </div>
             <div>
               <h2 className="font-mono text-lg font-bold text-[color:var(--color-text-bright)]">
-                Herramientas Claude
+                Claude tools
               </h2>
               <p className="text-xs text-[color:var(--color-text-muted)]">
                 {toolResources.length} elemento{toolResources.length === 1 ? "" : "s"} documentado

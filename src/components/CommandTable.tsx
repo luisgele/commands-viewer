@@ -61,7 +61,6 @@ export function CommandTable({ tool, onEdit, onAdd, onOpenDocs }: CommandTablePr
 
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
-  const [autoExpandedIds, setAutoExpandedIds] = useState<Set<string>>(new Set());
 
   const descThRef = useRef<HTMLTableCellElement>(null);
   const [cmdColWidth, setCmdColWidth] = useState<number>(
@@ -152,16 +151,15 @@ export function CommandTable({ tool, onEdit, onAdd, onOpenDocs }: CommandTablePr
 
   // Auto-expand rows whose search match came only from a modifier (so the user
   // can actually see why the row is visible). Manual user toggles still win.
-  useEffect(() => {
+  const autoExpandedIds = useMemo(() => {
     if (!filters.search.trim()) {
-      setAutoExpandedIds(new Set());
-      return;
+      return new Set<string>();
     }
     const next = new Set<string>();
     for (const cmd of sorted) {
       if (searchOnlyMatchesModifiers(cmd, filters.search)) next.add(cmd.id);
     }
-    setAutoExpandedIds(next);
+    return next;
   }, [filters.search, sorted]);
 
   const isExpanded = (id: string) => expandedIds.has(id) || autoExpandedIds.has(id);
@@ -207,11 +205,11 @@ export function CommandTable({ tool, onEdit, onAdd, onOpenDocs }: CommandTablePr
     return sortDir === "asc" ? "ascending" : "descending";
   };
 
-  const SortHeader = ({ label, keyName, align = "left" }: {
-    label: string;
-    keyName: SortKey;
-    align?: "left" | "center" | "right";
-  }) => {
+  const renderSortHeader = (
+    label: string,
+    keyName: SortKey,
+    align: "left" | "center" | "right" = "left",
+  ) => {
     const active = sortKey === keyName;
     const Icon = !active ? ArrowUpDown : sortDir === "asc" ? ArrowUp : ArrowDown;
     // Visual element only — the click handler lives on the parent <th> so
@@ -371,7 +369,7 @@ export function CommandTable({ tool, onEdit, onAdd, onOpenDocs }: CommandTablePr
                             }
                           }}
                         >
-                          <SortHeader label="Comando" keyName="name" />
+                          {renderSortHeader("Comando", "name")}
                           <div
                             role="separator"
                             aria-orientation="vertical"
@@ -414,7 +412,7 @@ export function CommandTable({ tool, onEdit, onAdd, onOpenDocs }: CommandTablePr
                             }
                           }}
                         >
-                          <SortHeader label="Valor" keyName="importance" align="center" />
+                          {renderSortHeader("Valor", "importance", "center")}
                         </th>
                         <th
                           scope="col"
@@ -431,7 +429,7 @@ export function CommandTable({ tool, onEdit, onAdd, onOpenDocs }: CommandTablePr
                           }}
                         >
                           <div className="group/freq relative inline-flex w-full justify-center">
-                            <SortHeader label="Frec." keyName="frequency" align="center" />
+                            {renderSortHeader("Frec.", "frequency", "center")}
                             <div
                               role="tooltip"
                               className="pointer-events-none invisible absolute left-1/2 top-full z-20 mt-2 w-56 -translate-x-1/2 rounded-md border border-[color:var(--color-border-glow)] bg-[color:var(--color-bg)] p-3 text-left font-mono text-[0.65rem] text-[color:var(--color-text)] opacity-0 shadow-xl transition-opacity group-hover/freq:visible group-hover/freq:opacity-100"

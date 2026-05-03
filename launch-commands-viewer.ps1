@@ -1,8 +1,8 @@
 $projectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $uiUrl = 'http://localhost:5173'
 $logDir = Join-Path $projectRoot 'tmp'
-$stdoutLog = Join-Path $logDir 'commands-viewer.stdout.log'
-$stderrLog = Join-Path $logDir 'commands-viewer.stderr.log'
+$stdoutLog = Join-Path $logDir 'managment-viewer.stdout.log'
+$stderrLog = Join-Path $logDir 'managment-viewer.stderr.log'
 $browserProfileDir = Join-Path $logDir 'browser-profile'
 
 function Get-BrowserPath {

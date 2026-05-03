@@ -34,20 +34,11 @@ export function Header({
           </div>
           <div>
             <h1 className="font-mono text-xl font-bold leading-none text-[color:var(--color-text-bright)] md:text-2xl">
-              <span
-                style={{
-                  background:
-                    "linear-gradient(135deg, var(--color-accent-orange), var(--color-accent-cyan))",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                }}
-              >
-                commands
-              </span>{" "}
-              viewer
+              <span className="text-[color:var(--color-accent-orange)]">Managment</span>{" "}
+              Viewer
             </h1>
             <p className="mt-1 text-xs text-[color:var(--color-text-muted)]">
-              Gestiona y visualiza cheatsheets de tus herramientas favoritas
+              Gestiona comandos, dominios y recursos técnicos desde un solo lugar
             </p>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import type { Command, Database, Tool, ToolResource } from "../types";
+import type { Command, Database, Domain, DomainEmail, Tool, ToolResource } from "../types";
 
 const BASE = "/api";
 
@@ -56,4 +56,23 @@ export const api = {
       method: "PATCH",
       body: JSON.stringify({ updates }),
     }),
+
+  // Domains
+  getDomains: () => request<Domain[]>("/domains"),
+  createDomain: (domain: Partial<Domain>) =>
+    request<Domain>("/domains", { method: "POST", body: JSON.stringify(domain) }),
+  updateDomain: (id: string, domain: Partial<Domain>) =>
+    request<Domain>(`/domains/${id}`, { method: "PUT", body: JSON.stringify(domain) }),
+  deleteDomain: (id: string) =>
+    request<void>(`/domains/${id}`, { method: "DELETE" }),
+
+  // Emails
+  getEmails: (domainId?: string) =>
+    request<DomainEmail[]>(`/emails${domainId ? `?domainId=${domainId}` : ""}`),
+  createEmail: (email: Partial<DomainEmail>) =>
+    request<DomainEmail>("/emails", { method: "POST", body: JSON.stringify(email) }),
+  updateEmail: (id: string, email: Partial<DomainEmail>) =>
+    request<DomainEmail>(`/emails/${id}`, { method: "PUT", body: JSON.stringify(email) }),
+  deleteEmail: (id: string) =>
+    request<void>(`/emails/${id}`, { method: "DELETE" }),
 };

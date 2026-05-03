@@ -63,3 +63,45 @@ export interface Database {
 
 export type SortKey = "manual" | "name" | "importance" | "frequency";
 export type SortDir = "asc" | "desc";
+
+// --- Domain types ---
+
+export type DomainStatus = "active" | "expired" | "pending" | "transferred" | "cancelled";
+export type EmailType = "personal" | "work" | "support" | "noreply" | "billing" | "other";
+
+export interface Domain {
+  id: string;
+  name: string;
+  registrar: string;
+  registrationDate: string; // ISO date
+  expirationDate: string;   // ISO date
+  renewalPrice: number;
+  autoRenew: boolean;
+  hostingProvider?: string;
+  hostingPlan?: string;
+  status: DomainStatus;
+  notes?: string;
+  tags?: string[];
+}
+
+export interface DomainEmail {
+  id: string;
+  domainId: string;
+  address: string;
+  type: EmailType;
+  provider: string;
+  createdAt?: string;
+  forwardingTo?: string;
+  storageLimit?: string;
+  passwordHint?: string;
+  active: boolean;
+  notes?: string;
+}
+
+export interface Database {
+  tools: Tool[];
+  commands: Command[];
+  resources: ToolResource[];
+  domains: Domain[];
+  emails: DomainEmail[];
+}

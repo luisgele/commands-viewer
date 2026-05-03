@@ -3,6 +3,17 @@ import { AlertTriangle, Upload, X } from "lucide-react";
 import type { Tool } from "../types";
 import { useFocusTrap } from "../lib/useFocusTrap";
 
+interface ImportedDomain {
+  id?: string;
+  name: string;
+}
+
+interface ImportedEmail {
+  id?: string;
+  address: string;
+  domainId?: string;
+}
+
 interface ImportedTool {
   id: string;
   name: string;
@@ -27,6 +38,8 @@ interface ImportedData {
   tools: ImportedTool[];
   commands: ImportedCommand[];
   resources?: ImportedResource[];
+  domains?: ImportedDomain[];
+  emails?: ImportedEmail[];
 }
 
 interface ImportPreviewModalProps {
@@ -93,6 +106,8 @@ export function ImportPreviewModal({
       importedCommands: data.commands.length - orphanCommands,
       totalResources: (data.resources ?? []).length,
       importedResources: (data.resources ?? []).length - orphanResources,
+      totalDomains: (data.domains ?? []).length,
+      totalEmails: (data.emails ?? []).length,
       toolBreakdown: [...byToolId.values()],
     };
   }, [data, existingTools]);
@@ -170,6 +185,16 @@ export function ImportPreviewModal({
               label="Total recursos"
               value={analysis.totalResources}
               accent="muted"
+            />
+            <StatCard
+              label="Dominios a importar"
+              value={analysis.totalDomains}
+              accent="purple"
+            />
+            <StatCard
+              label="Emails a importar"
+              value={analysis.totalEmails}
+              accent="purple"
             />
           </div>
 
@@ -269,14 +294,16 @@ function StatCard({
 }: {
   label: string;
   value: number;
-  accent: "cyan" | "green" | "muted";
+  accent: "cyan" | "green" | "purple" | "muted";
 }) {
   const color =
     accent === "cyan"
       ? "text-[color:var(--color-accent-cyan)]"
       : accent === "green"
         ? "text-[color:var(--color-accent-green)]"
-        : "text-[color:var(--color-text-bright)]";
+        : accent === "purple"
+          ? "text-[color:var(--color-accent-purple)]"
+          : "text-[color:var(--color-text-bright)]";
   return (
     <div className="rounded-md border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 py-2">
       <div className="font-mono text-[0.6rem] uppercase tracking-wider text-[color:var(--color-text-muted)]">

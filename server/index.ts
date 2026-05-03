@@ -13,6 +13,20 @@ import { existsSync } from "node:fs";
 import { spawn } from "node:child_process";
 import { dirname, isAbsolute, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import type {
+  Tool,
+  Command,
+  ToolResource,
+  Domain,
+  DomainEmail,
+  Database,
+  Importance,
+  ToolResourceType,
+  ToolResourceScope,
+  SkillSource,
+  DomainStatus,
+  EmailType,
+} from "../src/types/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -21,69 +35,8 @@ const ROOT = resolve(__dirname, "..");
 const INDEX_FILE = resolve(ROOT, "data", "index.json");
 const COMMANDS_DIR = resolve(ROOT, "data", "commands");
 const LEGACY_DATA_FILE = resolve(ROOT, "data", "commands.json");
+const DOMAINS_FILE = resolve(ROOT, "data", "domains.json");
 const PORT = Number(process.env.PORT) || 3001;
-
-type Importance = "critical" | "high" | "medium" | "low";
-type ToolResourceType = "skill" | "agent" | "plugin" | "hook";
-type ToolResourceScope = "global" | "project";
-type SkillSource = "bundled-slash-skill" | "markdown-file";
-
-interface Tool {
-  id: string;
-  name: string;
-  slug: string;
-  icon: string;
-  color: string;
-  order: number;
-  docUrl?: string;
-  dataFile?: string;
-}
-
-interface Modifier {
-  flag: string;
-  description: string;
-  example?: string;
-}
-
-interface Command {
-  id: string;
-  toolId: string;
-  section: string;
-  name: string;
-  description: string;
-  hint: string;
-  importance: Importance;
-  frequency: number;
-  tags: string[];
-  notes: string;
-  favorite: boolean;
-  order: number;
-  modifiers: Modifier[];
-  docUrl?: string;
-}
-
-interface ToolResource {
-  id: string;
-  toolId: string;
-  type: ToolResourceType;
-  name: string;
-  identifier: string;
-  publisher: string;
-  active: boolean;
-  utility: string;
-  scope: ToolResourceScope;
-  projectName: string;
-  installedAt: string;
-  securityAudited: boolean;
-  path: string;
-  source?: SkillSource;
-}
-
-interface Database {
-  tools: Tool[];
-  commands: Command[];
-  resources: ToolResource[];
-}
 
 interface ToolDataFile {
   commands: Command[];
@@ -230,6 +183,33 @@ async function writeResourcesFile(dataFile: string, resources: ToolResource[]): 
   await writeToolDataFile(dataFile, data);
 }
 
+// --- Domain persistence helpers -----------------------------------------
+
+function emptyDomainsData(): { domains: Domain[]; emails: DomainEmail[] } {
+  return { domains: [], emails: [] };
+}
+
+async function readDomains(): Promise<{ domains: Domain[]; emails: DomainEmail[] }> {
+  if (!existsSync(DOMAINS_FILE)) return emptyDomainsData();
+  const raw = await readFile(DOMAINS_FILE, "utf8");
+  const parsed = JSON.parse(raw) as Partial<{ domains: Domain[]; emails: DomainEmail[] }>;
+  return {
+    domains: parsed.domains ?? [],
+    emails: parsed.emails ?? [],
+  };
+}
+
+async function writeDomains(data: { domains: Domain[]; emails: DomainEmail[] }): Promise<void> {
+  const tmp = `${DOMAINS_FILE}.tmp`;
+  await writeFile(tmp, JSON.stringify(data, null, 2), "utf8");
+  try {
+    await rename(tmp, DOMAINS_FILE);
+  } catch {
+    await copyFile(tmp, DOMAINS_FILE);
+    await unlink(tmp).catch(() => undefined);
+  }
+}
+
 /**
  * Merges tools from index.json with all their commands.
  * Strips dataFile from tools before returning (it's internal).
@@ -246,10 +226,13 @@ async function readDb(): Promise<Database> {
       allResources.push(...data.resources);
     }
   }
+  const { domains, emails } = await readDomains();
   return {
     tools: tools.map(stripInternal) as Tool[],
     commands: allCommands,
     resources: allResources,
+    domains,
+    emails,
   };
 }
 
@@ -294,6 +277,8 @@ const VALID_IMPORTANCE: Importance[] = ["critical", "high", "medium", "low"];
 const VALID_RESOURCE_TYPES: ToolResourceType[] = ["skill", "agent", "plugin", "hook"];
 const VALID_RESOURCE_SCOPES: ToolResourceScope[] = ["global", "project"];
 const VALID_SKILL_SOURCES: SkillSource[] = ["bundled-slash-skill", "markdown-file"];
+const VALID_DOMAIN_STATUSES: DomainStatus[] = ["active", "expired", "pending", "transferred", "cancelled"];
+const VALID_EMAIL_TYPES: EmailType[] = ["personal", "work", "support", "noreply", "billing", "other"];
 
 function asString(v: unknown, fallback = ""): string {
   return typeof v === "string" ? v : fallback;
@@ -387,6 +372,52 @@ function normalizeResource(input: unknown, existing?: ToolResource): ToolResourc
         : (existing?.securityAudited ?? false),
     path: asString(o.path, existing?.path ?? ""),
     source,
+  };
+}
+
+function normalizeDomain(input: unknown, existing?: Domain): Domain {
+  const o = (input ?? {}) as Record<string, unknown>;
+  const status = VALID_DOMAIN_STATUSES.includes(o.status as DomainStatus)
+    ? (o.status as DomainStatus)
+    : (existing?.status ?? "active");
+  const price = typeof o.renewalPrice === "number" ? o.renewalPrice : (existing?.renewalPrice ?? 0);
+  return {
+    id: asString(o.id, existing?.id ?? ""),
+    name: asString(o.name, existing?.name ?? ""),
+    registrar: asString(o.registrar, existing?.registrar ?? ""),
+    registrationDate: asString(o.registrationDate, existing?.registrationDate ?? ""),
+    expirationDate: asString(o.expirationDate, existing?.expirationDate ?? ""),
+    renewalPrice: Math.max(0, price),
+    autoRenew: typeof o.autoRenew === "boolean" ? o.autoRenew : (existing?.autoRenew ?? false),
+    hostingProvider: (typeof o.hostingProvider === "string" && o.hostingProvider.trim())
+      ? o.hostingProvider.trim()
+      : (existing?.hostingProvider ?? ""),
+    hostingPlan: (typeof o.hostingPlan === "string" && o.hostingPlan.trim())
+      ? o.hostingPlan.trim()
+      : (existing?.hostingPlan ?? ""),
+    status,
+    notes: asString(o.notes, existing?.notes ?? ""),
+    tags: ((): string[] => { const t = asStringArray(o.tags); return t.length ? t : (existing?.tags ?? []); })(),
+  };
+}
+
+function normalizeEmail(input: unknown, existing?: DomainEmail): DomainEmail {
+  const o = (input ?? {}) as Record<string, unknown>;
+  const type = VALID_EMAIL_TYPES.includes(o.type as EmailType)
+    ? (o.type as EmailType)
+    : (existing?.type ?? "other");
+  return {
+    id: asString(o.id, existing?.id ?? ""),
+    domainId: asString(o.domainId, existing?.domainId ?? ""),
+    address: asString(o.address, existing?.address ?? ""),
+    type,
+    provider: asString(o.provider, existing?.provider ?? ""),
+    createdAt: asString(o.createdAt, existing?.createdAt ?? ""),
+    forwardingTo: asString(o.forwardingTo, existing?.forwardingTo ?? ""),
+    storageLimit: asString(o.storageLimit, existing?.storageLimit ?? ""),
+    passwordHint: asString(o.passwordHint, existing?.passwordHint ?? ""),
+    active: typeof o.active === "boolean" ? o.active : (existing?.active ?? true),
+    notes: asString(o.notes, existing?.notes ?? ""),
   };
 }
 
@@ -752,6 +783,154 @@ app.delete("/api/resources/:id", async (req, res) => {
       return true;
     });
     if (!removed) return res.status(404).json({ error: "Resource not found" });
+    res.status(204).end();
+  } catch (err) {
+    res.status(500).json({ error: (err as Error).message });
+  }
+});
+
+// --- Routes: domains ----------------------------------------------------
+
+app.get("/api/domains", async (_req, res) => {
+  try {
+    const { domains } = await readDomains();
+    res.json(domains);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to read domains" });
+  }
+});
+
+app.post("/api/domains", async (req, res) => {
+  try {
+    const result = await withWriteLock(async () => {
+      const base = normalizeDomain(req.body);
+      if (!base.name.trim()) throw new Error("Domain name is required");
+      const domain: Domain = {
+        ...base,
+        id: base.id || newId("domain"),
+      };
+      const { domains, emails } = await readDomains();
+      domains.push(domain);
+      await writeDomains({ domains, emails });
+      return domain;
+    });
+    res.status(201).json(result);
+  } catch (err) {
+    res.status(400).json({ error: (err as Error).message });
+  }
+});
+
+app.put("/api/domains/:id", async (req, res) => {
+  try {
+    const result = await withWriteLock(async () => {
+      const { domains, emails } = await readDomains();
+      const idx = domains.findIndex((d) => d.id === req.params.id);
+      if (idx === -1) return null;
+      const existing = domains[idx];
+      const updated = normalizeDomain({ ...req.body, id: existing.id }, existing);
+      if (!updated.name.trim()) throw new Error("Domain name is required");
+      domains[idx] = updated;
+      await writeDomains({ domains, emails });
+      return updated;
+    });
+    if (!result) return res.status(404).json({ error: "Domain not found" });
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ error: (err as Error).message });
+  }
+});
+
+app.delete("/api/domains/:id", async (req, res) => {
+  try {
+    const removed = await withWriteLock(async () => {
+      const { domains, emails } = await readDomains();
+      const idx = domains.findIndex((d) => d.id === req.params.id);
+      if (idx === -1) return false;
+      domains.splice(idx, 1);
+      const remainingEmails = emails.filter((e) => e.domainId !== req.params.id);
+      await writeDomains({ domains, emails: remainingEmails });
+      return true;
+    });
+    if (!removed) return res.status(404).json({ error: "Domain not found" });
+    res.status(204).end();
+  } catch (err) {
+    res.status(500).json({ error: (err as Error).message });
+  }
+});
+
+// --- Routes: emails -----------------------------------------------------
+
+app.get("/api/emails", async (req, res) => {
+  try {
+    const { emails } = await readDomains();
+    const domainId = asString(req.query.domainId).trim();
+    if (domainId) {
+      res.json(emails.filter((e) => e.domainId === domainId));
+    } else {
+      res.json(emails);
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to read emails" });
+  }
+});
+
+app.post("/api/emails", async (req, res) => {
+  try {
+    const result = await withWriteLock(async () => {
+      const base = normalizeEmail(req.body);
+      if (!base.address.trim()) throw new Error("Email address is required");
+      if (!base.domainId.trim()) throw new Error("domainId is required");
+      const { domains, emails } = await readDomains();
+      if (!domains.find((d) => d.id === base.domainId)) {
+        throw new Error("Domain not found");
+      }
+      const email: DomainEmail = {
+        ...base,
+        id: base.id || newId("email"),
+      };
+      emails.push(email);
+      await writeDomains({ domains, emails });
+      return email;
+    });
+    res.status(201).json(result);
+  } catch (err) {
+    res.status(400).json({ error: (err as Error).message });
+  }
+});
+
+app.put("/api/emails/:id", async (req, res) => {
+  try {
+    const result = await withWriteLock(async () => {
+      const { domains, emails } = await readDomains();
+      const idx = emails.findIndex((e) => e.id === req.params.id);
+      if (idx === -1) return null;
+      const existing = emails[idx];
+      const updated = normalizeEmail({ ...req.body, id: existing.id }, existing);
+      if (!updated.address.trim()) throw new Error("Email address is required");
+      emails[idx] = updated;
+      await writeDomains({ domains, emails });
+      return updated;
+    });
+    if (!result) return res.status(404).json({ error: "Email not found" });
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ error: (err as Error).message });
+  }
+});
+
+app.delete("/api/emails/:id", async (req, res) => {
+  try {
+    const removed = await withWriteLock(async () => {
+      const { domains, emails } = await readDomains();
+      const idx = emails.findIndex((e) => e.id === req.params.id);
+      if (idx === -1) return false;
+      emails.splice(idx, 1);
+      await writeDomains({ domains, emails });
+      return true;
+    });
+    if (!removed) return res.status(404).json({ error: "Email not found" });
     res.status(204).end();
   } catch (err) {
     res.status(500).json({ error: (err as Error).message });
