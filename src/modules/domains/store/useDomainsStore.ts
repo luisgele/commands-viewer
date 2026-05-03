@@ -20,9 +20,11 @@ interface DomainsState {
   addDomain: (domain: Partial<Domain>) => Promise<Domain>;
   updateDomain: (id: string, patch: Partial<Domain>) => Promise<void>;
   deleteDomain: (id: string) => Promise<void>;
+  reorderDomains: (orderedIds: string[]) => Promise<void>;
   addEmail: (email: Partial<DomainEmail>) => Promise<DomainEmail>;
   updateEmail: (id: string, patch: Partial<DomainEmail>) => Promise<void>;
   deleteEmail: (id: string) => Promise<void>;
+  reorderEmails: (domainId: string, orderedIds: string[]) => Promise<void>;
 
   setFilter: <K extends keyof DomainFilters>(key: K, value: DomainFilters[K]) => void;
   toggleStatusFilter: (status: DomainStatus) => void;
@@ -53,7 +55,15 @@ export const useDomainsStore = create<DomainsState>()((set, get) => ({
         api.getDomains(),
         api.getEmails(),
       ]);
-      set({ domains, emails, loading: false });
+      set({
+        domains: [...domains].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
+        emails: [...emails].sort(
+          (a, b) =>
+            a.domainId.localeCompare(b.domainId) ||
+            (a.order ?? 0) - (b.order ?? 0),
+        ),
+        loading: false,
+      });
     } catch (err) {
       set({ loading: false, error: (err as Error).message });
     }
@@ -81,6 +91,22 @@ export const useDomainsStore = create<DomainsState>()((set, get) => ({
     });
   },
 
+  reorderDomains: async (orderedIds) => {
+    const prev = get().domains;
+    const orderMap = new Map(orderedIds.map((id, order) => [id, order] as const));
+    const next = prev
+      .map((domain) =>
+        orderMap.has(domain.id) ? { ...domain, order: orderMap.get(domain.id)! } : domain,
+      )
+      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+    set({ domains: next });
+    try {
+      await api.reorderDomains(orderedIds.map((id, order) => ({ id, order })));
+    } catch (err) {
+      set({ domains: prev, error: (err as Error).message });
+    }
+  },
+
   addEmail: async (email) => {
     const created = await api.createEmail(email);
     set({ emails: [...get().emails, created] });
@@ -97,6 +123,28 @@ export const useDomainsStore = create<DomainsState>()((set, get) => ({
   deleteEmail: async (id) => {
     await api.deleteEmail(id);
     set({ emails: get().emails.filter((e) => e.id !== id) });
+  },
+
+  reorderEmails: async (domainId, orderedIds) => {
+    const prev = get().emails;
+    const orderMap = new Map(orderedIds.map((id, order) => [id, order] as const));
+    const next = prev
+      .map((email) =>
+        email.domainId === domainId && orderMap.has(email.id)
+          ? { ...email, order: orderMap.get(email.id)! }
+          : email,
+      )
+      .sort(
+        (a, b) =>
+          a.domainId.localeCompare(b.domainId) ||
+          (a.order ?? 0) - (b.order ?? 0),
+      );
+    set({ emails: next });
+    try {
+      await api.reorderEmails(orderedIds.map((id, order) => ({ id, order })));
+    } catch (err) {
+      set({ emails: prev, error: (err as Error).message });
+    }
   },
 
   setFilter: (key, value) =>

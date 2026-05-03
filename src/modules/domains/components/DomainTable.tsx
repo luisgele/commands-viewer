@@ -1,9 +1,22 @@
 import { useMemo, useState } from "react";
+import {
+  DndContext,
+  PointerSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useDomainsStore } from "../store/useDomainsStore";
 import { DomainRow } from "./DomainRow";
 
-type SortField = "name" | "registrar" | "expirationDate" | "renewalPrice" | "status";
+type SortField = "manual" | "name" | "registrar" | "expirationDate" | "renewalPrice" | "status";
 type SortDir = "asc" | "desc";
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 const TODAY_TIME = Date.now();
@@ -13,8 +26,13 @@ export function DomainTable() {
   const filters = useDomainsStore((s) => s.filters);
   const expandedDomainId = useDomainsStore((s) => s.selectedDomainId);
   const setExpandedDomain = useDomainsStore((s) => s.setSelectedDomain);
-  const [sortField, setSortField] = useState<SortField>("expirationDate");
+  const updateDomain = useDomainsStore((s) => s.updateDomain);
+  const reorderDomains = useDomainsStore((s) => s.reorderDomains);
+  const [sortField, setSortField] = useState<SortField>("manual");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+  );
 
   const toggleSort = (field: SortField) => {
     if (sortField === field) {
@@ -35,6 +53,8 @@ export function DomainTable() {
         (d) =>
           d.name.toLowerCase().includes(q) ||
           d.registrar.toLowerCase().includes(q) ||
+          (d.registrarUsername ?? "").toLowerCase().includes(q) ||
+          (d.registrarUrl ?? "").toLowerCase().includes(q) ||
           (d.tags ?? []).some((t) => t.toLowerCase().includes(q)),
       );
     }
@@ -54,10 +74,15 @@ export function DomainTable() {
       });
     }
 
-    // Sort
+    // Sort. Pinned domains stay visually first so important records remain visible.
     list.sort((a, b) => {
+      const pinnedCmp = Number(Boolean(b.pinned)) - Number(Boolean(a.pinned));
+      if (pinnedCmp !== 0) return pinnedCmp;
       let cmp = 0;
       switch (sortField) {
+        case "manual":
+          cmp = (a.order ?? 0) - (b.order ?? 0);
+          break;
         case "name":
           cmp = a.name.localeCompare(b.name);
           break;
@@ -80,6 +105,12 @@ export function DomainTable() {
     return list;
   }, [domains, filters, sortField, sortDir]);
 
+  const sortable =
+    sortField === "manual" &&
+    filters.search.trim() === "" &&
+    filters.status.size === 0 &&
+    filters.expiresInDays === null;
+
   const renderSortIcon = (field: SortField) => {
     if (sortField !== field) return <span className="inline-block w-3" />;
     return sortDir === "asc" ? (
@@ -89,13 +120,46 @@ export function DomainTable() {
     );
   };
 
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const oldIdx = filtered.findIndex((domain) => domain.id === active.id);
+    const newIdx = filtered.findIndex((domain) => domain.id === over.id);
+    if (oldIdx === -1 || newIdx === -1) return;
+    const reordered = arrayMove(filtered, oldIdx, newIdx);
+    await reorderDomains(reordered.map((domain) => domain.id));
+  };
+
   return (
     <div className="mx-auto max-w-[1400px] px-6 py-4">
-      <div className="overflow-hidden rounded-xl border border-[color:var(--color-border)]">
-        <table className="w-full text-left">
+      {!sortable && domains.length > 0 && (
+        <div className="mb-3 flex items-center justify-between gap-3 rounded-md border border-[color:var(--color-border)] bg-[color:var(--color-bg-card)]/50 px-4 py-2">
+          <p className="font-mono text-[0.7rem] text-[color:var(--color-text-muted)]">
+            Reordenación manual desactivada mientras hay filtros o un orden de columna activo.
+          </p>
+          <button
+            type="button"
+            onClick={() => setSortField("manual")}
+            className="shrink-0 rounded-md border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 py-1 font-mono text-[0.7rem] text-[color:var(--color-text-muted)] transition hover:border-[color:var(--color-accent-cyan)]/40 hover:text-[color:var(--color-accent-cyan)]"
+          >
+            Orden manual
+          </button>
+        </div>
+      )}
+      <div className="overflow-x-auto rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-bg)]/50 p-2">
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext
+            items={filtered.map((domain) => domain.id)}
+            strategy={verticalListSortingStrategy}
+          >
+        <table className="w-full min-w-[940px] border-separate border-spacing-y-2 text-left">
           <thead>
-            <tr className="border-b border-[color:var(--color-border)] bg-[color:var(--color-bg-card)]/60">
-              <th className="px-4 py-3 font-mono text-xs font-semibold text-[color:var(--color-text-muted)]">
+            <tr>
+              <th className="w-8 px-2 py-2" />
+              <th className="w-20 px-2 py-2 font-mono text-xs font-semibold text-[color:var(--color-text-muted)]">
+                Foco
+              </th>
+              <th className="px-4 py-2 font-mono text-xs font-semibold text-[color:var(--color-text-muted)]">
                 <button
                   type="button"
                   onClick={() => toggleSort("name")}
@@ -104,7 +168,7 @@ export function DomainTable() {
                   Dominio {renderSortIcon("name")}
                 </button>
               </th>
-              <th className="px-4 py-3 font-mono text-xs font-semibold text-[color:var(--color-text-muted)]">
+              <th className="px-4 py-2 font-mono text-xs font-semibold text-[color:var(--color-text-muted)]">
                 <button
                   type="button"
                   onClick={() => toggleSort("registrar")}
@@ -113,7 +177,7 @@ export function DomainTable() {
                   Registrador {renderSortIcon("registrar")}
                 </button>
               </th>
-              <th className="px-4 py-3 font-mono text-xs font-semibold text-[color:var(--color-text-muted)]">
+              <th className="px-4 py-2 font-mono text-xs font-semibold text-[color:var(--color-text-muted)]">
                 <button
                   type="button"
                   onClick={() => toggleSort("expirationDate")}
@@ -122,7 +186,7 @@ export function DomainTable() {
                   Caducidad {renderSortIcon("expirationDate")}
                 </button>
               </th>
-              <th className="px-4 py-3 font-mono text-xs font-semibold text-[color:var(--color-text-muted)]">
+              <th className="px-4 py-2 font-mono text-xs font-semibold text-[color:var(--color-text-muted)]">
                 <button
                   type="button"
                   onClick={() => toggleSort("renewalPrice")}
@@ -131,7 +195,7 @@ export function DomainTable() {
                   Precio {renderSortIcon("renewalPrice")}
                 </button>
               </th>
-              <th className="px-4 py-3 font-mono text-xs font-semibold text-[color:var(--color-text-muted)]">
+              <th className="px-4 py-2 font-mono text-xs font-semibold text-[color:var(--color-text-muted)]">
                 <button
                   type="button"
                   onClick={() => toggleSort("status")}
@@ -140,7 +204,7 @@ export function DomainTable() {
                   Estado {renderSortIcon("status")}
                 </button>
               </th>
-              <th className="px-4 py-3 text-right font-mono text-xs font-semibold text-[color:var(--color-text-muted)]">
+              <th className="px-4 py-2 text-right font-mono text-xs font-semibold text-[color:var(--color-text-muted)]">
                 Acciones
               </th>
             </tr>
@@ -150,16 +214,23 @@ export function DomainTable() {
               <DomainRow
                 key={domain.id}
                 domain={domain}
+                sortable={sortable}
                 expanded={expandedDomainId === domain.id}
                 onToggle={() =>
                   setExpandedDomain(expandedDomainId === domain.id ? null : domain.id)
+                }
+                onToggleFavorite={() =>
+                  updateDomain(domain.id, { favorite: !domain.favorite })
+                }
+                onTogglePinned={() =>
+                  updateDomain(domain.id, { pinned: !domain.pinned })
                 }
               />
             ))}
             {filtered.length === 0 && (
               <tr>
                 <td
-                  colSpan={6}
+                  colSpan={8}
                   className="px-4 py-12 text-center font-mono text-sm text-[color:var(--color-text-muted)]"
                 >
                   No se encontraron dominios con los filtros actuales.
@@ -168,6 +239,8 @@ export function DomainTable() {
             )}
           </tbody>
         </table>
+          </SortableContext>
+        </DndContext>
       </div>
     </div>
   );

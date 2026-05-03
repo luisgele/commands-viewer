@@ -13,6 +13,8 @@ interface DomainModalProps {
 export interface DomainFormValues {
   name: string;
   registrar: string;
+  registrarUrl: string;
+  registrarUsername: string;
   registrationDate: string;
   expirationDate: string;
   renewalPrice: number;
@@ -27,6 +29,8 @@ export interface DomainFormValues {
 const EMPTY: DomainFormValues = {
   name: "",
   registrar: "",
+  registrarUrl: "",
+  registrarUsername: "",
   registrationDate: "",
   expirationDate: "",
   renewalPrice: 0,
@@ -47,6 +51,8 @@ export function DomainModal({ domain, onClose, onSave }: DomainModalProps) {
       ? {
           name: domain.name,
           registrar: domain.registrar,
+          registrarUrl: domain.registrarUrl ?? "",
+          registrarUsername: domain.registrarUsername ?? "",
           registrationDate: domain.registrationDate,
           expirationDate: domain.expirationDate,
           renewalPrice: domain.renewalPrice,
@@ -156,6 +162,32 @@ export function DomainModal({ domain, onClose, onSave }: DomainModalProps) {
                 value={values.registrar}
                 onChange={(e) => patch("registrar", e.target.value)}
                 placeholder="ej. Namecheap"
+                className="w-full rounded-lg border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 py-2 font-mono text-sm text-[color:var(--color-text-bright)] outline-none transition focus:border-[color:var(--color-accent-cyan)]"
+              />
+            </div>
+
+            <div>
+              <label className="mb-1 block font-mono text-xs text-[color:var(--color-text-muted)]">
+                Web del proveedor
+              </label>
+              <input
+                type="url"
+                value={values.registrarUrl}
+                onChange={(e) => patch("registrarUrl", e.target.value)}
+                placeholder="https://panel.proveedor.com"
+                className="w-full rounded-lg border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 py-2 font-mono text-sm text-[color:var(--color-text-bright)] outline-none transition focus:border-[color:var(--color-accent-cyan)]"
+              />
+            </div>
+
+            <div>
+              <label className="mb-1 block font-mono text-xs text-[color:var(--color-text-muted)]">
+                Usuario de login
+              </label>
+              <input
+                type="text"
+                value={values.registrarUsername}
+                onChange={(e) => patch("registrarUsername", e.target.value)}
+                placeholder="usuario/cuenta del proveedor"
                 className="w-full rounded-lg border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 py-2 font-mono text-sm text-[color:var(--color-text-bright)] outline-none transition focus:border-[color:var(--color-accent-cyan)]"
               />
             </div>

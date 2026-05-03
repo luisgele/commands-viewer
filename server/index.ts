@@ -385,6 +385,8 @@ function normalizeDomain(input: unknown, existing?: Domain): Domain {
     id: asString(o.id, existing?.id ?? ""),
     name: asString(o.name, existing?.name ?? ""),
     registrar: asString(o.registrar, existing?.registrar ?? ""),
+    registrarUrl: asString(o.registrarUrl, existing?.registrarUrl ?? ""),
+    registrarUsername: asString(o.registrarUsername, existing?.registrarUsername ?? ""),
     registrationDate: asString(o.registrationDate, existing?.registrationDate ?? ""),
     expirationDate: asString(o.expirationDate, existing?.expirationDate ?? ""),
     renewalPrice: Math.max(0, price),
@@ -396,6 +398,9 @@ function normalizeDomain(input: unknown, existing?: Domain): Domain {
       ? o.hostingPlan.trim()
       : (existing?.hostingPlan ?? ""),
     status,
+    favorite: typeof o.favorite === "boolean" ? o.favorite : (existing?.favorite ?? false),
+    pinned: typeof o.pinned === "boolean" ? o.pinned : (existing?.pinned ?? false),
+    order: typeof o.order === "number" ? o.order : (existing?.order ?? 0),
     notes: asString(o.notes, existing?.notes ?? ""),
     tags: ((): string[] => { const t = asStringArray(o.tags); return t.length ? t : (existing?.tags ?? []); })(),
   };
@@ -417,6 +422,7 @@ function normalizeEmail(input: unknown, existing?: DomainEmail): DomainEmail {
     storageLimit: asString(o.storageLimit, existing?.storageLimit ?? ""),
     passwordHint: asString(o.passwordHint, existing?.passwordHint ?? ""),
     active: typeof o.active === "boolean" ? o.active : (existing?.active ?? true),
+    order: typeof o.order === "number" ? o.order : (existing?.order ?? 0),
     notes: asString(o.notes, existing?.notes ?? ""),
   };
 }
@@ -806,11 +812,12 @@ app.post("/api/domains", async (req, res) => {
     const result = await withWriteLock(async () => {
       const base = normalizeDomain(req.body);
       if (!base.name.trim()) throw new Error("Domain name is required");
+      const { domains, emails } = await readDomains();
       const domain: Domain = {
         ...base,
         id: base.id || newId("domain"),
+        order: domains.length,
       };
-      const { domains, emails } = await readDomains();
       domains.push(domain);
       await writeDomains({ domains, emails });
       return domain;
@@ -818,6 +825,28 @@ app.post("/api/domains", async (req, res) => {
     res.status(201).json(result);
   } catch (err) {
     res.status(400).json({ error: (err as Error).message });
+  }
+});
+
+app.patch("/api/domains/reorder", async (req, res) => {
+  try {
+    const updates = (req.body?.updates ?? req.body) as Array<{ id: string; order: number }>;
+    if (!Array.isArray(updates)) {
+      return res.status(400).json({ error: "Body must be an array of {id, order}" });
+    }
+    await withWriteLock(async () => {
+      const { domains, emails } = await readDomains();
+      const orderMap = new Map(updates.map((u) => [u.id, u.order] as const));
+      for (const domain of domains) {
+        const nextOrder = orderMap.get(domain.id);
+        if (typeof nextOrder === "number") domain.order = nextOrder;
+      }
+      domains.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+      await writeDomains({ domains, emails });
+    });
+    res.status(204).end();
+  } catch (err) {
+    res.status(500).json({ error: (err as Error).message });
   }
 });
 
@@ -889,6 +918,7 @@ app.post("/api/emails", async (req, res) => {
       const email: DomainEmail = {
         ...base,
         id: base.id || newId("email"),
+        order: emails.filter((e) => e.domainId === base.domainId).length,
       };
       emails.push(email);
       await writeDomains({ domains, emails });
@@ -897,6 +927,32 @@ app.post("/api/emails", async (req, res) => {
     res.status(201).json(result);
   } catch (err) {
     res.status(400).json({ error: (err as Error).message });
+  }
+});
+
+app.patch("/api/emails/reorder", async (req, res) => {
+  try {
+    const updates = (req.body?.updates ?? req.body) as Array<{ id: string; order: number }>;
+    if (!Array.isArray(updates)) {
+      return res.status(400).json({ error: "Body must be an array of {id, order}" });
+    }
+    await withWriteLock(async () => {
+      const { domains, emails } = await readDomains();
+      const orderMap = new Map(updates.map((u) => [u.id, u.order] as const));
+      for (const email of emails) {
+        const nextOrder = orderMap.get(email.id);
+        if (typeof nextOrder === "number") email.order = nextOrder;
+      }
+      emails.sort(
+        (a, b) =>
+          a.domainId.localeCompare(b.domainId) ||
+          (a.order ?? 0) - (b.order ?? 0),
+      );
+      await writeDomains({ domains, emails });
+    });
+    res.status(204).end();
+  } catch (err) {
+    res.status(500).json({ error: (err as Error).message });
   }
 });
 

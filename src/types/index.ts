@@ -73,6 +73,8 @@ export interface Domain {
   id: string;
   name: string;
   registrar: string;
+  registrarUrl?: string;
+  registrarUsername?: string;
   registrationDate: string; // ISO date
   expirationDate: string;   // ISO date
   renewalPrice: number;
@@ -80,6 +82,9 @@ export interface Domain {
   hostingProvider?: string;
   hostingPlan?: string;
   status: DomainStatus;
+  favorite?: boolean;
+  pinned?: boolean;
+  order?: number;
   notes?: string;
   tags?: string[];
 }
@@ -95,6 +100,7 @@ export interface DomainEmail {
   storageLimit?: string;
   passwordHint?: string;
   active: boolean;
+  order?: number;
   notes?: string;
 }
 

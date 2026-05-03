@@ -1,4 +1,6 @@
-import { Pencil, Trash2 } from "lucide-react";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { GripVertical, Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useDomainsStore } from "../store/useDomainsStore";
 import { EmailModal, type EmailFormValues } from "./EmailModal";
@@ -7,11 +9,19 @@ import type { DomainEmail } from "../../../types";
 
 interface EmailRowProps {
   email: DomainEmail;
+  sortable?: boolean;
 }
 
-export function EmailRow({ email }: EmailRowProps) {
+export function EmailRow({ email, sortable = false }: EmailRowProps) {
   const updateEmail = useDomainsStore((s) => s.updateEmail);
   const deleteEmail = useDomainsStore((s) => s.deleteEmail);
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
+    useSortable({ id: email.id, disabled: !sortable });
+
+  const style: React.CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
 
   const [editing, setEditing] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -23,7 +33,28 @@ export function EmailRow({ email }: EmailRowProps) {
 
   return (
     <>
-      <tr className="border-b border-[color:var(--color-border)] transition hover:bg-[color:var(--color-bg-card)]/30">
+      <tr
+        ref={setNodeRef}
+        style={style}
+        className={
+          isDragging
+            ? "border-b border-[color:var(--color-border)] bg-[color:var(--color-bg-card-alt)] opacity-70 shadow-lg"
+            : "border-b border-[color:var(--color-border)] transition hover:bg-[color:var(--color-bg-card)]/30"
+        }
+      >
+        <td className="px-2 py-2">
+          {sortable && (
+            <button
+              type="button"
+              {...attributes}
+              {...listeners}
+              className="flex h-6 w-6 cursor-grab items-center justify-center rounded text-[color:var(--color-text-muted)]/45 transition hover:text-[color:var(--color-text-bright)] active:cursor-grabbing"
+              aria-label="Arrastrar email para reordenar"
+            >
+              <GripVertical size={13} />
+            </button>
+          )}
+        </td>
         <td className="px-3 py-2 font-mono text-xs text-[color:var(--color-text-bright)]">
           {email.address}
           {email.forwardingTo && (

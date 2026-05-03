@@ -65,6 +65,11 @@ export const api = {
     request<Domain>(`/domains/${id}`, { method: "PUT", body: JSON.stringify(domain) }),
   deleteDomain: (id: string) =>
     request<void>(`/domains/${id}`, { method: "DELETE" }),
+  reorderDomains: (updates: Array<{ id: string; order: number }>) =>
+    request<void>("/domains/reorder", {
+      method: "PATCH",
+      body: JSON.stringify({ updates }),
+    }),
 
   // Emails
   getEmails: (domainId?: string) =>
@@ -75,4 +80,9 @@ export const api = {
     request<DomainEmail>(`/emails/${id}`, { method: "PUT", body: JSON.stringify(email) }),
   deleteEmail: (id: string) =>
     request<void>(`/emails/${id}`, { method: "DELETE" }),
+  reorderEmails: (updates: Array<{ id: string; order: number }>) =>
+    request<void>("/emails/reorder", {
+      method: "PATCH",
+      body: JSON.stringify({ updates }),
+    }),
 };
